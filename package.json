@@ -58,6 +58,6 @@
           "build": "vite build"
       }
     "build" : {
-          "outDir" : 'dist'
-    }
+          "outDir" : 'dist',
+    },
   }
