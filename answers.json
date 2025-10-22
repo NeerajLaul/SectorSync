@@ -1,0 +1,250 @@
+{
+  "vw1n8r": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Time & Materials",
+      "design": "Partial / Iterative Design",
+      "teams": "Structured Silo Teams",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6833
+      },
+      {
+        "method": "Scrum",
+        "score": 0.5833
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5833
+      }
+    ],
+    "timestamp": "2025-10-22T07:37:16.310Z"
+  },
+  "awv6dd": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Milestone Payments",
+      "design": "Emergent",
+      "teams": "Cross-functional",
+      "development": "Incremental",
+      "integration_testing": "End Phase",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.6167
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5833
+      }
+    ],
+    "timestamp": "2025-10-22T07:37:44.118Z"
+  },
+  "9rjr1u": {
+    "answers": {
+      "project_size": "Large",
+      "planning": "Continuous Flow",
+      "sourcing": "Mixed Internal/External",
+      "goals": "Predictable",
+      "customer_size": "Medium",
+      "customer_communication": "Milestone Reviews",
+      "payment_method": "Milestone Payments",
+      "design": "Partial / Iterative Design",
+      "teams": "Specialist",
+      "development": "Incremental",
+      "integration_testing": "When possible",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Hybrid",
+        "score": 0.7917
+      },
+      {
+        "method": "SAFe",
+        "score": 0.7667
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.6417
+      }
+    ],
+    "timestamp": "2025-10-22T07:41:02.200Z"
+  },
+  "3krqn3": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Iterative",
+      "sourcing": "Mixed Internal/External",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Time & Materials",
+      "design": "Upfront/Complete Design",
+      "teams": "Specialist",
+      "development": "Iterative",
+      "integration_testing": "When possible",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.6417
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.55
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5083
+      }
+    ],
+    "timestamp": "2025-10-22T07:42:08.608Z"
+  },
+  "ikl7nx": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Time & Materials",
+      "design": "Partial / Iterative Design",
+      "teams": "Structured Silo Teams",
+      "development": "Iterative",
+      "integration_testing": "When possible",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.5833
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5667
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.525
+      }
+    ],
+    "timestamp": "2025-10-22T08:00:43.253Z"
+  },
+  "o0t95x": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Time & Materials",
+      "design": "Partial / Iterative Design",
+      "teams": "Structured Silo Teams",
+      "development": "Iterative",
+      "integration_testing": "When possible",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.5833
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5667
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.525
+      }
+    ],
+    "timestamp": "2025-10-22T08:02:26.202Z"
+  },
+  "xs6klu": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Medium",
+      "customer_communication": "Performance Metrics",
+      "payment_method": "Time & Materials",
+      "design": "Partial / Iterative Design",
+      "teams": "Structured Silo Teams",
+      "development": "Iterative",
+      "integration_testing": "When possible",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.5833
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5667
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.525
+      }
+    ],
+    "timestamp": "2025-10-22T08:32:26.429Z"
+  },
+  "y7vllf": {
+    "answers": {
+      "project_size": "Large",
+      "planning": "Continuous Flow",
+      "sourcing": "Heavily Outsourced",
+      "goals": "Speed",
+      "customer_size": "Large",
+      "customer_communication": "Continuous Feedback Loops",
+      "payment_method": "Milestone Payments",
+      "design": "Upfront/Complete Design",
+      "teams": "Cross-functional",
+      "development": "Incremental",
+      "integration_testing": "End Phase",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.675
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.6417
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.6417
+      }
+    ],
+    "timestamp": "2025-10-22T08:55:45.453Z"
+  }
+}

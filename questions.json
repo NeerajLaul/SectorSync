@@ -1,0 +1,314 @@
+[
+  {
+    "id": 1,
+    "questionNumber": 1,
+    "question": "What is your team size?",
+    "factor": "project_size",
+    "options": [
+      {
+        "id": "q1-a",
+        "text": "Small",
+        "icon": "📦",
+        "factorValue": "Small"
+      },
+      {
+        "id": "q1-b",
+        "text": "Medium",
+        "icon": "📋",
+        "factorValue": "Medium"
+      },
+      {
+        "id": "q1-c",
+        "text": "Large",
+        "icon": "🏢",
+        "factorValue": "Large"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "questionNumber": 2,
+    "question": "What is your planning approach?",
+    "factor": "planning",
+    "options": [
+      {
+        "id": "q2-a",
+        "text": "Iterative - plan as we go",
+        "icon": "🔄",
+        "factorValue": "Iterative"
+      },
+      {
+        "id": "q2-b",
+        "text": "Continuous Flow - minimal upfront planning",
+        "icon": "🌊",
+        "factorValue": "Continuous Flow"
+      },
+      {
+        "id": "q2-c",
+        "text": "Up-front - comprehensive planning before execution",
+        "icon": "📋",
+        "factorValue": "Up-front"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "questionNumber": 3,
+    "question": "How is your project sourced?",
+    "factor": "sourcing",
+    "options": [
+      {
+        "id": "q3-a",
+        "text": "Internal Sourcing - all in-house team",
+        "icon": "🏠",
+        "factorValue": "Internal Sourcing"
+      },
+      {
+        "id": "q3-b",
+        "text": "Mixed Internal/External",
+        "icon": "🤝",
+        "factorValue": "Mixed Internal/External"
+      },
+      {
+        "id": "q3-c",
+        "text": "Heavily Outsourced",
+        "icon": "🌐",
+        "factorValue": "Heavily Outsourced"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "questionNumber": 4,
+    "question": "What is your primary project goal?",
+    "factor": "goals",
+    "options": [
+      {
+        "id": "q4-a",
+        "text": "Speed - get to market fast",
+        "icon": "🚀",
+        "factorValue": "Speed"
+      },
+      {
+        "id": "q4-b",
+        "text": "Predictable - minimize risk and uncertainty",
+        "icon": "📊",
+        "factorValue": "Predictable"
+      },
+      {
+        "id": "q4-c",
+        "text": "Innovation - explore new solutions",
+        "icon": "💡",
+        "factorValue": "Innovation"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "questionNumber": 5,
+    "question": "What is your customer size?",
+    "factor": "customer_size",
+    "options": [
+      {
+        "id": "q5-a",
+        "text": "Small",
+        "icon": "👤",
+        "factorValue": "Small"
+      },
+      {
+        "id": "q5-b",
+        "text": "Medium",
+        "icon": "👥",
+        "factorValue": "Medium"
+      },
+      {
+        "id": "q5-c",
+        "text": "Large",
+        "icon": "🏢",
+        "factorValue": "Large"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "questionNumber": 6,
+    "question": "How do you communicate with customers?",
+    "factor": "customer_communication",
+    "options": [
+      {
+        "id": "q6-a",
+        "text": "Continuous Feedback Loops",
+        "icon": "🔁",
+        "factorValue": "Continuous Feedback Loops"
+      },
+      {
+        "id": "q6-b",
+        "text": "Milestone Reviews",
+        "icon": "🎯",
+        "factorValue": "Milestone Reviews"
+      },
+      {
+        "id": "q6-c",
+        "text": "Performance Metrics",
+        "icon": "📈",
+        "factorValue": "Performance Metrics"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "questionNumber": 7,
+    "question": "What is your payment method?",
+    "factor": "payment_method",
+    "options": [
+      {
+        "id": "q7-a",
+        "text": "Time & Materials",
+        "icon": "⏱️",
+        "factorValue": "Time & Materials"
+      },
+      {
+        "id": "q7-b",
+        "text": "Milestone Payments",
+        "icon": "🎯",
+        "factorValue": "Milestone Payments"
+      },
+      {
+        "id": "q7-c",
+        "text": "Firm Fixed Price",
+        "icon": "💰",
+        "factorValue": "Firm Fixed Price"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "questionNumber": 8,
+    "question": "What is your design approach?",
+    "factor": "design",
+    "options": [
+      {
+        "id": "q8-a",
+        "text": "Emergent - design evolves",
+        "icon": "🌱",
+        "factorValue": "Emergent"
+      },
+      {
+        "id": "q8-b",
+        "text": "Partial / Iterative Design",
+        "icon": "🔄",
+        "factorValue": "Partial / Iterative Design"
+      },
+      {
+        "id": "q8-c",
+        "text": "Upfront/Complete Design",
+        "icon": "📐",
+        "factorValue": "Upfront/Complete Design"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "questionNumber": 9,
+    "question": "What is your team structure?",
+    "factor": "teams",
+    "options": [
+      {
+        "id": "q9-a",
+        "text": "Cross-functional teams",
+        "icon": "🤝",
+        "factorValue": "Cross-functional"
+      },
+      {
+        "id": "q9-b",
+        "text": "Specialist teams",
+        "icon": "🎯",
+        "factorValue": "Specialist"
+      },
+      {
+        "id": "q9-c",
+        "text": "Structured Silo Teams",
+        "icon": "🏢",
+        "factorValue": "Structured Silo Teams"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "questionNumber": 10,
+    "question": "What is your development approach?",
+    "factor": "development",
+    "options": [
+      {
+        "id": "q10-a",
+        "text": "Iterative - short cycles with feedback",
+        "icon": "🔁",
+        "factorValue": "Iterative"
+      },
+      {
+        "id": "q10-b",
+        "text": "Incremental - build up features gradually",
+        "icon": "📈",
+        "factorValue": "Incremental"
+      },
+      {
+        "id": "q10-c",
+        "text": "Linear - sequential phases",
+        "icon": "➡️",
+        "factorValue": "Linear"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "questionNumber": 11,
+    "question": "How do you approach integration and testing?",
+    "factor": "integration_testing",
+    "options": [
+      {
+        "id": "q11-a",
+        "text": "Continuous integration and testing",
+        "icon": "🔄",
+        "factorValue": "Continuous"
+      },
+      {
+        "id": "q11-b",
+        "text": "When possible throughout development",
+        "icon": "⚡",
+        "factorValue": "When possible"
+      },
+      {
+        "id": "q11-c",
+        "text": "End Phase - testing at the end",
+        "icon": "🎯",
+        "factorValue": "End Phase"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "questionNumber": 12,
+    "question": "How do you close/accept projects?",
+    "factor": "closing",
+    "options": [
+      {
+        "id": "q12-a",
+        "text": "Team Acceptance - internal approval",
+        "icon": "👥",
+        "factorValue": "Team Acceptance"
+      },
+      {
+        "id": "q12-b",
+        "text": "Customer Acceptance",
+        "icon": "🤝",
+        "factorValue": "Customer Acceptance"
+      },
+      {
+        "id": "q12-c",
+        "text": "3rd Party Acceptance - formal external review",
+        "icon": "✅",
+        "factorValue": "3rd Party Acceptance"
+      }
+    ]
+  }
+]
