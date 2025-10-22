@@ -42,9 +42,24 @@ app.post("/api/scoring", (req, res) => {
   }
 });
 
-// answers (mounted router)  ✅ single source of truth
+// answers (mounted router) single source of truth
 app.use("/api/answers", answersRouter);
+
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const buildPath = path.join(__dirname, "dist");
+app.use(express.static(buildPath));
+
+// Catch-all to serve index.html for any route not starting with /api
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
 
