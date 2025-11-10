@@ -1,0 +1,154 @@
+[
+  {
+    "id": "method1",
+    "name": "Scrum",
+    "description": "An agile framework that focuses on iterative development with short, time-boxed sprints and frequent stakeholder feedback.",
+    "attributes": {
+      "project_size": "small or medium",
+      "planning": "iterative",
+      "sourcing": "internal sourcing",
+      "goals": "speed",
+      "customer_size": "small or medium",
+      "customer_communication": "continuous feedback loops",
+      "payment_method": "time & materials",
+      "design": "emergent",
+      "teams": "cross-functional",
+      "development": "iterative",
+      "integration_testing": "continuous",
+      "closing": "team acceptance"
+    }
+  },
+  {
+    "id": "method2",
+    "name": "SAFe",
+    "description": "Scaled Agile Framework that brings agile principles to large organizations through synchronized program increments.",
+    "attributes": {
+      "project_size": "large",
+      "planning": "iterative",
+      "sourcing": "mixed internal/external",
+      "goals": "predictable",
+      "customer_size": "large",
+      "customer_communication": "milestone reviews",
+      "payment_method": "milestone payments",
+      "design": "partial / iterative design",
+      "teams": "cross-functional",
+      "development": "incremental",
+      "integration_testing": "continuous",
+      "closing": "customer acceptance"
+    }
+  },
+  {
+    "id": "method3",
+    "name": "Hybrid",
+    "description": "Combines structured planning with iterative delivery — ideal for environments balancing predictability and flexibility.",
+    "attributes": {
+      "project_size": "small medium large",
+      "planning": "iterative",
+      "sourcing": "mixed internal/external",
+      "goals": "predictable",
+      "customer_size": "medium large",
+      "customer_communication": "milestone reviews",
+      "payment_method": "milestone payments",
+      "design": "partial / iterative design",
+      "teams": "structured silo teams",
+      "development": "incremental",
+      "integration_testing": "end phase",
+      "closing": "customer acceptance"
+    }
+  },
+  {
+    "id": "method4",
+    "name": "Waterfall",
+    "description": "A sequential model with defined stages, focusing on up-front planning and documentation before execution.",
+    "attributes": {
+      "project_size": "medium or large",
+      "planning": "up-front",
+      "sourcing": "heavily outsourced",
+      "goals": "predictable",
+      "customer_size": "large",
+      "customer_communication": "milestone reviews",
+      "payment_method": "firm fixed price milestone payments",
+      "design": "upfront / complete design",
+      "teams": "specialist",
+      "development": "linear",
+      "integration_testing": "end phase",
+      "closing": "customer acceptance"
+    }
+  },
+  {
+    "id": "method5",
+    "name": "Lean Six Sigma",
+    "description": "Process improvement methodology focusing on waste reduction, continuous flow, and high-quality results.",
+    "attributes": {
+      "project_size": "small to enterprise",
+      "planning": "continuous flow",
+      "sourcing": "internal",
+      "goals": "innovation",
+      "customer_size": "any",
+      "customer_communication": "performance metrics",
+      "payment_method": "time & materials",
+      "design": "process improvement design",
+      "teams": "cross-functional",
+      "development": "incremental",
+      "integration_testing": "continuous",
+      "closing": "customer acceptance"
+    }
+  },
+  {
+    "id": "method6",
+    "name": "PRINCE2",
+    "description": "A structured project management method emphasizing defined roles, stages, and controlled processes.",
+    "attributes": {
+      "project_size": "medium, large",
+      "planning": "stage-based",
+      "sourcing": "mixed",
+      "goals": "predictable",
+      "customer_size": "large",
+      "customer_communication": "milestone reviews",
+      "payment_method": "milestone payments",
+      "design": "upfront",
+      "teams": "structured silo teams",
+      "development": "linear",
+      "integration_testing": "end phase",
+      "closing": "customer acceptance"
+    }
+  },
+  {
+    "id": "method7",
+    "name": "Disciplined Agile",
+    "description": "A flexible, context-driven approach that combines agile principles with governance and scalability.",
+    "attributes": {
+      "project_size": "small to large",
+      "planning": "context-driven",
+      "sourcing": "flexible",
+      "goals": "innovation",
+      "customer_size": "any",
+      "customer_communication": "continuous feedback loops",
+      "payment_method": "time & materials",
+      "design": "emergent to partial",
+      "teams": "cross-functional",
+      "development": "iterative incremental",
+      "integration_testing": "continuous",
+      "closing": "team acceptance"
+    }
+  },
+  {
+    "id": "method8",
+    "name": "Continuous Delivery",
+    "description": "An agile software engineering approach emphasizing automation, rapid iteration, and frequent deployment.",
+    "attributes": {
+      "project_size": "small to medium",
+      "planning": "iterative",
+      "sourcing": "internal",
+      "goals": "speed innovation",
+      "customer_size": "small to medium",
+      "customer_communication": "continuous feedback loops",
+      "payment_method": "time & materials",
+      "design": "emergent",
+      "teams": "cross-functional",
+      "development": "iterative",
+      "integration_testing": "continuous",
+      "closing": "team acceptance"
+    }
+  }
+]

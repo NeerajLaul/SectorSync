@@ -1,7 +1,7 @@
 
-  # Sector Sync Tool
+  # Sector Sync Tool V.2
 
-  This is a code bundle for Sector Sync Tool. The original project is available at https://www.figma.com/design/uxGdPsEP7tpJxNUURXdXGq/Sector-Sync-Tool.
+  This is a code bundle for Sector Sync Tool V.2. The original project is available at https://www.figma.com/design/qmH3sHdP7pSOlmVyfWRrET/Sector-Sync-Tool-V.2.
 
   ## Running the code
 
