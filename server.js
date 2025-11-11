@@ -27,7 +27,7 @@ app.use("/api/score", scoringRouter);
 
 app.use(express.static(distPath));
 
-app.get("*", (req, res, next) => { 
+app.use("*", (req, res, next) => { 
   if (req.path.startsWith("/api")) {
     return next();
   }
@@ -38,5 +38,6 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🌐 Access API at: http://localhost:${PORT}/`);
 });
+
 
 
