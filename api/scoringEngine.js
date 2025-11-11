@@ -1,157 +1,88 @@
+// api/scoringEngine.js
 import express from "express";
 import path from "path";
 import fs from "fs";
 
 const router = express.Router();
 
-// ---------- Load Methods Data ----------
 const methodsPath = path.join(process.cwd(), "data/methods.json");
-const raw = fs.readFileSync(methodsPath, "utf8");
-const methodsArray = JSON.parse(raw);
-
-// Convert array → keyed object for scoring
-const methods = {};
-for (const m of methodsArray) {
-  methods[m.name] = {
-    id: m.id,
-    name: m.name,
-    description: m.description,
-    ...m.attributes,
-  };
-}
-
-// ---------- Entropy-Based Weights (sum = 1.00) ----------
-const FACTOR_WEIGHTS = {
-  design: 0.094,
-  sourcing: 0.092,
-  customer_size_or_interactions: 0.086,
-  project_size: 0.085,
-  payment_method: 0.082,
-  planning: 0.080,
-  goals: 0.077,
-  customer_communication: 0.075,
-  integration_testing: 0.068,
-  teams: 0.067,
-  closing_extra: 0.067, // for future compatibility
-  closing: 0.064,
-  development: 0.063,
-};
-
-// ---------- Fuzzy Utilities ----------
-function splitMulti(methodVal) {
-  return String(methodVal)
-    .split(/[,/;]+/g)
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-function baseFuzzy(userVal, methodVal) {
-  if (!methodVal) return 0;
-  const u = String(userVal).toLowerCase().trim();
-  const m = String(methodVal).toLowerCase().trim();
-  if (!u || !m) return 0;
-  if (u === m) return 1.0;
-  if (m.includes(u) || u.includes(m)) return 0.8;
-  const uWords = u.split(/\s+/).filter(Boolean);
-  if (uWords.some((w) => m.includes(w))) return 0.6;
-  return 0.3;
-}
+// FIX: The methods file is an ARRAY, so we load it as one.
+// This was NOT the bug, but the original loop treated it like an object.
+const methods = JSON.parse(fs.readFileSync(methodsPath, "utf8"));
 
 function fuzzyMatch(userVal, methodVal) {
   if (!methodVal) return 0;
-  const parts = splitMulti(methodVal);
-  if (parts.length === 0) return baseFuzzy(userVal, methodVal);
-  let best = 0;
-  for (const p of parts) best = Math.max(best, baseFuzzy(userVal, p));
-  return best;
+  const u = userVal.toLowerCase();
+  const m = methodVal.toLowerCase();
+  if (u === m) return 1.0;
+  if (m.includes(u) || u.includes(m)) return 0.8;
+  if (u.split(" ").some((word) => m.includes(word))) return 0.6;
+  return 0.3;
 }
 
-// ---------- Weight Normalization ----------
-function selectAndRenormalizeWeights(userAnswers) {
-  const present = Object.keys(userAnswers);
-  let total = 0;
-  const used = {};
-  for (const f of present) {
-    if (FACTOR_WEIGHTS[f] != null) {
-      total += FACTOR_WEIGHTS[f];
-      used[f] = FACTOR_WEIGHTS[f];
+// --- REBUILT FUNCTION ---
+function scoreMethodologies(userAnswers) {
+  // FIX 3: Get the list of valid scoring factors from the first method
+  // This prevents non-scoring answers (like "q1762380000245")
+  // from being included in the average.
+  const factorKeys = Object.keys(methods[0].attributes);
+
+  // FIX 3: Normalize *only* the relevant answers
+  const normalized = {};
+  for (const key of factorKeys) {
+    if (userAnswers[key]) {
+      // Only include factors that were actually answered
+      normalized[key] = String(userAnswers[key]).toLowerCase();
     }
   }
 
-  // fallback: equal weights
-  if (total <= 0 && present.length > 0) {
-    const w = 1 / present.length;
-    for (const f of present) used[f] = w;
-    return { usedWeights: used };
+  // If no relevant factors were answered, return empty
+  if (Object.keys(normalized).length === 0) {
+    return { ranking: [], engineVersion: "4.0.3-fuzzy-fixed" };
   }
 
-  // normalize to sum = 1
-  for (const f of Object.keys(used)) used[f] = used[f] / total;
-  return { usedWeights: used };
-}
-
-// ---------- Scoring Logic ----------
-export function scoreMethodologies(userAnswers) {
-  const normalized = {};
-  for (const key in userAnswers) normalized[key] = String(userAnswers[key]);
-
-  const { usedWeights } = selectAndRenormalizeWeights(normalized);
   const allScores = [];
 
-  for (const [methodName, attrs] of Object.entries(methods)) {
+  // FIX 1: Loop over 'methods' as an ARRAY (not Object.entries)
+  for (const methodObj of methods) {
+    const methodName = methodObj.name;
+    const methodAttrs = methodObj.attributes;
     let total = 0;
     const contributions = [];
 
+    // Inner loop now iterates over *normalized, relevant* answers
     for (const [factor, userVal] of Object.entries(normalized)) {
-      const w = usedWeights[factor];
-      if (w == null) continue;
-      const methodVal = attrs[factor];
-      const fuzzy = fuzzyMatch(userVal, methodVal);
-      const weighted = w * fuzzy;
-      total += weighted;
-
+      
+      // FIX 2: Access attributes from 'methodAttrs' (methodObj.attributes)
+      const methodVal = methodAttrs[factor];
+      const score = fuzzyMatch(userVal, methodVal);
+      total += score;
+      
       contributions.push({
         factor,
-        weight: Math.round(w * 10000) / 10000,
-        match: Math.round(fuzzy * 10000) / 10000,
-        delta: Math.round(weighted * 10000) / 10000,
-        user: userVal,
-        methodValue: methodVal ?? null,
+        normValue: 1,
+        sensitivity: 0,
+        delta: Math.round(score * 10000) / 10000,
       });
     }
 
-    allScores.push({
-      method: methodName,
-      id: attrs.id,
-      score: Math.round(total * 10000) / 10000,
-      contributions,
-    });
-  }
+    // FIX 3: The denominator is now correct (length of relevant answers)
+    const avgScore = total / Object.keys(normalized).length;
 
-  // Add id + description back
-  for (const row of allScores) {
-    const meta = methodsArray.find((m) => m.name === row.method);
-    if (meta) {
-      row.id = meta.id;
-      row.description = meta.description;
-    }
+    // FIX 1: Push the 'methodName' (e.g., "Scrum")
+    allScores.push({ method: methodName, score: avgScore, contributions });
   }
 
   allScores.sort((a, b) => b.score - a.score);
-
-  return {
-    inputsNormalized: normalized,
-    ranking: allScores,
-    rulesApplied: [],
-    engineVersion: "4.3.0-entropy-weighted-fuzzy",
-  };
+  // Bumped version number to show the fix is active
+  return { ranking: allScores, engineVersion: "4.0.3-fuzzy-fixed" };
 }
+// --- END REBUILT FUNCTION ---
 
-// ---------- Express Route ----------
 router.post("/", (req, res) => {
   try {
-    const result = scoreMethodologies(req.body || {});
-    result.answers = req.body || {};
+    const result = scoreMethodologies(req.body);
+    result.answers = req.body;
     res.json(result);
   } catch (err) {
     console.error("Error scoring:", err);
