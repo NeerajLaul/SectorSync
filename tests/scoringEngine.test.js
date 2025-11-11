@@ -1,25 +1,35 @@
 import { scoreMethodologies } from '../api/scoringengine.js';
 
-// helper to assert the winner by name
+// Utility: assert winner (ties allowed if expected is among top scorers)
 function expectTopMethod(user, expected) {
   const { ranking } = scoreMethodologies(user);
   expect(ranking.length).toBeGreaterThan(0);
-  const top = ranking[0].method;
-  // if multiple tie, allow expected to be among top scorers
-  const bestScore = ranking[0].score;
-  const leaders = ranking.filter(r => r.score === bestScore).map(r => r.method);
+  const best = ranking[0].score;
+  const leaders = ranking.filter(r => r.score === best).map(r => r.method);
+  // Debug if needed:
+  // console.log({ expected, leaders, top3: ranking.slice(0,3) });
   expect(leaders).toContain(expected);
 }
 
-// 1) Scrum
-test('Scrum wins: small, iterative, internal, speed, continuous feedback', () => {
+/**
+ * Notes:
+ * - Uses professor guidance:
+ *   Team size: Small(1–10), Medium(10–50), Large(50–200), Enterprise(200+)
+ *   CD/Lean bias internal + continuous; PRINCE2/Waterfall infrequent milestone;
+ *   SAFe structured reviews, external specialists; Hybrid fits Medium/Enterprise and behaves like Waterfall on comms;
+ *   Payment: T&M = Scrum/SAFe/CD/LSS; Performance-based = Agile/Lean; Fixed Price & Milestones = Predictive(+ Lean).
+ * - If you renamed Q5 to customer_interaction in your engine, replace `customer_size` with `customer_interaction`.
+ */
+
+// 1) Scrum — small, iterative, internal, speed/innovation, continuous feedback, T&M
+test('Scrum wins (Small, iterative, internal, speed/innovation, continuous, T&M)', () => {
   expectTopMethod(
     {
       project_size: 'small',
       planning: 'iterative',
       sourcing: 'internal sourcing',
-      goals: 'speed',
-      customer_size: 'small',
+      goals: 'speed, innovation, optimization',
+      customer_size: 'high engagement',
       customer_communication: 'continuous feedback loops',
       payment_method: 'time & materials',
       design: 'emergent',
@@ -32,17 +42,17 @@ test('Scrum wins: small, iterative, internal, speed, continuous feedback', () =>
   );
 });
 
-// 2) SAFe
-test('SAFe wins: large, iterative, mixed, predictable, milestone reviews', () => {
+// 2) SAFe — large, iterative, mixed/external specialists, predictable, structured reviews, T&M
+test('SAFe wins (Large, iterative, mixed/external, predictable, structured, T&M)', () => {
   expectTopMethod(
     {
-      project_size: 'large',
+      project_size: 'large, enterprise',
       planning: 'iterative',
       sourcing: 'mixed internal/external',
       goals: 'predictable',
-      customer_size: 'large',
-      customer_communication: 'milestone reviews',
-      payment_method: 'milestone payments',
+      customer_size: 'moderate engagement',
+      customer_communication: 'milestone reviews', // structured program reviews
+      payment_method: 'time & materials',
       design: 'partial / iterative design',
       teams: 'cross-functional',
       development: 'incremental',
@@ -53,16 +63,16 @@ test('SAFe wins: large, iterative, mixed, predictable, milestone reviews', () =>
   );
 });
 
-// 3) Hybrid (Iterative + Waterfall)
-test('Hybrid wins: large, iterative + up-front mixed, both feedback & milestones', () => {
+// 3) Hybrid — enterprise, mixed planning, mixed sourcing, limited feedback, fixed/milestones
+test('Hybrid wins (Enterprise, iterative + up-front, mixed, limited feedback, fixed/milestones)', () => {
   expectTopMethod(
     {
-      project_size: 'large',
+      project_size: 'enterprise',
       planning: 'iterative, up-front',
       sourcing: 'mixed internal/external',
       goals: 'speed, predictability',
-      customer_size: 'large',
-      customer_communication: 'continuous feedback loops, milestone reviews',
+      customer_size: 'low engagement',
+      customer_communication: 'milestone reviews',
       payment_method: 'fixed price, milestone payments',
       design: 'iterative, emergent design',
       teams: 'cross-functional teams',
@@ -74,15 +84,15 @@ test('Hybrid wins: large, iterative + up-front mixed, both feedback & milestones
   );
 });
 
-// 4) Waterfall
-test('Waterfall wins: large, up-front, heavily outsourced, predictable, end phase', () => {
+// 4) Waterfall — large, upfront, outsourced, predictive, milestone committee, fixed/milestones
+test('Waterfall wins (Large, up-front, outsourced, predictable, milestone committee, FP/milestones)', () => {
   expectTopMethod(
     {
       project_size: 'large',
       planning: 'up-front',
       sourcing: 'heavily outsourced',
       goals: 'predictable',
-      customer_size: 'large',
+      customer_size: 'low engagement',
       customer_communication: 'milestone reviews',
       payment_method: 'firm fixed price milestone payments',
       design: 'upfront / complete design',
@@ -95,15 +105,15 @@ test('Waterfall wins: large, up-front, heavily outsourced, predictable, end phas
   );
 });
 
-// 5) Lean Six Sigma
-test('Lean Six Sigma wins: continuous flow, internal, innovation, performance metrics', () => {
+// 5) Lean Six Sigma — medium, continuous flow, internal, innovation/optimization, metrics, T&M
+test('Lean Six Sigma wins (Medium, continuous flow, internal, innovation/optimization, metrics, T&M)', () => {
   expectTopMethod(
     {
       project_size: 'medium',
       planning: 'continuous flow',
       sourcing: 'internal',
-      goals: 'innovation',
-      customer_size: 'any',
+      goals: 'innovation, optimization',
+      customer_size: 'high engagement',
       customer_communication: 'performance metrics',
       payment_method: 'time & materials',
       design: 'process improvement design',
@@ -116,36 +126,36 @@ test('Lean Six Sigma wins: continuous flow, internal, innovation, performance me
   );
 });
 
-// 6) Lean Continuous Delivery Model
-test('Lean Continuous Delivery Model wins: continuous flow, automated pipeline, subscription', () => {
+// 6) Lean Continuous Delivery Model — medium, internal bias, subscription, automated pipeline, continuous
+test('Lean Continuous Delivery Model wins (Medium, internal bias, subscription, automated pipeline, continuous)', () => {
   expectTopMethod(
     {
-      project_size: 'large',
+      project_size: 'medium',
       planning: 'continuous flow',
       sourcing: 'internal sourcing team',
       goals: 'innovation, optimization',
-      customer_size: 'very large',
-      customer_communication: 'performance metrics',
+      customer_size: 'high engagement',
+      customer_communication: 'continuous feedback loops, performance metrics',
       payment_method: 'subscription, time & materials',
       design: 'modular, emergent design',
       teams: 'cross-functional teams',
       development: 'automated, incremental',
       integration_testing: 'continuous',
-      closing: 'customer acceptance',
+      closing: 'team acceptance',
     },
     'Lean Continuous Delivery Model'
   );
 });
 
-// 7) Disciplined Agile
-test('Disciplined Agile wins: enterprise scale, iterative+incremental, mixed team', () => {
+// 7) Disciplined Agile — large, iterative+incremental, mixed team, value-based, flexible comms
+test('Disciplined Agile wins (Large, iterative+incremental, mixed, value-based, flexible comms)', () => {
   expectTopMethod(
     {
-      project_size: 'enterprise',
+      project_size: 'large',
       planning: 'iterative, incremental',
       sourcing: 'mixed internal/external team',
       goals: 'speed, predictability',
-      customer_size: 'enterprise',
+      customer_size: 'moderate engagement',
       customer_communication: 'continuous feedback loops',
       payment_method: 'value-based, incremental',
       design: 'iterative, emergent design',
@@ -158,22 +168,22 @@ test('Disciplined Agile wins: enterprise scale, iterative+incremental, mixed tea
   );
 });
 
-// 8) PRINCE2
-test('PRINCE2 wins: stage-based, milestone payments, end-phase integration, external acceptance', () => {
+// 8) PRINCE2 — enterprise, stage-based, mixed, predictive, milestone committee, end-phase, milestones
+test('PRINCE2 wins (Enterprise, stage-based, mixed, predictive, milestone committee, end-phase, milestones)', () => {
   expectTopMethod(
     {
-      project_size: 'large',
+      project_size: 'enterprise',
       planning: 'stage-based',
       sourcing: 'mixed',
       goals: 'predictable',
-      customer_size: 'large',
+      customer_size: 'low engagement',
       customer_communication: 'milestone reviews',
       payment_method: 'milestone payments',
       design: 'upfront design',
       teams: 'functional teams, problem-solving teams',
       development: 'linear, incremental',
       integration_testing: 'end phase',
-      closing: '3rd party acceptance, customer acceptance',
+      closing: 'customer acceptance, 3rd party acceptance',
     },
     'PRINCE2'
   );
