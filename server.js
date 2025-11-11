@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const distPath = path.join(__dirname, "dist");
+const distPath = path.join(__dirname, "build");
 
 app.use(cors());
 app.use(express.json());
@@ -38,6 +38,7 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🌐 Access API at: http://localhost:${PORT}/`);
 });
+
 
 
 
