@@ -59,9 +59,10 @@
             "vite": "6.3.5"
       },
       "scripts": {
-            "dev": "vite",
-            "build": "vite build",
-            "start": "concurrently \"npm run dev\" \"npm run server\"",
-            "server": "node server.js"
+          "dev": "concurrently \"vite\" \"npm run server\"",
+          "build": "vite build",
+          "start": "node server.js",
+          "serve": "vite preview",
+          "server": "node server.js"
       }
 }
