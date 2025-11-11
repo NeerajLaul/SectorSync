@@ -6,12 +6,11 @@
     "attributes": {
       "project_size": "small, medium",
       "planning": "iterative",
-      "sourcing": "internal sourcing",
+      "sourcing": "internal sourcing team",
       "goals": "speed, innovation, optimization",
       "customer_communication": "continuous feedback loops",
-      "payment_method": "time & materials",
-      "design": "emergent",
-      "teams": "cross-functional",
+      "customer_involvement": "high involvement",
+      "design": "emergent design",
       "development": "iterative",
       "integration_testing": "continuous",
       "closing": "team acceptance"
@@ -23,34 +22,32 @@
     "description": "Scaled Agile Framework (SAFe) brings agile principles to large and enterprise environments through synchronized program increments.",
     "attributes": {
       "project_size": "large, enterprise",
-      "planning": "iterative",
-      "sourcing": "mixed internal/external, external specialists",
-      "goals": "predictable",
-      "customer_communication": "milestone reviews",
-      "payment_method": "time & materials",
-      "design": "partial / iterative design",
-      "teams": "cross-functional",
+      "planning": "incremental, iterative",
+      "sourcing": "mixed internal/external specialists",
+      "goals": "spped, predictability",
+      "customer_communication": "continuous feedback loops, as needed",
+      "customer_involvement": "as needed involvement, medium involvement",
+      "design": "iterative design, emergent design",
       "development": "incremental",
       "integration_testing": "continuous",
-      "closing": "customer acceptance"
+      "closing": "team acceptance"
     }
   },
   {
     "id": "method3",
-    "name": "Hybrid",
+    "name": "Hybrid (Iterative Waterfall)",
     "description": "Blends agile and predictive practices; combines up-front structure with iterative delivery for flexibility and control.",
     "attributes": {
       "project_size": "medium, enterprise, large",
-      "planning": "iterative, up-front",
-      "sourcing": "mixed internal/external",
+      "planning": "iterative",
+      "sourcing": "mixed internal/external team",
       "goals": "speed, predictability",
       "customer_communication": "milestone reviews",
-      "payment_method": "fixed price, milestone payments",
-      "design": "iterative, emergent design",
-      "teams": "cross-functional teams",
+      "customer_involvement": "low involvement",
+      "design": "up-front design, iterative design, emergent design",
       "development": "linear, iterative",
       "integration_testing": "continuous, end phase",
-      "closing": "team acceptance, customer acceptance"
+      "closing": "team acceptance, customer acceptance, 3rd party acceptance"
     }
   },
   {
@@ -60,15 +57,14 @@
     "attributes": {
       "project_size": "medium, large",
       "planning": "up-front",
-      "sourcing": "heavily outsourced",
-      "goals": "predictable",
+      "sourcing": "mixed internal/external specialists",
+      "goals": "predictability",
       "customer_communication": "milestone reviews",
-      "payment_method": "firm fixed price milestone payments",
-      "design": "upfront / complete design",
-      "teams": "specialist",
+      "customer_involvement": "low involvement",
+      "design": "upfront design",
       "development": "linear",
       "integration_testing": "end phase",
-      "closing": "customer acceptance"
+      "closing": "customer acceptance, 3rd party acceptance"
     }
   },
   {
@@ -76,17 +72,16 @@
     "name": "Lean Six Sigma",
     "description": "Process improvement methodology focused on continuous flow, waste reduction, and measurable quality outcomes.",
     "attributes": {
-      "project_size": "small, medium, large",
-      "planning": "continuous flow",
-      "sourcing": "internal",
+      "project_size": "small, medium",
+      "planning": "up-front, incremental",
+      "sourcing": "internal sourcing specialists",
       "goals": "innovation, optimization",
       "customer_communication": "performance metrics",
-      "payment_method": "time & materials, performance-based",
-      "design": "process improvement design",
-      "teams": "cross-functional",
-      "development": "incremental",
-      "integration_testing": "continuous",
-      "closing": "customer acceptance"
+      "customer_involvement": "low involvement, medium involvement",
+      "design": "up-front design, emergent design",
+      "development": "linear, iterative",
+      "integration_testing": "when possible",
+      "closing": "team acceptance"
     }
   },
   {
@@ -94,17 +89,16 @@
     "name": "Lean Continuous Delivery Model",
     "description": "Engineering-centric model emphasizing automation, rapid deployment, and continuous integration for quick feedback.",
     "attributes": {
-      "project_size": "small, medium, (large when feasible)",
-      "planning": "continuous flow",
+      "project_size": "small, medium",
+      "planning": "incremental",
       "sourcing": "internal sourcing team",
-      "goals": "innovation, optimization",
-      "customer_communication": "continuous feedback loops, performance metrics",
-      "payment_method": "subscription, time & materials",
-      "design": "modular, emergent design",
-      "teams": "cross-functional teams",
-      "development": "automated, incremental",
-      "integration_testing": "continuous",
-      "closing": "team acceptance"
+      "goals": "innovation, speed",
+      "customer_communication": "continuous feedback loops",
+      "customer_involvement": "high involvement",
+      "design": "emergent design",
+      "development": "incremental",
+      "integration_testing": "continuous, when possible",
+      "closing": "customer acceptance"
     }
   },
   {
@@ -112,17 +106,16 @@
     "name": "Disciplined Agile",
     "description": "Context-driven toolkit combining agile, lean, and governance practices; encourages flexibility in scaling and delivery.",
     "attributes": {
-      "project_size": "medium, large, enterprise",
-      "planning": "iterative, incremental",
+      "project_size": "small, medium, large, enterprise",
+      "planning": "iterative, flexible",
       "sourcing": "mixed internal/external team",
       "goals": "speed, predictability",
-      "customer_communication": "continuous feedback loops",
-      "payment_method": "value-based, incremental",
-      "design": "iterative, emergent design",
-      "teams": "cross-functional, functional teams",
+      "customer_communication": "continuous feedback loops, as needed",
+      "customer_involvement": "as needed involvement, medium involvement",
+      "design": "up-front design, iterative design, emergent design",
       "development": "iterative, incremental",
-      "integration_testing": "continuous",
-      "closing": "team acceptance"
+      "integration_testing": "continuous, when possible",
+      "closing": "team acceptance, customer acceptance"
     }
   },
   {
@@ -131,16 +124,16 @@
     "description": "Structured project management approach with stage gates, defined roles, and milestone-driven oversight.",
     "attributes": {
       "project_size": "large, enterprise",
-      "planning": "stage-based",
-      "sourcing": "mixed",
-      "goals": "predictable",
+      "planning": "up-front, incremental",
+      "sourcing": "mixed internal/external specialists",
+      "goals": "predictability",
       "customer_communication": "milestone reviews",
-      "payment_method": "milestone payments, fixed price",
-      "design": "upfront design",
-      "teams": "functional teams, problem-solving teams",
+      "customer_involvement": "low involvement",
+      "design": "up-front design",
       "development": "linear, incremental",
       "integration_testing": "end phase",
-      "closing": "customer acceptance, 3rd party acceptance"
+      "closing": "3rd party acceptance"
     }
   }
 ]
+
