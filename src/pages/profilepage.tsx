@@ -222,50 +222,34 @@ export default function ProfilePage({
         <Card className="p-0 overflow-hidden shadow-2xl glass-card border-white/20 dark:border-white/10">
           <Tabs value={tab} onValueChange={setTab} className="w-full">
             {/* Tab bar */}
-            {/* Tab bar */}
             <div className="px-6 pt-4 pb-2">
-              <div className="rounded-full bg-muted/70 p-1 shadow-inner">
-                <TabsList className="grid grid-cols-4 w-full bg-transparent gap-1">
-                  <TabsTrigger
-                    value="overview"
-                    className="rounded-full text-sm font-medium px-4 py-2
-                               data-[state=active]:bg-background
-                               data-[state=active]:text-foreground
-                               data-[state=active]:shadow-sm"
-                  >
-                    Overview
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="results"
-                    className="rounded-full text-sm font-medium px-4 py-2
-                               data-[state=active]:bg-background
-                               data-[state=active]:text-foreground
-                               data-[state=active]:shadow-sm"
-                  >
-                    Past Results
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="account"
-                    className="rounded-full text-sm font-medium px-4 py-2
-                               data-[state=active]:bg-background
-                               data-[state=active]:text-foreground
-                               data-[state=active]:shadow-sm"
-                  >
-                    Account
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="security"
-                    className="rounded-full text-sm font-medium px-4 py-2
-                               data-[state=active]:bg-background
-                               data-[state=active]:text-foreground
-                               data-[state=active]:shadow-sm"
-                  >
-                    Security
-                  </TabsTrigger>
-                </TabsList>
-              </div>
+              <TabsList className="w-full bg-muted/60 rounded-full p-1 flex">
+                <TabsTrigger
+                  value="overview"
+                  className="flex-1 rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="results"
+                  className="flex-1 rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
+                  Past Results
+                </TabsTrigger>
+                <TabsTrigger
+                  value="account"
+                  className="flex-1 rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
+                  Account
+                </TabsTrigger>
+                <TabsTrigger
+                  value="security"
+                  className="flex-1 rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
+                  Security
+                </TabsTrigger>
+              </TabsList>
             </div>
-
 
             <Separator className="mt-0" />
 
