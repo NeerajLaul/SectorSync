@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
-import path, {dirname} from "path";
+import path from "path";
 import { fileURLToPath } from "url"
+import {dirname} from "path"
 
 import questionsRouter from "./api/questions.js";
 import answersRouter from "./api/answers.js";
@@ -38,6 +39,7 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🌐 Access API at: http://localhost:${PORT}/`);
 });
+
 
 
 
