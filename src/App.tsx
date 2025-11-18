@@ -9,6 +9,7 @@ import { SurveyPage } from "./pages/survey";
 import { ResultsPage } from "./pages/results";
 import { PitchPage } from "./pages/pitch";
 import { PrintPage } from "./pages/print";
+import AdminPage from "./pages/admin";
 import { MoodPlayer } from "./components/MoodPlayer";
 import { BenchmarkPage } from "./pages/benchmark";
 import { FindResultsPage } from "./pages/findResults";
