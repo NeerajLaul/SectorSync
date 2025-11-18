@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 const router = express.Router();
-const questionsFile = path.join(process.cwd(), "data/questions.json");
+const questionsFile = path.join(__dir_name, "../data/questions.json");
 
 // --- Utility functions ---
 function readQuestionsFile() {
@@ -122,4 +122,5 @@ router.post("/bulk", (req, res) => {
 
 
 export default router;
+
 
