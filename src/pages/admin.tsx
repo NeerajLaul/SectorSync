@@ -17,7 +17,7 @@ export default function AdminPage() {
 
     const fetchAnswers = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/admin/answers");
+            const res = await fetch("/api/admin/answers");
             const json = await res.json();
             if (json.success && Array.isArray(json.answers)) setAnswers(json.answers);
         } catch (err) {
@@ -28,7 +28,7 @@ export default function AdminPage() {
 
     const fetchSummary = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/admin/summary");
+            const res = await fetch("/api/admin/summary");
             const json = await res.json();
             if (json.success) setSummary(json.summary);
         } catch (err) {
@@ -38,7 +38,7 @@ export default function AdminPage() {
 
     const fetchQuestions = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/questions");
+            const res = await fetch("/api/questions");
             const data = await res.json();
             setQuestions(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -48,7 +48,7 @@ export default function AdminPage() {
 
     const fetchMethods = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/methods");
+            const res = await fetch("/api/methods");
             const data = await res.json();
             setMethods(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -89,7 +89,7 @@ export default function AdminPage() {
     const handleDeleteQuestion = async (id: string) => {
         if (!confirm("Delete this question?")) return;
         setQuestions(questions.filter((q) => q.id !== id));
-        await fetch(`http://localhost:5000/api/questions/${id}`, { method: "DELETE" });
+        await fetch(`/api/questions/${id}`, { method: "DELETE" });
     };
 
     const handleDeleteOption = (qid: string, oid: string) => {
@@ -104,7 +104,7 @@ export default function AdminPage() {
 
     const handleSaveQuestions = async () => {
         try {
-            await fetch("http://localhost:5000/api/questions/bulk", {
+            await fetch("/api/questions/bulk", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(questions),
@@ -118,7 +118,7 @@ export default function AdminPage() {
 
     const handleSaveMethods = async () => {
         try {
-            await fetch("http://localhost:5000/api/methods", {
+            await fetch("/api/methods", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(methods),
@@ -134,7 +134,7 @@ export default function AdminPage() {
         if (!confirm("Are you sure you want to delete all saved answers?")) return;
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:5000/api/admin/reset/answers", {
+            const res = await fetch("/api/admin/reset/answers", {
                 method: "DELETE",
             });
             const json = await res.json();
