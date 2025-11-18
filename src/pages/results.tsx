@@ -530,10 +530,6 @@ export function ResultsPage({
             </div>
           )}
         </div>
-
-
-
-
       </div>
     </div>
 
