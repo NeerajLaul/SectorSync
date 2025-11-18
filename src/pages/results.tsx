@@ -159,7 +159,7 @@ export function ResultsPage({
   useEffect(() => {
     if (!results || !results.ranking?.length || results.restored) return;
 
-    fetch("http://localhost:5000/api/answers", {
+    fetch("/api/answers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
