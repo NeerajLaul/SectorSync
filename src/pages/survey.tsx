@@ -5,13 +5,6 @@ import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Label } from "../components/ui/label";
 import { Progress } from "../components/ui/progress";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../components/ui/tooltip";
-
 
 // ✅ removed scoringEngine import — frontend doesn’t use backend logic here
 
@@ -165,44 +158,6 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
               />
             ))}
           </RadioGroup>
-          {/* Card with animation */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentQuestion}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card className="glass-strong p-10 sm:p-12 shadow-2xl border-white/20 dark:border-white/10 transition-all duration-500">
-              <div className="mb-10">
-                <div className="flex items-start gap-3 mb-4">
-                  <h2 className="text-3xl sm:text-4xl font-semibold leading-tight flex-1">
-                    {question.question}
-                  </h2>
-                  {question.description && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button 
-                            className="mt-2 flex-shrink-0 p-2 rounded-full bg-blue-500/10 hover:bg-blue-500/20 dark:bg-blue-400/10 dark:hover:bg-blue-400/20 border-2 border-blue-500/30 hover:border-blue-500/50 transition-all duration-200 hover:scale-110"
-                            aria-label="More information"
-                          >
-                            <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent 
-                          side="bottom" 
-                          className="max-w-sm p-4 text-sm"
-                          sideOffset={8}
-                        >
-                          <p className="leading-relaxed">{question.description}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
-                </div>
-              </div>
 
           <div className="flex items-center justify-between mt-10 pt-8 border-t border-white/10">
             <Button
