@@ -13,7 +13,10 @@ function readQuestionsFile() {
   if (!raw) return [];
   try {
     return JSON.parse(raw);
-  } catch {
+  } catch (err) {
+
+    console.error("CRITICAL: Failed to parse questions.json:", err.message);
+    console.error("File content snippet:", raw.substring(0, 50));
     return [];
   }
 }
@@ -119,3 +122,4 @@ router.post("/bulk", (req, res) => {
 
 
 export default router;
+
