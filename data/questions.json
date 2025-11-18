@@ -1,4 +1,3 @@
-[
   {
     "id": "project_size",
     "question": "What is the projected size of your project team over the course of the project?",
@@ -248,5 +247,4 @@
         "factorValue": ""
       }
     ]
-  },
-]
+  }
