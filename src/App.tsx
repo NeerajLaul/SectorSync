@@ -340,158 +340,152 @@ export default function App() {
   // --------- Render ----------
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen flex flex-col">
-        {/* Top navigation is hidden for pitch + auth to keep them clean */}
-        {state !== "pitch" &&
-          state !== "signin" &&
-          state !== "signup" && (
-            <Navigation
-              currentPage={currentPage}
-              onNavigate={handleNavigate}
-              onStartAssessment={handleStartAssessment}
-              onOpenFindResults={handleOpenFindResults}
-              onSignIn={handleShowSignIn}
-              user={user}
-              onSignOut={handleSignOut}
-              showProfile={showProfileTab}
-            />
-          )}
-
-        {/* Mood Player - hide on auth screens */}
-        {state !== "signin" && state !== "signup" && (
-          <MoodPlayer />
+  <ThemeProvider>
+    <div className="min-h-screen flex flex-col">
+      {state !== "pitch" &&
+        state !== "signin" &&
+        state !== "signup" && (
+          <Navigation
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            onStartAssessment={handleStartAssessment}
+            onOpenFindResults={handleOpenFindResults}
+            onSignIn={handleShowSignIn}
+            user={user}
+            onSignOut={handleSignOut}
+            showProfile={showProfileTab}
+          />
         )}
 
-        <main className="flex-1">
-          {/* Auth screens */}
-          {state === "signin" && (
-            <SignInPage
-              onSignIn={handleSignIn}
-              onSignUp={handleShowSignUp}
-              onSkip={handleSkipAuth}
-            />
-          )}
+      {state !== "signin" && state !== "signup" && (
+        <MoodPlayer />
+      )}
 
-          {state === "signup" && (
-            <SignUpPage
-              onSignUp={handleSignUp}
-              onSignIn={handleShowSignIn}
-              onSkip={handleSkipAuth}
-            />
-          )}
+      <main className="flex-1">
+        {window.location.pathname === "/admin" ? (
+          <AdminPage />
+        ) : (
+          <>
+            {state === "signin" && (
+              <SignInPage
+                onSignIn={handleSignIn}
+                onSignUp={handleShowSignUp}
+                onSkip={handleSkipAuth}
+              />
+            )}
 
-          {/* Project naming */}
-          {state === "project-naming" && (
-            <ProjectNaming
-              onComplete={handleProjectNamed}
-              onSkip={handleSkipProjectNaming}
-            />
-          )}
+            {state === "signup" && (
+              <SignUpPage
+                onSignUp={handleSignUp}
+                onSignIn={handleShowSignIn}
+                onSkip={handleSkipAuth}
+              />
+            )}
 
-          {/* Questionnaire */}
-          {state === "questionnaire" && (
-            <SurveyPage onComplete={handleComplete} />
-          )}
+            {state === "project-naming" && (
+              <ProjectNaming
+                onComplete={handleProjectNamed}
+                onSkip={handleSkipProjectNaming}
+              />
+            )}
 
-          {/* Results */}
-          {state === "results" && results && (
-            <ResultsPage
-              results={results}
-              onRestart={handleRestart}
-              resultId={resultId}
-              setResultId={setResultId}
-              onOpenPitch={handleOpenPitch}
-              onOpenPrint={handleOpenPrint}
-              onOpenBenchmark={handleOpenBenchmark}
-            />
-          )}
+            {state === "questionnaire" && (
+              <SurveyPage onComplete={handleComplete} />
+            )}
 
-          {/* Find Results */}
-          {state === "findresults" && (
-            <FindResultsPage onLoadResults={handleLoadResults} />
-          )}
+            {state === "results" && results && (
+              <ResultsPage
+                results={results}
+                onRestart={handleRestart}
+                resultId={resultId}
+                setResultId={setResultId}
+                onOpenPitch={handleOpenPitch}
+                onOpenPrint={handleOpenPrint}
+                onOpenBenchmark={handleOpenBenchmark}
+              />
+            )}
 
-          {/* Landing pages under each top tab */}
-          {state === "landing" && (
-            <>
-              {currentPage === "home" && (
-                <IndexPage
-                  onStartAssessment={handleStartAssessment}
-                />
-              )}
-              {currentPage === "guide" && (
-                <GuidePage
-                  onStartAssessment={handleStartAssessment}
-                />
-              )}
-              {currentPage === "about" && (
-                <AboutPage
-                  onStartAssessment={handleStartAssessment}
-                />
-              )}
-            </>
-          )}
+            {state === "findresults" && (
+              <FindResultsPage onLoadResults={handleLoadResults} />
+            )}
 
-          {/* Profile page */}
-          {state === "profile" && (
-            <ProfilePage
-              user={userProfile}
-              results={history}
-              onUpdateProfile={
-                user
-                  ? onUpdateProfile
-                  : async () => {
-                      alert("Sign in to edit your profile.");
-                    }
-              }
-              onChangeEmail={
-                user
-                  ? onChangeEmail
-                  : async () => {
-                      alert("Sign in to change your email.");
-                    }
-              }
-              onChangePassword={
-                user
-                  ? onChangePassword
-                  : async () => {
-                      alert("Sign in to change your password.");
-                    }
-              }
-              onExportResult={onExportResult}
-              onDeleteResult={onDeleteResult}
-              onViewResult={handleViewResult}
-            />
-          )}
+            {state === "landing" && (
+              <>
+                {currentPage === "home" && (
+                  <IndexPage
+                    onStartAssessment={handleStartAssessment}
+                  />
+                )}
+                {currentPage === "guide" && (
+                  <GuidePage
+                    onStartAssessment={handleStartAssessment}
+                  />
+                )}
+                {currentPage === "about" && (
+                  <AboutPage
+                    onStartAssessment={handleStartAssessment}
+                  />
+                )}
+              </>
+            )}
 
-          {/* Pitch mode */}
-          {state === "pitch" && results && (
-            <PitchPage
-              results={results}
-              onExit={handleExitPitchOrPrint}
-            />
-          )}
+            {state === "profile" && (
+              <ProfilePage
+                user={userProfile}
+                results={history}
+                onUpdateProfile={
+                  user
+                    ? onUpdateProfile
+                    : async () => {
+                        alert("Sign in to edit your profile.");
+                      }
+                }
+                onChangeEmail={
+                  user
+                    ? onChangeEmail
+                    : async () => {
+                        alert("Sign in to change your email.");
+                      }
+                }
+                onChangePassword={
+                  user
+                    ? onChangePassword
+                    : async () => {
+                        alert("Sign in to change your password.");
+                      }
+                }
+                onExportResult={onExportResult}
+                onDeleteResult={onDeleteResult}
+                onViewResult={handleViewResult}
+              />
+            )}
 
-          {/* Print deck */}
-          {state === "print" && results && (
-            <PrintPage
-              results={results}
-              onBack={handleExitPitchOrPrint}
-              onOpenBenchmark={handleOpenBenchmark}
-              brandName="SectorSync"
-            />
-          )}
+            {state === "pitch" && results && (
+              <PitchPage
+                results={results}
+                onExit={handleExitPitchOrPrint}
+              />
+            )}
 
-          {/* Benchmark */}
-          {state === "benchmark" && results && (
-            <BenchmarkPage
-              results={results}
-              onBack={handleExitBenchmark}
-            />
-          )}
-        </main>
-      </div>
-    </ThemeProvider>
-  );
+            {state === "print" && results && (
+              <PrintPage
+                results={results}
+                onBack={handleExitPitchOrPrint}
+                onOpenBenchmark={handleOpenBenchmark}
+                brandName="SectorSync"
+              />
+            )}
+
+            {state === "benchmark" && results && (
+              <BenchmarkPage
+                results={results}
+                onBack={handleExitBenchmark}
+              />
+            )}
+          </>
+        )}
+      </main>
+    </div>
+  </ThemeProvider>
+);
 }
