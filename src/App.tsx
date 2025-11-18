@@ -188,7 +188,7 @@ export default function App() {
   const handleComplete = async (answers: UserAnswers) => {
     try {
       // Backend scoring
-      const res = await fetch("http://localhost:5000/api/score", {
+      const res = await fetch("/api/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(answers),
