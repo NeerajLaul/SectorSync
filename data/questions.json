@@ -1,7 +1,8 @@
+[
   {
     "id": "project_size",
-    "question": "What is the projected size of your project team over the course of the project?",
-    "description": "Please estimate the number of people, the number of teams/areas, project duration, budget allocation, and project complexity.",
+    "question": "What is your typical project size?",
+    "description": "Consider team size, budget, and scope",
     "options": [
       {
         "id": "project_size-opt1",
@@ -17,18 +18,13 @@
         "id": "project_size-opt3",
         "text": "Large",
         "factorValue": ""
-      },
-       {
-        "id": "project_size-opt4",
-        "text": "Enterprise",
-        "factorValue": ""
       }
     ]
   },
   {
     "id": "planning",
-    "question": "How do you expect to plan out your project?",
-    "description": "Think about how you want to approach planning for your project.",
+    "question": "How do you prefer to approach planning?",
+    "description": "Think about how you define requirements and deliverables",
     "options": [
       {
         "id": "planning-opt1",
@@ -37,52 +33,42 @@
       },
       {
         "id": "planning-opt2",
-        "text": "Up-Front",
+        "text": "Continuous Flow",
         "factorValue": ""
       },
       {
         "id": "planning-opt3",
-        "text": "Flexible",
-        "factorValue": ""
-      },
-       {
-        "id": "planning-opt4",
-        "text": "Incremental",
+        "text": "Up-front",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "sourcing",
-    "question": "How do you expect to handle sourcing for your project?",
-    "description": "Consider how the project team, resources, and requirements will be acquired and managed throughout the project lifecycle.",
+    "question": "What is your team sourcing model?",
+    "description": "How do you typically staff your projects?",
     "options": [
       {
         "id": "sourcing-opt1",
-        "text": "Internal Sourcing Team",
+        "text": "Internal Sourcing",
         "factorValue": ""
       },
       {
         "id": "sourcing-opt2",
-        "text": "Internal Sourcing Specialists",
+        "text": "Mixed Internal/External",
         "factorValue": ""
       },
       {
         "id": "sourcing-opt3",
-        "text": "Mixed Internal/External Sourcing Team",
-        "factorValue": ""
-      },
-      {
-        "id": "sourcing-opt4",
-        "text": "Mixed Internal/External Sourcing Specialists",
+        "text": "Heavily Outsourced",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "goals",
-    "question": "Which of the following best describes the primary goal you anticipate for your project?",
-    "description": "Choose the most important outcome for your project.",
+    "question": "What is your primary project goal?",
+    "description": "Choose the most important outcome for your projects",
     "options": [
       {
         "id": "goals-opt1",
@@ -91,25 +77,42 @@
       },
       {
         "id": "goals-opt2",
-        "text": "Predictability",
+        "text": "Predictable",
         "factorValue": ""
       },
       {
         "id": "goals-opt3",
         "text": "Innovation",
         "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "customer_size",
+    "question": "What is your typical customer organization size?",
+    "description": "Consider the size of companies you work with",
+    "options": [
+      {
+        "id": "customer_size-opt1",
+        "text": "Small",
+        "factorValue": ""
       },
       {
-        "id": "goals-opt4",
-        "text": "Optimization",
+        "id": "customer_size-opt2",
+        "text": "Medium",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_size-opt3",
+        "text": "Large",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "customer_communication",
-    "question": "Which of the following best describes the communication style you plan to utilize with your customer(s) for your project?",
-    "description": "Think about the situations and events that would warrant customer interactions.",
+    "question": "How do you communicate with customers?",
+    "description": "Think about your typical customer interaction cadence",
     "options": [
       {
         "id": "customer_communication-opt1",
@@ -118,96 +121,108 @@
       },
       {
         "id": "customer_communication-opt2",
-        "text": "As Needed",
-        "factorValue": ""
-      },
-      {
-        "id": "customer_communication-opt3",
         "text": "Milestone Reviews",
         "factorValue": ""
       },
       {
-        "id": "customer_communication-opt4",
+        "id": "customer_communication-opt3",
         "text": "Performance Metrics",
         "factorValue": ""
       }
     ]
   },
   {
-    "id": "customer_involvement",
-    "question": "Which of the following best describes the communication level you plan to maintain with your customer(s) for this project?",
-    "description": "Think about how often you want to interact with your customer.",
+    "id": "payment_method",
+    "question": "What is your preferred payment model?",
+    "description": "How do you typically structure contracts?",
     "options": [
       {
-        "id": "customer_involvement-opt1",
-        "text": "High Involvement",
+        "id": "payment_method-opt1",
+        "text": "Time & Materials",
         "factorValue": ""
       },
       {
-        "id": "customer_involvement-opt2",
-        "text": "Medium Involvement",
+        "id": "payment_method-opt2",
+        "text": "Milestone Payments",
         "factorValue": ""
       },
       {
-        "id": "customer_involvement-opt3",
-        "text": "Low Involvement",
-        "factorValue": ""
-      },
-      {
-        "id": "customer_involvement-opt4",
-        "text": "As Needed Involvement",
+        "id": "payment_method-opt3",
+        "text": "Firm Fixed Price",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "design",
-    "question": "How and when do you anticipate the engineering design phase to occur for your project?",
-    "description": "Think about when and how design would happen.",
+    "question": "How do you approach design?",
+    "description": "Think about when and how design happens",
     "options": [
       {
         "id": "design-opt1",
-        "text": "Up-Front Design",
+        "text": "Emergent",
         "factorValue": ""
       },
       {
         "id": "design-opt2",
-        "text": "Iterative Design",
+        "text": "Partial / Iterative Design",
         "factorValue": ""
       },
       {
         "id": "design-opt3",
-        "text": "Emergent Design",
+        "text": "Upfront/Complete Design",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "teams",
+    "question": "What is your team structure?",
+    "description": "How are your teams organized?",
+    "options": [
+      {
+        "id": "teams-opt1",
+        "text": "Cross-functional",
+        "factorValue": ""
+      },
+      {
+        "id": "teams-opt2",
+        "text": "Specialist",
+        "factorValue": ""
+      },
+      {
+        "id": "teams-opt3",
+        "text": "Structured Silo Teams",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "development",
-    "question": "How you anticipate engineering development will occur over the course of the project?",
-    "description": "Think about how you would want to build features.",
+    "question": "What is your development approach?",
+    "description": "How do you build and deliver features?",
     "options": [
       {
         "id": "development-opt1",
-        "text": "Linear",
-        "factorValue": ""
-      },
-      {
-        "id": "development-opt2",
         "text": "Iterative",
         "factorValue": ""
       },
       {
-        "id": "development-opt3",
+        "id": "development-opt2",
         "text": "Incremental",
+        "factorValue": ""
+      },
+      {
+        "id": "development-opt3",
+        "text": "Linear",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "integration_testing",
-    "question": "How do you anticipate engineering integration and testing will be performed?",
-    "description": "Think about your testing and integration cadence.",
+    "question": "When do you integrate and test?",
+    "description": "Think about your testing and integration cadence",
     "options": [
       {
         "id": "integration_testing-opt1",
@@ -216,35 +231,58 @@
       },
       {
         "id": "integration_testing-opt2",
-        "text": "End Phase",
+        "text": "When possible",
         "factorValue": ""
       },
       {
         "id": "integration_testing-opt3",
-        "text": "When Possible",
+        "text": "End Phase",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "closing",
-    "question": "What is the anticipated mode of closure for the project?",
-    "description": "Think about who would provide the final approval for your project.",
+    "question": "How do you close projects?",
+    "description": "Who provides final approval?",
     "options": [
       {
         "id": "closing-opt1",
-        "text": "3rd Party Acceptance",
-        "factorValue": ""
-      },
-      {
-        "id": "closing-opt2",
         "text": "Team Acceptance",
         "factorValue": ""
       },
       {
-        "id": "closing-opt3",
+        "id": "closing-opt2",
         "text": "Customer Acceptance",
+        "factorValue": ""
+      },
+      {
+        "id": "closing-opt3",
+        "text": "3rd Party Acceptance",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "q1762390132642",
+    "question": "This is definitely a question!",
+    "description": "",
+    "options": [
+      {
+        "id": "q1762390132642-opt1",
+        "text": "yes",
+        "factorValue": ""
+      },
+      {
+        "id": "q1762390132642-opt2",
+        "text": "no",
+        "factorValue": ""
+      },
+      {
+        "id": "q1762390132642-opt3",
+        "text": "i think youre tired",
         "factorValue": ""
       }
     ]
   }
+]
