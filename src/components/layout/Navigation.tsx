@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoImage from "../assets/final-sector-sync-logo.png"; 
+import logoImage from "figma:asset/f9a9e70ab33c2f607bdeadf1c0791a99735686fd.png";
 import { ThemeToggle } from "../ThemeToggle";
 
 interface NavigationProps {
