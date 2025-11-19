@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoImage from "../assets/final sector sync logo.png"; 
+import logoImage from "../assets/final-sector-sync-logo.png"; 
 import { ThemeToggle } from "../ThemeToggle";
 
 interface NavigationProps {
