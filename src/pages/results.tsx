@@ -58,7 +58,7 @@ const METHOD_VIDEOS: Record<string, string> = {
   "Lean Six Sigma": "2B1Xp0wwo2U",
   PRINCE2: "oQkT3l8r6OQ",
   "Disciplined Agile": "4y9l0o7i8vA",
-  "Continuous Delivery": "v4cQdP4B4Ws",
+  "Lean Continuous Delivery": "v4cQdP4B4Ws",
 };
 
 const METHOD_DESCRIPTIONS: Record<string, string> = {
@@ -75,7 +75,7 @@ const METHOD_DESCRIPTIONS: Record<string, string> = {
     "Structured project management method emphasizing organization, control, and defined roles throughout the project.",
   "Disciplined Agile":
     "Hybrid toolkit that provides guidance for choosing the right approach for your specific context.",
-  "Continuous Delivery":
+  "Lean Continuous Delivery":
     "Software development practice where code changes are automatically built, tested, and deployed.",
 };
 
