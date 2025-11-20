@@ -51,14 +51,15 @@ const YouTubeEmbed = ({
 
 /* map method -> video id (swap these with your picks) */
 const METHOD_VIDEOS: Record<string, string> = {
-  Scrum: "9TycLR0TqFA",
-  SAFe: "R9EJfYw3n9A",
-  Hybrid: "xq4Y87idawk",
-  Waterfall: "v3nB2K3r0l4",
-  "Lean Six Sigma": "2B1Xp0wwo2U",
-  PRINCE2: "oQkT3l8r6OQ",
-  "Disciplined Agile": "4y9l0o7i8vA",
-  "Lean Continuous Delivery": "v4cQdP4B4Ws",
+  Scrum: "pcsLLgUb7_A",                  // https://www.youtube.com/watch?v=pcsLLgUb7_A
+  SAFe: "aW2m-BtCJyE",                   // https://www.youtube.com/watch?v=aW2m-BtCJyE
+  "Disciplined Agile": "Giu5wIdCaLI",    // https://www.youtube.com/watch?v=Giu5wIdCaLI
+  Agile: "Z9QbYZh1YXY",                  // https://www.youtube.com/watch?v=Z9QbYZh1YXY&t=524s
+  Hybrid: "bLZ9MNwV2vE",                 // https://www.youtube.com/watch?v=bLZ9MNwV2vE
+  "Lean Continuous Delivery": "tQMrrNo16jo", // mapped to same main CD video
+  "Lean Six Sigma": "wfsRAZUnonI",       // https://www.youtube.com/watch?v=wfsRAZUnonI
+  Waterfall: "W4lE6ozdjls",              // https://www.youtube.com/watch?v=W4lE6ozdjls
+  PRINCE2: "bsIvbr0we8w",                // https://www.youtube.com/watch?v=bsIvbr0we8w&t=57s
 };
 
 const METHOD_DESCRIPTIONS: Record<string, string> = {
