@@ -35,7 +35,7 @@
   },
   {
     "id": "method3",
-    "name": "Hybrid (Iterative Waterfall)",
+    "name": "Hybrid",
     "description": "Blends agile and predictive practices; combines up-front structure with iterative delivery for flexibility and control.",
     "attributes": {
       "project_size": "medium, enterprise, large",
@@ -136,4 +136,5 @@
     }
   }
 ]
+
 
