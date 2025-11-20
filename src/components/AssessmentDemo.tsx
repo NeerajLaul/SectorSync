@@ -1,14 +1,14 @@
 /**
  * AssessmentDemo Component
- * 
+ *
  * Quick 30-second interactive walkthrough of SectorSync's key features.
  * Includes synchronized captions showing key features.
- * 
+ *
  * Features:
  * - Fast-paced flow: intro → 2 questions → results with all features
  * - Synchronized captions
  * - Shows top 3 results, benchmark, pitch mode, share/print
- * 
+ *
  * @component
  * @example
  * <AssessmentDemo onStartRealAssessment={() => startAssessment()} />
@@ -18,11 +18,31 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
-import { 
-  ArrowRight, Play, Pause, RotateCcw, CheckCircle2, TrendingUp,
-  BarChart3, Share2, Printer, Presentation
+import {
+  ArrowRight,
+  Play,
+  Pause,
+  RotateCcw,
+  CheckCircle2,
+  TrendingUp,
+  BarChart3,
+  Share2,
+  Printer,
+  Presentation,
 } from "lucide-react";
+
+// ---- questions.json now lives in /data ----
 import questionsData from "../data/questions.json";
+
+interface Question {
+  id?: string;
+  question: string;
+  description?: string;
+  options: string[];
+  // add other fields from your JSON as needed
+}
+
+const QUESTIONS: Question[] = questionsData as Question[];
 
 interface AssessmentDemoProps {
   /** Optional callback triggered when user clicks "Start Your Assessment" */
@@ -30,29 +50,54 @@ interface AssessmentDemoProps {
 }
 
 // Quick demo - only show 2 questions
-const DEMO_QUESTIONS = [QUESTIONS[0], QUESTIONS[3]]; // project_size and goals
+// (assumes QUESTIONS[0] and QUESTIONS[3] exist)
+const DEMO_QUESTIONS: Question[] = [QUESTIONS[0], QUESTIONS[3]];
 const DEMO_ANSWERS = ["Small", "Speed"];
 
 // Caption script with timing
 const CAPTION_SCRIPT = [
-  { time: 0, text: "Welcome to SectorSync - your data-driven project management methodology advisor", duration: 4 },
-  { time: 4, text: "Answer just 12 quick questions about your project", duration: 3 },
-  { time: 7, text: "Our advanced scoring engine analyzes your needs", duration: 3 },
-  { time: 10, text: "Get your top 3 methodology matches instantly", duration: 3 },
+  {
+    time: 0,
+    text: "Welcome to SectorSync - your data-driven project management methodology advisor",
+    duration: 4,
+  },
+  {
+    time: 4,
+    text: "Answer just 10 quick questions about your project",
+    duration: 3,
+  },
+  {
+    time: 7,
+    text: "Our advanced scoring engine analyzes your needs",
+    duration: 3,
+  },
+  {
+    time: 10,
+    text: "Get your top 3 methodology matches instantly",
+    duration: 3,
+  },
   { time: 13, text: "View industry benchmarks for context", duration: 2.5 },
   { time: 15.5, text: "Share results in stunning pitch mode", duration: 2.5 },
   { time: 18, text: "Export or print your recommendations", duration: 2.5 },
-  { time: 20.5, text: "Ready to find your perfect methodology?", duration: 2.5 },
+  {
+    time: 20.5,
+    text: "Ready to find your perfect methodology?",
+    duration: 2.5,
+  },
 ];
 
 export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [phase, setPhase] = useState<"intro" | "question1" | "question2" | "results" | "features">("intro");
+  const [phase, setPhase] = useState<
+    "intro" | "question1" | "question2" | "results" | "features"
+  >("intro");
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentCaption, setCurrentCaption] = useState("");
-  const [showFeature, setShowFeature] = useState<"top3" | "benchmark" | "pitch" | "share" | null>(null);
-  
+  const [showFeature, setShowFeature] = useState<
+    "top3" | "benchmark" | "pitch" | "share" | null
+  >(null);
+
   const startTimeRef = useRef<number>(0);
   const timerRef = useRef<number | null>(null);
 
@@ -62,26 +107,29 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
     const updateCaption = () => {
       const elapsed = (Date.now() - startTimeRef.current) / 1000;
-      
+
       const currentNarration = CAPTION_SCRIPT.find(
-        item => elapsed >= item.time && elapsed < item.time + item.duration
+        (item) => elapsed >= item.time && elapsed < item.time + item.duration,
       );
-      
+
       if (currentNarration && currentNarration.text !== currentCaption) {
         setCurrentCaption(currentNarration.text);
       }
     };
 
     updateCaption();
-    const interval = setInterval(updateCaption, 100);
-    return () => clearInterval(interval);
+    const interval = window.setInterval(updateCaption, 100);
+
+    return () => {
+      window.clearInterval(interval);
+    };
   }, [isPlaying, currentCaption]);
 
-  // Main demo flow - 30 second timeline
+  // Main demo flow - ~23–30 second timeline
   useEffect(() => {
     if (!isPlaying) {
       if (timerRef.current) {
-        clearInterval(timerRef.current);
+        window.clearInterval(timerRef.current);
         timerRef.current = null;
       }
       return;
@@ -136,7 +184,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
         // Demo complete at ~23 seconds
         setIsPlaying(false);
         if (timerRef.current) {
-          clearInterval(timerRef.current);
+          window.clearInterval(timerRef.current);
           timerRef.current = null;
         }
       }
@@ -147,7 +195,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
     return () => {
       if (timerRef.current) {
-        clearInterval(timerRef.current);
+        window.clearInterval(timerRef.current);
         timerRef.current = null;
       }
     };
@@ -157,7 +205,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     if (!isPlaying) {
       startTimeRef.current = Date.now();
     }
-    setIsPlaying(!isPlaying);
+    setIsPlaying((prev) => !prev);
   };
 
   const handleRestart = () => {
@@ -168,21 +216,26 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     setShowFeature(null);
     setCurrentCaption("");
     if (timerRef.current) {
-      clearInterval(timerRef.current);
+      window.clearInterval(timerRef.current);
       timerRef.current = null;
     }
   };
 
   const currentQuestion = DEMO_QUESTIONS[currentStep];
-  const progress = phase === "intro" ? 0 
-    : phase === "question1" ? 25 
-    : phase === "question2" ? 50 
-    : 100;
+
+  const progress =
+    phase === "intro"
+      ? 0
+      : phase === "question1"
+        ? 25
+        : phase === "question2"
+          ? 50
+          : 100;
 
   return (
     <div className="w-full">
       {/* Demo Controls */}
-      <div className="flex items-center justify-between mb-4 p-4 bg-muted/50 rounded-lg">
+      <div className="mb-4 flex items-center justify-between rounded-lg bg-muted/50 p-4">
         <div className="flex items-center gap-2">
           <Button
             size="sm"
@@ -196,7 +249,8 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
               </>
             ) : (
               <>
-                <Play className="h-4 w-4" /> {phase === "intro" ? "Start" : "Resume"} Demo
+                <Play className="h-4 w-4" />{" "}
+                {phase === "intro" ? "Start" : "Resume"} Demo
               </>
             )}
           </Button>
@@ -215,7 +269,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       </div>
 
       {/* Demo Container */}
-      <div className="relative aspect-video bg-gradient-to-br from-primary/5 to-purple-100/10 dark:from-primary/10 dark:to-purple-900/20 rounded-xl border-2 overflow-hidden">
+      <div className="relative aspect-video overflow-hidden rounded-xl border-2 bg-gradient-to-br from-primary/5 to-purple-100/10 dark:from-primary/10 dark:to-purple-900/20">
         <AnimatePresence mode="wait">
           {/* Intro Phase */}
           {phase === "intro" && (
@@ -232,11 +286,11 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                 transition={{ delay: 0.2 }}
                 className="space-y-4"
               >
-                <div className="bg-primary/10 p-6 rounded-full inline-block mb-4">
+                <div className="mb-4 inline-block rounded-full bg-primary/10 p-6">
                   <CheckCircle2 className="h-16 w-16 text-primary" />
                 </div>
                 <h3 className="text-4xl">SectorSync</h3>
-                <p className="text-xl text-muted-foreground max-w-md">
+                <p className="mx-auto max-w-md text-xl text-muted-foreground">
                   Data-Driven Project Management Advisor
                 </p>
               </motion.div>
@@ -244,85 +298,88 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           )}
 
           {/* Question Phases */}
-          {(phase === "question1" || phase === "question2") && currentQuestion && (
-            <motion.div
-              key={`question-${currentStep}`}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              className="absolute inset-0 flex flex-col p-6"
-            >
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">
-                    Sample Question {currentStep + 1}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {Math.round(progress)}%
-                  </span>
-                </div>
-                <Progress value={progress} className="h-2" />
-              </div>
-
-              {/* Question Card */}
+          {(phase === "question1" || phase === "question2") &&
+            currentQuestion && (
               <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="flex-1 flex flex-col"
+                key={`question-${currentStep}`}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                className="absolute inset-0 flex flex-col p-6"
               >
+                {/* Progress Bar */}
                 <div className="mb-4">
-                  <h3 className="text-2xl mb-2">{currentQuestion.question}</h3>
-                  {currentQuestion.description && (
-                    <p className="text-sm text-muted-foreground">
-                      {currentQuestion.description}
-                    </p>
-                  )}
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">
+                      Sample Question {currentStep + 1}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {Math.round(progress)}%
+                    </span>
+                  </div>
+                  <Progress value={progress} className="h-2" />
                 </div>
 
-                {/* Options - Show first 4 for brevity */}
-                <div className="space-y-2">
-                  {currentQuestion.options.slice(0, 4).map((option, idx) => {
-                    const isSelected = selectedAnswer === option;
+                {/* Question Card */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex flex-1 flex-col"
+                >
+                  <div className="mb-4">
+                    <h3 className="mb-2 text-2xl">
+                      {currentQuestion.question}
+                    </h3>
+                    {currentQuestion.description && (
+                      <p className="text-sm text-muted-foreground">
+                        {currentQuestion.description}
+                      </p>
+                    )}
+                  </div>
 
-                    return (
-                      <motion.div
-                        key={option}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className={`p-3 rounded-lg border-2 transition-all duration-300 ${
-                          isSelected
-                            ? "border-primary bg-primary/10 shadow-lg scale-105"
-                            : "border-muted bg-white/50 dark:bg-black/20"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                              isSelected
-                                ? "border-primary bg-primary"
-                                : "border-muted-foreground/30"
-                            }`}
-                          >
-                            {isSelected && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="w-2 h-2 rounded-full bg-white"
-                              />
-                            )}
+                  {/* Options - Show first 4 for brevity */}
+                  <div className="space-y-2">
+                    {currentQuestion.options.slice(0, 4).map((option, idx) => {
+                      const isSelected = selectedAnswer === option;
+
+                      return (
+                        <motion.div
+                          key={option}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className={`transition-all duration-300 rounded-lg border-2 p-3 ${
+                            isSelected
+                              ? "scale-105 border-primary bg-primary/10 shadow-lg"
+                              : "border-muted bg-white/50 dark:bg-black/20"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all ${
+                                isSelected
+                                  ? "border-primary bg-primary"
+                                  : "border-muted-foreground/30"
+                              }`}
+                            >
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="h-2 w-2 rounded-full bg-white"
+                                />
+                              )}
+                            </div>
+                            <span>{option}</span>
                           </div>
-                          <span>{option}</span>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
+            )}
 
           {/* Results Phase - Show All Features */}
           {(phase === "results" || phase === "features") && (
@@ -330,7 +387,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
               key="results"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute inset-0 flex flex-col p-6 overflow-y-auto"
+              className="absolute inset-0 flex flex-col overflow-y-auto p-6"
             >
               <div className="space-y-4">
                 {/* Top Match */}
@@ -340,37 +397,40 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                   transition={{ delay: 0.2 }}
                   className="text-center"
                 >
-                  <div className="bg-yellow-400 p-3 rounded-full inline-block mb-2">
+                  <div className="mb-2 inline-block rounded-full bg-yellow-400 p-3">
                     <span className="text-3xl">🏆</span>
                   </div>
-                  <div className="text-xs text-green-600 dark:text-green-400 mb-1">
+                  <div className="mb-1 text-xs text-green-600 dark:text-green-400">
                     TOP MATCH
                   </div>
-                  <h2 className="text-3xl mb-2">Scrum</h2>
-                  <div className="bg-muted rounded-full h-2 max-w-xs mx-auto overflow-hidden">
+                  <h2 className="mb-2 text-3xl">Scrum</h2>
+                  <div className="mx-auto h-2 max-w-xs overflow-hidden rounded-full bg-muted">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: "95%" }}
                       transition={{ duration: 0.8 }}
-                      className="bg-gradient-to-r from-green-500 to-green-600 h-full"
+                      className="h-full bg-gradient-to-r from-green-500 to-green-600"
                     />
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">95% Match</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    95% Match
+                  </p>
                 </motion.div>
 
                 {/* Top 3 Results Feature */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
-                  animate={{ 
-                    y: 0, 
+                  animate={{
+                    y: 0,
                     opacity: 1,
                     scale: showFeature === "top3" ? 1.02 : 1,
-                    borderColor: showFeature === "top3" ? "rgb(var(--primary))" : "transparent"
                   }}
                   transition={{ delay: 0.4 }}
-                  className="glass-card p-4 rounded-lg border-2"
+                  className={`glass-card rounded-lg border-2 p-4 ${
+                    showFeature === "top3" ? "border-primary" : "border-transparent"
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-primary" />
                       <span className="text-sm">Top 3 Recommendations</span>
@@ -379,15 +439,21 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>1. Scrum</span>
-                      <span className="text-green-600 dark:text-green-400">95%</span>
+                      <span className="text-green-600 dark:text-green-400">
+                        95%
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>2. SAFe</span>
-                      <span className="text-blue-600 dark:text-blue-400">78%</span>
+                      <span className="text-blue-600 dark:text-blue-400">
+                        78%
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>3. Hybrid</span>
-                      <span className="text-purple-600 dark:text-purple-400">72%</span>
+                      <span className="text-purple-600 dark:text-purple-400">
+                        72%
+                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -397,45 +463,51 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                   {/* Industry Benchmark */}
                   <motion.div
                     initial={{ scale: 0 }}
-                    animate={{ 
+                    animate={{
                       scale: 1,
-                      borderColor: showFeature === "benchmark" ? "rgb(var(--primary))" : "transparent",
-                      boxShadow: showFeature === "benchmark" ? "0 0 20px rgba(var(--primary), 0.3)" : "none"
                     }}
                     transition={{ delay: 0.6 }}
-                    className="glass-card p-3 rounded-lg border-2 text-center"
+                    className={`glass-card rounded-lg border-2 p-3 text-center ${
+                      showFeature === "benchmark"
+                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+                        : "border-transparent"
+                    }`}
                   >
-                    <BarChart3 className="h-6 w-6 mx-auto mb-1 text-primary" />
+                    <BarChart3 className="mx-auto mb-1 h-6 w-6 text-primary" />
                     <p className="text-xs">Industry Benchmark</p>
                   </motion.div>
 
                   {/* Pitch Mode */}
                   <motion.div
                     initial={{ scale: 0 }}
-                    animate={{ 
+                    animate={{
                       scale: 1,
-                      borderColor: showFeature === "pitch" ? "rgb(var(--primary))" : "transparent",
-                      boxShadow: showFeature === "pitch" ? "0 0 20px rgba(var(--primary), 0.3)" : "none"
                     }}
                     transition={{ delay: 0.7 }}
-                    className="glass-card p-3 rounded-lg border-2 text-center"
+                    className={`glass-card rounded-lg border-2 p-3 text-center ${
+                      showFeature === "pitch"
+                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+                        : "border-transparent"
+                    }`}
                   >
-                    <Presentation className="h-6 w-6 mx-auto mb-1 text-primary" />
+                    <Presentation className="mx-auto mb-1 h-6 w-6 text-primary" />
                     <p className="text-xs">Pitch Mode</p>
                   </motion.div>
 
                   {/* Share & Print */}
                   <motion.div
                     initial={{ scale: 0 }}
-                    animate={{ 
+                    animate={{
                       scale: 1,
-                      borderColor: showFeature === "share" ? "rgb(var(--primary))" : "transparent",
-                      boxShadow: showFeature === "share" ? "0 0 20px rgba(var(--primary), 0.3)" : "none"
                     }}
                     transition={{ delay: 0.8 }}
-                    className="glass-card p-3 rounded-lg border-2 text-center"
+                    className={`glass-card rounded-lg border-2 p-3 text-center ${
+                      showFeature === "share"
+                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+                        : "border-transparent"
+                    }`}
                   >
-                    <div className="flex justify-center gap-1 mb-1">
+                    <div className="mb-1 flex justify-center gap-1">
                       <Share2 className="h-5 w-5 text-primary" />
                       <Printer className="h-5 w-5 text-primary" />
                     </div>
@@ -449,14 +521,15 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-center pt-2"
+                    className="pt-2 text-center"
                   >
                     <Button
                       size="lg"
                       onClick={onStartRealAssessment}
                       className="gap-2"
                     >
-                      Start Your Assessment <ArrowRight className="h-5 w-5" />
+                      Start Your Assessment{" "}
+                      <ArrowRight className="h-5 w-5" />
                     </Button>
                   </motion.div>
                 )}
@@ -471,23 +544,27 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute bottom-6 left-6 right-6 bg-black/80 text-white p-3 rounded-lg text-center text-sm backdrop-blur-sm"
+            className="absolute bottom-6 left-6 right-6 rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
           >
             {currentCaption}
           </motion.div>
         )}
 
         {/* Animated Background Effect */}
-        <div className="absolute inset-0 pointer-events-none opacity-30">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="pointer-events-none absolute inset-0 opacity-30">
+          <div className="absolute left-0 top-0 h-64 w-64 animate-pulse rounded-full bg-primary/20 blur-3xl" />
+          <div
+            className="absolute bottom-0 right-0 h-64 w-64 animate-pulse rounded-full bg-purple-500/20 blur-3xl"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
       </div>
 
       {/* Demo Description */}
-      <div className="mt-4 p-4 bg-muted/30 rounded-lg">
-        <p className="text-sm text-muted-foreground text-center">
-          <strong>30-second quick tour</strong> showing key features with captions. Full assessment takes 3-5 minutes.
+      <div className="mt-4 rounded-lg bg-muted/30 p-4">
+        <p className="text-center text-sm text-muted-foreground">
+          <strong>30-second quick tour</strong> showing key features with
+          captions. Full assessment takes 3–5 minutes.
         </p>
       </div>
     </div>
