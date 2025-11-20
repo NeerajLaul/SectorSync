@@ -22,7 +22,7 @@ import {
   ArrowRight, Play, Pause, RotateCcw, CheckCircle2, TrendingUp,
   BarChart3, Share2, Printer, Presentation
 } from "lucide-react";
-import { QUESTIONS } from "../utils/questions";
+import questionsData from "../data/questions.json";
 
 interface AssessmentDemoProps {
   /** Optional callback triggered when user clicks "Start Your Assessment" */
