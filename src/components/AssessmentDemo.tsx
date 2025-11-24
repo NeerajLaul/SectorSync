@@ -589,13 +589,11 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
         {/* Captions Overlay (z-20, above everything else) */}
         {currentCaption && isPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="absolute bottom-6 left-6 right-6 z-20 rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
-          >
-            {currentCaption}
+          <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-red-600 text-white text-2xl font-bold">
+            {currentCaption || "CAPTION TEST"}
+          </div>
+        )}
+
           </motion.div>
         )}
 
