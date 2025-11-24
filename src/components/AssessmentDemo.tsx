@@ -585,28 +585,25 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           </AnimatePresence>
         </div>
 
-        {/* Captions Overlay – small pill at bottom center */}
+        {/* Captions Overlay – anchored at true bottom inside demo container */}
         {currentCaption && isPlaying && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            className="pointer-events-none absolute bottom-4 left-0 right-0 z-[80] flex justify-center"
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute bottom-[1.5rem] left-1/2 -translate-x-1/2 z-[80]"
           >
             <div
               className="
-                pointer-events-auto inline-flex max-w-[85%]
-                rounded-md border border-border
-                px-4 py-2 text-center text-xs sm:text-sm
-                bg-white/90 text-black
-                dark:bg-black/80 dark:text-white
-                shadow-md
+                text-sm sm:text-base text-black dark:text-white
+                px-4 py-1 
               "
             >
               {currentCaption}
             </div>
           </motion.div>
         )}
+
 
 
         {/* Animated Background Effect (behind everything) */}
