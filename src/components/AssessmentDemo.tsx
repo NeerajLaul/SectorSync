@@ -594,25 +594,20 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
         </div>
       </div>
 
-      {/* Captions Overlay – inside demo, bottom center, floating */}
+      {/* 👉 Caption strip directly UNDER the demo box */}
       {currentCaption && isPlaying && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 8 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60]"
-        >
+        <div className="mt-3 flex w-full justify-center">
           <div
             className="
-              px-4 py-2 text-xs sm:text-sm text-black dark:text-white
-              bg-white/85 dark:bg-black/70
-              rounded-md shadow-sm
-              border border-border
+              max-w-[90%] text-center text-sm
+              px-4 py-2 rounded-md border border-border shadow-sm
+              bg-white/90 text-black
+              dark:bg-black/80 dark:text-white
             "
           >
             {currentCaption}
           </div>
-        </motion.div>
+        </div>
       )}
 
 
