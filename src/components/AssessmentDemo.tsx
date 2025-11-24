@@ -51,7 +51,7 @@ interface Question {
 }
 
 // Quick demo - only show 2 answers we auto-select
-const DEMO_ANSWERS = ["Small", "Speed"];
+const DEMO_ANSWERS = ["Small", "Speed"] as const;
 
 // Caption script with timing
 const CAPTION_SCRIPT = [
@@ -85,9 +85,25 @@ const CAPTION_SCRIPT = [
   },
 ];
 
+// helper to normalize option display text
+const getOptionText = (option: string | QuestionOption): string =>
+  typeof option === "string" ? option : option.text ?? option.value ?? "";
+
+// helper to pick a demo option by keyword (e.g. "Small", "Speed")
+const pickDemoOption = (question: Question | undefined, keyword: string): string | null => {
+  if (!question || !question.options?.length) return null;
+
+  const lowerKeyword = keyword.toLowerCase();
+  const texts = question.options.map(getOptionText);
+
+  const match = texts.find((t) => t.toLowerCase().includes(lowerKeyword));
+  return match ?? texts[0] ?? null;
+};
+
 export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [demoQuestions, setDemoQuestions] = useState<Question[]>([]);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [phase, setPhase] = useState<
@@ -102,27 +118,28 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   const startTimeRef = useRef<number>(0);
   const timerRef = useRef<number | null>(null);
 
+  const hasDemoQuestions = demoQuestions.length >= 2;
+
   // --- Fetch questions from backend once ---
   useEffect(() => {
     fetch("http://localhost:5000/api/questions")
       .then((res) => res.json())
       .then((data: Question[]) => {
-        setQuestions(data || []);
+        const safeData = Array.isArray(data) ? data : [];
+        setQuestions(safeData);
 
         // Pick demo questions: prefer index 0 and 3, fallback to first two
         const picks: Question[] = [];
-        if (data[0]) picks.push(data[0]);
-        if (data[3]) {
-          picks.push(data[3]);
-        } else if (data[1]) {
-          picks.push(data[1]);
+        if (safeData[0]) picks.push(safeData[0]);
+        if (safeData[3]) {
+          picks.push(safeData[3]);
+        } else if (safeData[1]) {
+          picks.push(safeData[1]);
         }
         setDemoQuestions(picks);
       })
       .catch((err) => console.error("Failed to load demo questions:", err));
   }, []);
-
-  const hasDemoQuestions = demoQuestions.length >= 1;
 
   // Synchronized caption updates
   useEffect(() => {
@@ -168,7 +185,8 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           setSelectedAnswer(null);
         }
         if (elapsed >= 5.5 && !selectedAnswer) {
-          setSelectedAnswer(DEMO_ANSWERS[0]);
+          const picked = pickDemoOption(demoQuestions[0], DEMO_ANSWERS[0]);
+          if (picked) setSelectedAnswer(picked);
         }
       } else if (elapsed < 10) {
         if (phase !== "question2") {
@@ -176,8 +194,9 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           setCurrentStep(1);
           setSelectedAnswer(null);
         }
-        if (elapsed >= 8.5 && selectedAnswer !== DEMO_ANSWERS[1]) {
-          setSelectedAnswer(DEMO_ANSWERS[1]);
+        if (elapsed >= 8.5 && !selectedAnswer) {
+          const picked = pickDemoOption(demoQuestions[1], DEMO_ANSWERS[1]);
+          if (picked) setSelectedAnswer(picked);
         }
       } else if (elapsed < 13) {
         if (phase !== "results") {
@@ -219,7 +238,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
         timerRef.current = null;
       }
     };
-  }, [isPlaying, phase, selectedAnswer, showFeature, hasDemoQuestions]);
+  }, [isPlaying, phase, selectedAnswer, showFeature, hasDemoQuestions, demoQuestions]);
 
   const handlePlayPause = () => {
     if (!hasDemoQuestions) return; // avoid starting before data loads
@@ -252,12 +271,6 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       : phase === "question2"
       ? 50
       : 100;
-
-  // helper to normalize option display text
-  const getOptionText = (option: string | QuestionOption): string =>
-    typeof option === "string"
-      ? option
-      : option.text ?? option.value ?? "";
 
   return (
     <div className="w-full">
@@ -459,11 +472,13 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                     y: 0,
                     opacity: 1,
                     scale: showFeature === "top3" ? 1.02 : 1,
+                    borderColor:
+                      showFeature === "top3"
+                        ? "rgb(var(--primary))"
+                        : "transparent",
                   }}
                   transition={{ delay: 0.4 }}
-                  className={`glass-card rounded-lg border-2 p-4 ${
-                    showFeature === "top3" ? "border-primary" : "border-transparent"
-                  }`}
+                  className="glass-card rounded-lg border-2 p-4"
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -500,13 +515,17 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                     initial={{ scale: 0 }}
                     animate={{
                       scale: 1,
+                      borderColor:
+                        showFeature === "benchmark"
+                          ? "rgb(var(--primary))"
+                          : "transparent",
+                      boxShadow:
+                        showFeature === "benchmark"
+                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                          : "none",
                     }}
                     transition={{ delay: 0.6 }}
-                    className={`glass-card rounded-lg border-2 p-3 text-center ${
-                      showFeature === "benchmark"
-                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
-                        : "border-transparent"
-                    }`}
+                    className="glass-card rounded-lg border-2 p-3 text-center"
                   >
                     <BarChart3 className="mx-auto mb-1 h-6 w-6 text-primary" />
                     <p className="text-xs">Industry Benchmark</p>
@@ -517,13 +536,17 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                     initial={{ scale: 0 }}
                     animate={{
                       scale: 1,
+                      borderColor:
+                        showFeature === "pitch"
+                          ? "rgb(var(--primary))"
+                          : "transparent",
+                      boxShadow:
+                        showFeature === "pitch"
+                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                          : "none",
                     }}
                     transition={{ delay: 0.7 }}
-                    className={`glass-card rounded-lg border-2 p-3 text-center ${
-                      showFeature === "pitch"
-                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
-                        : "border-transparent"
-                    }`}
+                    className="glass-card rounded-lg border-2 p-3 text-center"
                   >
                     <Presentation className="mx-auto mb-1 h-6 w-6 text-primary" />
                     <p className="text-xs">Pitch Mode</p>
@@ -534,13 +557,17 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                     initial={{ scale: 0 }}
                     animate={{
                       scale: 1,
+                      borderColor:
+                        showFeature === "share"
+                          ? "rgb(var(--primary))"
+                          : "transparent",
+                      boxShadow:
+                        showFeature === "share"
+                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                          : "none",
                     }}
                     transition={{ delay: 0.8 }}
-                    className={`glass-card rounded-lg border-2 p-3 text-center ${
-                      showFeature === "share"
-                        ? "border-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]"
-                        : "border-transparent"
-                    }`}
+                    className="glass-card rounded-lg border-2 p-3 text-center"
                   >
                     <div className="mb-1 flex justify-center gap-1">
                       <Share2 className="h-5 w-5 text-primary" />
