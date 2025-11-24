@@ -597,11 +597,19 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       {/* 👉 Caption strip directly UNDER the demo box */}
       {currentCaption && isPlaying && (
         <div className="mt-3 flex w-full justify-center">
-          <div className="max-w-[90%] text-center text-sm text-black dark:text-white">
+          <div
+            className="
+              max-w-[90%] text-center text-sm
+              px-4 py-2 rounded-md border border-border shadow-sm
+              bg-white/90 text-black
+              dark:bg-black/80 dark:text-white
+            "
+          >
             {currentCaption}
           </div>
         </div>
       )}
+
 
       {/* Demo Description */}
       <div className="mt-4 rounded-lg bg-muted/30 p-4">
