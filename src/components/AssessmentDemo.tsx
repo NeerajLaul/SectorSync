@@ -116,7 +116,8 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   >(null);
 
   const startTimeRef = useRef<number>(0);
-  const timerRef = useRef<number | null>(null);
+  const demoTimerRef = useRef<number | null>(null);
+  const captionTimerRef = useRef<number | null>(null);
 
   const hasDemoQuestions = demoQuestions.length >= 2;
 
@@ -141,36 +142,48 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       .catch((err) => console.error("Failed to load demo questions:", err));
   }, []);
 
-  // Synchronized caption updates
+  // --- Synchronized caption updates (separate interval from main demo) ---
   useEffect(() => {
+    // Clear any existing caption timer
+    if (captionTimerRef.current) {
+      window.clearInterval(captionTimerRef.current);
+      captionTimerRef.current = null;
+    }
+
     if (!isPlaying) {
-      // Clear captions when stopped
       setCurrentCaption("");
       return;
     }
-  
+
     const updateCaption = () => {
       const elapsed = (Date.now() - startTimeRef.current) / 1000;
-  
+
       const currentNarration = CAPTION_SCRIPT.find(
         (item) => elapsed >= item.time && elapsed < item.time + item.duration
       );
-  
+
       setCurrentCaption(currentNarration?.text ?? "");
     };
-  
+
     updateCaption();
-    const interval = window.setInterval(updateCaption, 100);
-    return () => window.clearInterval(interval);
+    captionTimerRef.current = window.setInterval(updateCaption, 100);
+
+    return () => {
+      if (captionTimerRef.current) {
+        window.clearInterval(captionTimerRef.current);
+        captionTimerRef.current = null;
+      }
+    };
   }, [isPlaying]);
 
-  // Main demo flow - ~23 second timeline
+  // --- Main demo flow - ~23 second timeline ---
   useEffect(() => {
+    if (demoTimerRef.current) {
+      window.clearInterval(demoTimerRef.current);
+      demoTimerRef.current = null;
+    }
+
     if (!isPlaying || !hasDemoQuestions) {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
       return;
     }
 
@@ -224,20 +237,16 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       } else {
         // Demo complete at ~23 seconds
         setIsPlaying(false);
-        if (timerRef.current) {
-          window.clearInterval(timerRef.current);
-          timerRef.current = null;
-        }
       }
     };
 
     runDemo();
-    timerRef.current = window.setInterval(runDemo, 100);
+    demoTimerRef.current = window.setInterval(runDemo, 100);
 
     return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (demoTimerRef.current) {
+        window.clearInterval(demoTimerRef.current);
+        demoTimerRef.current = null;
       }
     };
   }, [isPlaying, phase, selectedAnswer, showFeature, hasDemoQuestions, demoQuestions]);
@@ -257,9 +266,14 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     setSelectedAnswer(null);
     setShowFeature(null);
     setCurrentCaption("");
-    if (timerRef.current) {
-      window.clearInterval(timerRef.current);
-      timerRef.current = null;
+
+    if (demoTimerRef.current) {
+      window.clearInterval(demoTimerRef.current);
+      demoTimerRef.current = null;
+    }
+    if (captionTimerRef.current) {
+      window.clearInterval(captionTimerRef.current);
+      captionTimerRef.current = null;
     }
   };
 
@@ -317,305 +331,310 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
       {/* Demo Container */}
       <div className="relative aspect-video overflow-hidden rounded-xl border-2 bg-gradient-to-br from-primary/5 to-purple-100/10 dark:from-primary/10 dark:to-purple-900/20">
-        <AnimatePresence mode="wait">
-          {/* Intro Phase */}
-          {phase === "intro" && (
-            <motion.div
-              key="intro"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -50 }}
-              className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center"
-            >
+        {/* Main content (z-10) */}
+        <div className="absolute inset-0 z-10">
+          <AnimatePresence mode="wait">
+            {/* Intro Phase */}
+            {phase === "intro" && (
               <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="space-y-4"
+                key="intro"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, y: -50 }}
+                className="flex h-full flex-col items-center justify-center p-8 text-center"
               >
-                <div className="mb-4 inline-block rounded-full bg-primary/10 p-6">
-                  <CheckCircle2 className="h-16 w-16 text-primary" />
-                </div>
-                <h3 className="text-4xl">SectorSync</h3>
-                <p className="mx-auto max-w-md text-xl text-muted-foreground">
-                  Data-Driven Project Management Advisor
-                </p>
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* Question Phases */}
-          {(phase === "question1" || phase === "question2") &&
-            currentQuestion && (
-              <motion.div
-                key={`question-${currentStep}`}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                className="absolute inset-0 flex flex-col p-6"
-              >
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Sample Question {currentStep + 1}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      {Math.round(progress)}%
-                    </span>
-                  </div>
-                  <Progress value={progress} className="h-2" />
-                </div>
-
-                {/* Question Card */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="flex flex-1 flex-col"
+                  className="space-y-4"
                 >
-                  <div className="mb-4">
-                    <h3 className="mb-2 text-2xl">{currentQuestion.question}</h3>
-                    {currentQuestion.description && (
-                      <p className="text-sm text-muted-foreground">
-                        {currentQuestion.description}
-                      </p>
-                    )}
+                  <div className="mb-4 inline-block rounded-full bg-primary/10 p-6">
+                    <CheckCircle2 className="h-16 w-16 text-primary" />
                   </div>
-
-                  {/* Options - Show first 4 for brevity */}
-                  <div className="space-y-2">
-                    {currentQuestion.options.slice(0, 4).map((option, idx) => {
-                      const displayText = getOptionText(option);
-                      const isSelected = selectedAnswer === displayText;
-
-                      return (
-                        <motion.div
-                          key={
-                            typeof option === "string"
-                              ? option
-                              : option.id ?? displayText ?? idx
-                          }
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 }}
-                          className={`rounded-lg border-2 p-3 transition-all duration-300 ${
-                            isSelected
-                              ? "scale-105 border-primary bg-primary/10 shadow-lg"
-                              : "border-muted bg-white/50 dark:bg-black/20"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all ${
-                                isSelected
-                                  ? "border-primary bg-primary"
-                                  : "border-muted-foreground/30"
-                              }`}
-                            >
-                              {isSelected && (
-                                <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  className="h-2 w-2 rounded-full bg-white"
-                                />
-                              )}
-                            </div>
-                            <span>{displayText}</span>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
+                  <h3 className="text-4xl">SectorSync</h3>
+                  <p className="mx-auto max-w-md text-xl text-muted-foreground">
+                    Data-Driven Project Management Advisor
+                  </p>
                 </motion.div>
               </motion.div>
             )}
 
-          {/* Results Phase - Show All Features */}
-          {(phase === "results" || phase === "features") && (
-            <motion.div
-              key="results"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="absolute inset-0 flex flex-col overflow-y-auto p-6"
-            >
-              <div className="space-y-4">
-                {/* Top Match */}
+            {/* Question Phases */}
+            {(phase === "question1" || phase === "question2") &&
+              currentQuestion && (
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-center"
+                  key={`question-${currentStep}`}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  className="flex h-full flex-col p-6"
                 >
-                  <div className="mb-2 inline-block rounded-full bg-yellow-400 p-3">
-                    <span className="text-3xl">🏆</span>
+                  {/* Progress Bar */}
+                  <div className="mb-4">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        Sample Question {currentStep + 1}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(progress)}%
+                      </span>
+                    </div>
+                    <Progress value={progress} className="h-2" />
                   </div>
-                  <div className="mb-1 text-xs text-green-600 dark:text-green-400">
-                    TOP MATCH
-                  </div>
-                  <h2 className="mb-2 text-3xl">Scrum</h2>
-                  <div className="mx-auto h-2 max-w-xs overflow-hidden rounded-full bg-muted">
+
+                  {/* Question Card */}
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex flex-1 flex-col"
+                  >
+                    <div className="mb-4">
+                      <h3 className="mb-2 text-2xl">
+                        {currentQuestion.question}
+                      </h3>
+                      {currentQuestion.description && (
+                        <p className="text-sm text-muted-foreground">
+                          {currentQuestion.description}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Options - Show first 4 for brevity */}
+                    <div className="space-y-2">
+                      {currentQuestion.options.slice(0, 4).map((option, idx) => {
+                        const displayText = getOptionText(option);
+                        const isSelected = selectedAnswer === displayText;
+
+                        return (
+                          <motion.div
+                            key={
+                              typeof option === "string"
+                                ? option
+                                : option.id ?? displayText ?? idx
+                            }
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className={`rounded-lg border-2 p-3 transition-all duration-300 ${
+                              isSelected
+                                ? "scale-105 border-primary bg-primary/10 shadow-lg"
+                                : "border-muted bg-white/50 dark:bg-black/20"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all ${
+                                  isSelected
+                                    ? "border-primary bg-primary"
+                                    : "border-muted-foreground/30"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="h-2 w-2 rounded-full bg-white"
+                                  />
+                                )}
+                              </div>
+                              <span>{displayText}</span>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+
+            {/* Results Phase - Show All Features */}
+            {(phase === "results" || phase === "features") && (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex h-full flex-col overflow-y-auto p-6"
+              >
+                <div className="space-y-4">
+                  {/* Top Match */}
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-center"
+                  >
+                    <div className="mb-2 inline-block rounded-full bg-yellow-400 p-3">
+                      <span className="text-3xl">🏆</span>
+                    </div>
+                    <div className="mb-1 text-xs text-green-600 dark:text-green-400">
+                      TOP MATCH
+                    </div>
+                    <h2 className="mb-2 text-3xl">Scrum</h2>
+                    <div className="mx-auto h-2 max-w-xs overflow-hidden rounded-full bg-muted">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: "95%" }}
+                        transition={{ duration: 0.8 }}
+                        className="h-full bg-gradient-to-r from-green-500 to-green-600"
+                      />
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      95% Match
+                    </p>
+                  </motion.div>
+
+                  {/* Top 3 Results Feature */}
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      scale: showFeature === "top3" ? 1.02 : 1,
+                      borderColor:
+                        showFeature === "top3"
+                          ? "rgb(var(--primary))"
+                          : "transparent",
+                    }}
+                    transition={{ delay: 0.4 }}
+                    className="glass-card rounded-lg border-2 p-4"
+                  >
+                    <div className="mb-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5 text-primary" />
+                        <span className="text-sm">Top 3 Recommendations</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>1. Scrum</span>
+                        <span className="text-green-600 dark:text-green-400">
+                          95%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>2. SAFe</span>
+                        <span className="text-blue-600 dark:text-blue-400">
+                          78%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>3. Hybrid</span>
+                        <span className="text-purple-600 dark:text-purple-400">
+                          72%
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Features Grid */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {/* Industry Benchmark */}
                     <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: "95%" }}
-                      transition={{ duration: 0.8 }}
-                      className="h-full bg-gradient-to-r from-green-500 to-green-600"
-                    />
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    95% Match
-                  </p>
-                </motion.div>
-
-                {/* Top 3 Results Feature */}
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{
-                    y: 0,
-                    opacity: 1,
-                    scale: showFeature === "top3" ? 1.02 : 1,
-                    borderColor:
-                      showFeature === "top3"
-                        ? "rgb(var(--primary))"
-                        : "transparent",
-                  }}
-                  transition={{ delay: 0.4 }}
-                  className="glass-card rounded-lg border-2 p-4"
-                >
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-primary" />
-                      <span className="text-sm">Top 3 Recommendations</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>1. Scrum</span>
-                      <span className="text-green-600 dark:text-green-400">
-                        95%
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>2. SAFe</span>
-                      <span className="text-blue-600 dark:text-blue-400">
-                        78%
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>3. Hybrid</span>
-                      <span className="text-purple-600 dark:text-purple-400">
-                        72%
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Features Grid */}
-                <div className="grid grid-cols-3 gap-3">
-                  {/* Industry Benchmark */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{
-                      scale: 1,
-                      borderColor:
-                        showFeature === "benchmark"
-                          ? "rgb(var(--primary))"
-                          : "transparent",
-                      boxShadow:
-                        showFeature === "benchmark"
-                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                          : "none",
-                    }}
-                    transition={{ delay: 0.6 }}
-                    className="glass-card rounded-lg border-2 p-3 text-center"
-                  >
-                    <BarChart3 className="mx-auto mb-1 h-6 w-6 text-primary" />
-                    <p className="text-xs">Industry Benchmark</p>
-                  </motion.div>
-
-                  {/* Pitch Mode */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{
-                      scale: 1,
-                      borderColor:
-                        showFeature === "pitch"
-                          ? "rgb(var(--primary))"
-                          : "transparent",
-                      boxShadow:
-                        showFeature === "pitch"
-                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                          : "none",
-                    }}
-                    transition={{ delay: 0.7 }}
-                    className="glass-card rounded-lg border-2 p-3 text-center"
-                  >
-                    <Presentation className="mx-auto mb-1 h-6 w-6 text-primary" />
-                    <p className="text-xs">Pitch Mode</p>
-                  </motion.div>
-
-                  {/* Share & Print */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{
-                      scale: 1,
-                      borderColor:
-                        showFeature === "share"
-                          ? "rgb(var(--primary))"
-                          : "transparent",
-                      boxShadow:
-                        showFeature === "share"
-                          ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                          : "none",
-                    }}
-                    transition={{ delay: 0.8 }}
-                    className="glass-card rounded-lg border-2 p-3 text-center"
-                  >
-                    <div className="mb-1 flex justify-center gap-1">
-                      <Share2 className="h-5 w-5 text-primary" />
-                      <Printer className="h-5 w-5 text-primary" />
-                    </div>
-                    <p className="text-xs">Share & Print</p>
-                  </motion.div>
-                </div>
-
-                {/* CTA */}
-                {phase === "features" && onStartRealAssessment && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="pt-2 text-center"
-                  >
-                    <Button
-                      size="lg"
-                      onClick={onStartRealAssessment}
-                      className="gap-2"
+                      initial={{ scale: 0 }}
+                      animate={{
+                        scale: 1,
+                        borderColor:
+                          showFeature === "benchmark"
+                            ? "rgb(var(--primary))"
+                            : "transparent",
+                        boxShadow:
+                          showFeature === "benchmark"
+                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                            : "none",
+                      }}
+                      transition={{ delay: 0.6 }}
+                      className="glass-card rounded-lg border-2 p-3 text-center"
                     >
-                      Start Your Assessment{" "}
-                      <ArrowRight className="h-5 w-5" />
-                    </Button>
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                      <BarChart3 className="mx-auto mb-1 h-6 w-6 text-primary" />
+                      <p className="text-xs">Industry Benchmark</p>
+                    </motion.div>
 
-        {/* Captions Overlay */}
+                    {/* Pitch Mode */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{
+                        scale: 1,
+                        borderColor:
+                          showFeature === "pitch"
+                            ? "rgb(var(--primary))"
+                            : "transparent",
+                        boxShadow:
+                          showFeature === "pitch"
+                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                            : "none",
+                      }}
+                      transition={{ delay: 0.7 }}
+                      className="glass-card rounded-lg border-2 p-3 text-center"
+                    >
+                      <Presentation className="mx-auto mb-1 h-6 w-6 text-primary" />
+                      <p className="text-xs">Pitch Mode</p>
+                    </motion.div>
+
+                    {/* Share & Print */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{
+                        scale: 1,
+                        borderColor:
+                          showFeature === "share"
+                            ? "rgb(var(--primary))"
+                            : "transparent",
+                        boxShadow:
+                          showFeature === "share"
+                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
+                            : "none",
+                      }}
+                      transition={{ delay: 0.8 }}
+                      className="glass-card rounded-lg border-2 p-3 text-center"
+                    >
+                      <div className="mb-1 flex justify-center gap-1">
+                        <Share2 className="h-5 w-5 text-primary" />
+                        <Printer className="h-5 w-5 text-primary" />
+                      </div>
+                      <p className="text-xs">Share & Print</p>
+                    </motion.div>
+                  </div>
+
+                  {/* CTA */}
+                  {phase === "features" && onStartRealAssessment && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="pt-2 text-center"
+                    >
+                      <Button
+                        size="lg"
+                        onClick={onStartRealAssessment}
+                        className="gap-2"
+                      >
+                        Start Your Assessment{" "}
+                        <ArrowRight className="h-5 w-5" />
+                      </Button>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Captions Overlay (z-20, always above content/background) */}
         {currentCaption && isPlaying && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute bottom-6 left-6 right-6 rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
+            className="absolute bottom-6 left-6 right-6 z-20 rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
           >
             {currentCaption}
           </motion.div>
         )}
 
-        {/* Animated Background Effect */}
-        <div className="pointer-events-none absolute inset-0 opacity-30">
+        {/* Animated Background Effect (z-0, behind everything) */}
+        <div className="pointer-events-none absolute inset-0 z-0 opacity-30">
           <div className="absolute left-0 top-0 h-64 w-64 animate-pulse rounded-full bg-primary/20 blur-3xl" />
           <div
             className="absolute bottom-0 right-0 h-64 w-64 animate-pulse rounded-full bg-purple-500/20 blur-3xl"
