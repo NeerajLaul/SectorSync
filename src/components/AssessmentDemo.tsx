@@ -586,15 +586,15 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
             )}
           </AnimatePresence>
         </div>
-
+        
         {currentCaption && isPlaying && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[9999] flex items-center justify-center bg-red-600 text-white text-2xl font-bold"
+            className="absolute bottom-4 left-4 right-4 z-[50] rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
           >
-            {currentCaption || "CAPTION TEST"}
+            {currentCaption}
           </motion.div>
         )}
 
