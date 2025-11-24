@@ -592,11 +592,15 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute bottom-4 left-4 right-4 z-[50] rounded-lg bg-black/80 p-3 text-center text-sm text-white backdrop-blur-sm"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[50] 
+                       max-w-[80%] px-4 py-2 
+                       rounded-md bg-white/90 text-black text-sm 
+                       shadow-lg text-center"
           >
             {currentCaption}
           </motion.div>
         )}
+
 
 
         {/* Animated Background Effect (z-0, behind everything) */}
