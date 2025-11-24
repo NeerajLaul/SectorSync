@@ -143,24 +143,26 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
   // Synchronized caption updates
   useEffect(() => {
-    if (!isPlaying) return;
-
+    if (!isPlaying) {
+      // Clear captions when stopped
+      setCurrentCaption("");
+      return;
+    }
+  
     const updateCaption = () => {
       const elapsed = (Date.now() - startTimeRef.current) / 1000;
-
+  
       const currentNarration = CAPTION_SCRIPT.find(
         (item) => elapsed >= item.time && elapsed < item.time + item.duration
       );
-
-      if (currentNarration && currentNarration.text !== currentCaption) {
-        setCurrentCaption(currentNarration.text);
-      }
+  
+      setCurrentCaption(currentNarration?.text ?? "");
     };
-
+  
     updateCaption();
     const interval = window.setInterval(updateCaption, 100);
     return () => window.clearInterval(interval);
-  }, [isPlaying, currentCaption]);
+  }, [isPlaying]);
 
   // Main demo flow - ~23 second timeline
   useEffect(() => {
