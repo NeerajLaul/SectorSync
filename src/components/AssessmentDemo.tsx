@@ -587,15 +587,17 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           </AnimatePresence>
         </div>
 
-        {/* Captions Overlay (z-20, above everything else) */}
         {currentCaption && isPlaying && (
-          <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-red-600 text-white text-2xl font-bold">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[9999] flex items-center justify-center bg-red-600 text-white text-2xl font-bold"
+          >
             {currentCaption || "CAPTION TEST"}
-          </div>
-        )}
-
           </motion.div>
         )}
+
 
         {/* Animated Background Effect (z-0, behind everything) */}
         <div className="pointer-events-none absolute inset-0 z-0 opacity-30">
