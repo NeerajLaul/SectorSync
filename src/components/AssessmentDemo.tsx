@@ -14,7 +14,7 @@
  * <AssessmentDemo onStartRealAssessment={() => startAssessment()} />
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
@@ -90,7 +90,10 @@ const getOptionText = (option: string | QuestionOption): string =>
   typeof option === "string" ? option : option.text ?? option.value ?? "";
 
 // helper to pick a demo option by keyword (e.g. "Small", "Speed")
-const pickDemoOption = (question: Question | undefined, keyword: string): string | null => {
+const pickDemoOption = (
+  question: Question | undefined,
+  keyword: string
+): string | null => {
   if (!question || !question.options?.length) return null;
 
   const lowerKeyword = keyword.toLowerCase();
@@ -100,24 +103,20 @@ const pickDemoOption = (question: Question | undefined, keyword: string): string
   return match ?? texts[0] ?? null;
 };
 
+type Phase = "intro" | "question1" | "question2" | "results" | "features";
+type FeatureHighlight = "top3" | "benchmark" | "pitch" | "share" | null;
+
 export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [demoQuestions, setDemoQuestions] = useState<Question[]>([]);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [elapsed, setElapsed] = useState(0); // seconds since demo start
+  const [phase, setPhase] = useState<Phase>("intro");
   const [currentStep, setCurrentStep] = useState(0);
-  const [phase, setPhase] = useState<
-    "intro" | "question1" | "question2" | "results" | "features"
-  >("intro");
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentCaption, setCurrentCaption] = useState("");
-  const [showFeature, setShowFeature] = useState<
-    "top3" | "benchmark" | "pitch" | "share" | null
-  >(null);
-
-  const startTimeRef = useRef<number>(0);
-  const demoTimerRef = useRef<number | null>(null);
-  const captionTimerRef = useRef<number | null>(null);
+  const [showFeature, setShowFeature] = useState<FeatureHighlight>(null);
 
   const hasDemoQuestions = demoQuestions.length >= 2;
 
@@ -142,139 +141,118 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
       .catch((err) => console.error("Failed to load demo questions:", err));
   }, []);
 
-  // --- Synchronized caption updates (separate interval from main demo) ---
+  // --- Single timer driving elapsed time ---
   useEffect(() => {
-    // Clear any existing caption timer
-    if (captionTimerRef.current) {
-      window.clearInterval(captionTimerRef.current);
-      captionTimerRef.current = null;
+    if (!isPlaying || !hasDemoQuestions) return;
+
+    const start = performance.now() - elapsed * 1000;
+
+    const id = window.setInterval(() => {
+      const now = performance.now();
+      const seconds = (now - start) / 1000;
+      setElapsed(seconds);
+    }, 100);
+
+    return () => {
+      window.clearInterval(id);
+    };
+  }, [isPlaying, hasDemoQuestions, elapsed]);
+
+  // --- Derive phase, auto-answers, feature highlights, and stop condition from elapsed ---
+  useEffect(() => {
+    if (!hasDemoQuestions) return;
+
+    const t = elapsed;
+
+    // Stop demo after ~23 seconds
+    if (t >= 23) {
+      if (isPlaying) {
+        setIsPlaying(false);
+      }
+      return;
     }
 
+    // Phase transitions
+    if (t < 4) {
+      if (phase !== "intro") setPhase("intro");
+    } else if (t < 7) {
+      if (phase !== "question1") {
+        setPhase("question1");
+        setCurrentStep(0);
+        setSelectedAnswer(null);
+        setShowFeature(null);
+      }
+      if (t >= 5.5 && !selectedAnswer) {
+        const picked = pickDemoOption(demoQuestions[0], DEMO_ANSWERS[0]);
+        if (picked) setSelectedAnswer(picked);
+      }
+    } else if (t < 10) {
+      if (phase !== "question2") {
+        setPhase("question2");
+        setCurrentStep(1);
+        setSelectedAnswer(null);
+        setShowFeature(null);
+      }
+      if (t >= 8.5 && !selectedAnswer) {
+        const picked = pickDemoOption(demoQuestions[1], DEMO_ANSWERS[1]);
+        if (picked) setSelectedAnswer(picked);
+      }
+    } else if (t < 13) {
+      if (phase !== "results") {
+        setPhase("results");
+        setShowFeature("top3");
+        setSelectedAnswer(null);
+      }
+    } else if (t < 15.5) {
+      if (showFeature !== "benchmark") {
+        setShowFeature("benchmark");
+      }
+    } else if (t < 18) {
+      if (showFeature !== "pitch") {
+        setShowFeature("pitch");
+      }
+    } else if (t < 20.5) {
+      if (showFeature !== "share") {
+        setShowFeature("share");
+      }
+    } else {
+      if (phase !== "features") {
+        setPhase("features");
+      }
+    }
+  }, [elapsed, hasDemoQuestions, phase, selectedAnswer, showFeature, demoQuestions, isPlaying]);
+
+  // --- Captions derived purely from elapsed ---
+  useEffect(() => {
     if (!isPlaying) {
       setCurrentCaption("");
       return;
     }
 
-    const updateCaption = () => {
-      const elapsed = (Date.now() - startTimeRef.current) / 1000;
+    const t = elapsed;
+    const current = CAPTION_SCRIPT.find(
+      (item) => t >= item.time && t < item.time + item.duration
+    );
 
-      const currentNarration = CAPTION_SCRIPT.find(
-        (item) => elapsed >= item.time && elapsed < item.time + item.duration
-      );
-
-      setCurrentCaption(currentNarration?.text ?? "");
-    };
-
-    updateCaption();
-    captionTimerRef.current = window.setInterval(updateCaption, 100);
-
-    return () => {
-      if (captionTimerRef.current) {
-        window.clearInterval(captionTimerRef.current);
-        captionTimerRef.current = null;
-      }
-    };
-  }, [isPlaying]);
-
-  // --- Main demo flow - ~23 second timeline ---
-  useEffect(() => {
-    if (demoTimerRef.current) {
-      window.clearInterval(demoTimerRef.current);
-      demoTimerRef.current = null;
-    }
-
-    if (!isPlaying || !hasDemoQuestions) {
-      return;
-    }
-
-    const runDemo = () => {
-      const elapsed = (Date.now() - startTimeRef.current) / 1000;
-
-      // Phase transitions based on time
-      if (elapsed < 4) {
-        if (phase !== "intro") setPhase("intro");
-      } else if (elapsed < 7) {
-        if (phase !== "question1") {
-          setPhase("question1");
-          setCurrentStep(0);
-          setSelectedAnswer(null);
-        }
-        if (elapsed >= 5.5 && !selectedAnswer) {
-          const picked = pickDemoOption(demoQuestions[0], DEMO_ANSWERS[0]);
-          if (picked) setSelectedAnswer(picked);
-        }
-      } else if (elapsed < 10) {
-        if (phase !== "question2") {
-          setPhase("question2");
-          setCurrentStep(1);
-          setSelectedAnswer(null);
-        }
-        if (elapsed >= 8.5 && !selectedAnswer) {
-          const picked = pickDemoOption(demoQuestions[1], DEMO_ANSWERS[1]);
-          if (picked) setSelectedAnswer(picked);
-        }
-      } else if (elapsed < 13) {
-        if (phase !== "results") {
-          setPhase("results");
-          setShowFeature("top3");
-        }
-      } else if (elapsed < 15.5) {
-        if (showFeature !== "benchmark") {
-          setShowFeature("benchmark");
-        }
-      } else if (elapsed < 18) {
-        if (showFeature !== "pitch") {
-          setShowFeature("pitch");
-        }
-      } else if (elapsed < 20.5) {
-        if (showFeature !== "share") {
-          setShowFeature("share");
-        }
-      } else if (elapsed < 23) {
-        if (phase !== "features") {
-          setPhase("features");
-        }
-      } else {
-        // Demo complete at ~23 seconds
-        setIsPlaying(false);
-      }
-    };
-
-    runDemo();
-    demoTimerRef.current = window.setInterval(runDemo, 100);
-
-    return () => {
-      if (demoTimerRef.current) {
-        window.clearInterval(demoTimerRef.current);
-        demoTimerRef.current = null;
-      }
-    };
-  }, [isPlaying, phase, selectedAnswer, showFeature, hasDemoQuestions, demoQuestions]);
+    setCurrentCaption(current?.text ?? "");
+  }, [elapsed, isPlaying]);
 
   const handlePlayPause = () => {
-    if (!hasDemoQuestions) return; // avoid starting before data loads
+    if (!hasDemoQuestions) return;
     if (!isPlaying) {
-      startTimeRef.current = Date.now();
+      // starting or resuming – keep elapsed as-is so it resumes smoothly
     }
     setIsPlaying((prev) => !prev);
   };
 
   const handleRestart = () => {
     setIsPlaying(false);
-    setCurrentStep(0);
+    setElapsed(0);
     setPhase("intro");
+    setCurrentStep(0);
     setSelectedAnswer(null);
     setShowFeature(null);
     setCurrentCaption("");
-
-    if (demoTimerRef.current) {
-      window.clearInterval(demoTimerRef.current);
-      demoTimerRef.current = null;
-    }
-    if (captionTimerRef.current) {
-      window.clearInterval(captionTimerRef.current);
-      captionTimerRef.current = null;
-    }
   };
 
   const currentQuestion = demoQuestions[currentStep];
@@ -539,10 +517,6 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                           showFeature === "benchmark"
                             ? "rgb(var(--primary))"
                             : "transparent",
-                        boxShadow:
-                          showFeature === "benchmark"
-                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                            : "none",
                       }}
                       transition={{ delay: 0.6 }}
                       className="glass-card rounded-lg border-2 p-3 text-center"
@@ -560,10 +534,6 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                           showFeature === "pitch"
                             ? "rgb(var(--primary))"
                             : "transparent",
-                        boxShadow:
-                          showFeature === "pitch"
-                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                            : "none",
                       }}
                       transition={{ delay: 0.7 }}
                       className="glass-card rounded-lg border-2 p-3 text-center"
@@ -581,10 +551,6 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
                           showFeature === "share"
                             ? "rgb(var(--primary))"
                             : "transparent",
-                        boxShadow:
-                          showFeature === "share"
-                            ? "0 0 20px rgba(var(--primary-rgb, 0,0,0), 0.3)"
-                            : "none",
                       }}
                       transition={{ delay: 0.8 }}
                       className="glass-card rounded-lg border-2 p-3 text-center"
@@ -621,7 +587,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
           </AnimatePresence>
         </div>
 
-        {/* Captions Overlay (z-20, always above content/background) */}
+        {/* Captions Overlay (z-20, above everything else) */}
         {currentCaption && isPlaying && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
