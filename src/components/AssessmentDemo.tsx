@@ -107,7 +107,7 @@ type Phase = "intro" | "question1" | "question2" | "results" | "features";
 type FeatureHighlight = "top3" | "benchmark" | "pitch" | "share" | null;
 
 export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [, setQuestions] = useState<Question[]>([]); // kept in case you want later
   const [demoQuestions, setDemoQuestions] = useState<Question[]>([]);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -145,6 +145,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
   useEffect(() => {
     if (!isPlaying || !hasDemoQuestions) return;
 
+    // start time adjusted for current elapsed (so resume works)
     const start = performance.now() - elapsed * 1000;
 
     const id = window.setInterval(() => {
@@ -158,7 +159,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     };
   }, [isPlaying, hasDemoQuestions, elapsed]);
 
-  // --- Derive phase, auto-answers, feature highlights, and stop condition from elapsed ---
+  // --- Derive phase, answers, feature highlights from elapsed ---
   useEffect(() => {
     if (!hasDemoQuestions) return;
 
@@ -239,9 +240,6 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
   const handlePlayPause = () => {
     if (!hasDemoQuestions) return;
-    if (!isPlaying) {
-      // starting or resuming – keep elapsed as-is so it resumes smoothly
-    }
     setIsPlaying((prev) => !prev);
   };
 
@@ -586,24 +584,29 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
             )}
           </AnimatePresence>
         </div>
-        
+
+        {/* Captions Overlay - bottom center, theme-aware */}
         {currentCaption && isPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[50] 
-                       max-w-[80%] px-4 py-2 
-                       rounded-md bg-white/90 text-black text-sm 
-                       shadow-lg text-center"
-          >
-            {currentCaption}
-          </motion.div>
+          <div className="absolute inset-0 z-20 flex items-end justify-center pb-4 pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="
+                pointer-events-auto
+                max-w-[80%] px-4 py-2
+                rounded-md shadow-lg border border-border
+                text-sm text-center
+                bg-white/90 text-black
+                dark:bg-black/80 dark:text-white
+              "
+            >
+              {currentCaption}
+            </motion.div>
+          </div>
         )}
 
-
-
-        {/* Animated Background Effect (z-0, behind everything) */}
+        {/* Animated Background Effect (behind everything) */}
         <div className="pointer-events-none absolute inset-0 z-0 opacity-30">
           <div className="absolute left-0 top-0 h-64 w-64 animate-pulse rounded-full bg-primary/20 blur-3xl" />
           <div
