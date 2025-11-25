@@ -7,21 +7,25 @@
       {
         "id": "project_size-opt1",
         "text": "Small",
+        "description": "Involves fewer than 50 people, a single team or functional area, lasts under 3 months, costs under $100K, and has low complexity.",
         "factorValue": ""
       },
       {
         "id": "project_size-opt2",
         "text": "Medium",
+        "description": "Includes 50–100 people across a few teams or areas, lasts 3–9 months, costs $100K–$1M, and has moderate complexity.",
         "factorValue": ""
       },
       {
         "id": "project_size-opt3",
         "text": "Large",
+        "description": "Involves 125–200 people, multiple teams or company-wide impact, lasts 9 months–3 years, costs $1M–$10M, and has high complexity.",
         "factorValue": ""
       },
        {
         "id": "project_size-opt4",
         "text": "Enterprise",
+        "description": "Involves more than 200 people, wide organizational or public impact, lasts over 3 years, costs over $10M, and has extremely high complexity.",
         "factorValue": ""
       }
     ]
@@ -34,21 +38,25 @@
       {
         "id": "planning-opt1",
         "text": "Highly Adaptive (Low Governance)",
+        "description": "Flexible, feedback-driven planning with minimal documentation, suited for change-heavy environments and rapid decision-making. Planning occurs in short cycles based on evolving stakeholder needs.",
         "factorValue": ""
       },
       {
         "id": "planning-opt2",
         "text": "Hybrid Planning (Moderate Governance)",
+        "description": "Mixes upfront structure with adaptive refinements, using checkpoints and controlled change to balance flexibility and oversight.",
         "factorValue": ""
       },
       {
         "id": "planning-opt3",
         "text": "Predictive Planning ( Structured Governance)",
+        "description": "Most planning is completed before execution, with defined scope, schedule, and deliverables, and changes allowed only through formal approval.",
         "factorValue": ""
       },
        {
         "id": "planning-opt4",
         "text": "Stage-Gate Planning (High Governance & Compliance)",
+         "description": "Strict, documentation-heavy approach with phase approvals and full upfront requirements, ideal for regulated or safety-critical projects.",
         "factorValue": ""
       }
     ]
@@ -61,21 +69,25 @@
       {
         "id": "sourcing-opt1",
         "text": "Internal Sourcing Team",
+        "description": "Uses existing employees across functions who collaborate and share responsibilities on the project.",
         "factorValue": ""
       },
       {
         "id": "sourcing-opt2",
         "text": "Internal Sourcing Specialists",
+        "description": "Uses internal experts who work only within their specific areas without cross-functional collaboration.",
         "factorValue": ""
       },
       {
         "id": "sourcing-opt3",
         "text": "Mixed Internal/External Sourcing Team",
+        "description": "Combines internal staff and external resources, promoting teamwork while expanding capabilities.",
         "factorValue": ""
       },
       {
         "id": "sourcing-opt4",
         "text": "Mixed Internal/External Sourcing Specialists",
+        "description": "Blends internal and external expertise, but roles are task-specific with little cross-collaboration.",
         "factorValue": ""
       }
     ]
@@ -88,21 +100,25 @@
       {
         "id": "goals-opt1",
         "text": "Speed to Market",
+        "description": "Prioritizes rapid execution and delivery, even if refinement comes later.",
         "factorValue": ""
       },
       {
         "id": "goals-opt2",
         "text": "Compliance,Risk, and Stability",
+        "description": "Driven by regulatory, safety, or contractual constraints requiring stability and control.",
         "factorValue": ""
       },
       {
         "id": "goals-opt3",
         "text": "Innovation and Experimentation",
+        "description": "Emphasizes novel solutions, experimentation, and creativity, often involving uncertainty.",
         "factorValue": ""
       },
       {
         "id": "goals-opt4",
         "text": "Optimization and Efficiency",
+        "description": "Focuses on improving performance, quality, or operational efficiency.",
         "factorValue": ""
       }
     ]
@@ -115,21 +131,25 @@
       {
         "id": "customer_communication-opt1",
         "text": "Continuous, Direct Collaboration",
+        "description": "Customer deeply engaged throughout the project, frequently giving feedback and decisions.",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt2",
         "text": "Scheduled Touchpoints with Feedback Cycle",
+        "description": "Customer engaged at planned feedback points such as milestones or reviews.",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt3",
         "text": "Structured Reporting & Controlled Decision Points",
+        "description": "Customer involved mainly through formal status reports and approval checkpoints.",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt4",
         "text": "Approval-Based or Contractual Communication",
+        "description": "Customer only involved for approvals, compliance, or contractual sign-off.",
         "factorValue": ""
       }
     ]
@@ -142,21 +162,25 @@
       {
         "id": "customer_involvement-opt1",
         "text": "Daily or Continuous Communication",
+        "description": "Frequent/daily communication needed for rapid decisions and real-time collaboration.",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt2",
         "text": "Weekly or Regular Communication",
+        "description": "Communication occurs on a set cadence (weekly/bi-weekly) to align decisions and updates.",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt3",
         "text": "Milestone-Based Communication",
+        "description": "Communication mainly at major delivery points or key milestones.",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt4",
         "text": "Minimal or As-Needed Communication",
+        "description": "Communication only when needed for approvals, escalations, or contract reviews.",
         "factorValue": ""
       }
     ]
@@ -169,16 +193,19 @@
       {
         "id": "design-opt1",
         "text": "Up-Front Design",
+        "description": "Vast majority of system's design is completed, documented, and approved before any significant implementation begins.",
         "factorValue": ""
       },
       {
         "id": "design-opt2",
         "text": "Iterative Design",
+        "description": "Cyclical process of creating, testing, analyzing, and refining the design.",
         "factorValue": ""
       },
       {
         "id": "design-opt3",
         "text": "Emergent Design",
+        "description": "Design is continuous and just-in-time integrated into daily development.",
         "factorValue": ""
       }
     ]
@@ -191,16 +218,19 @@
       {
         "id": "development-opt1",
         "text": "Linear",
+        "description": "Each phase is completed fully before moving to the next, with no overlap.",
         "factorValue": ""
       },
       {
         "id": "development-opt2",
         "text": "Iterative",
+        "description": "Work is repeated in cycles, refining the product based on feedback each time.",
         "factorValue": ""
       },
       {
         "id": "development-opt3",
         "text": "Incremental",
+        "description": "The product is built in functional pieces, with each increment adding usable features.",
         "factorValue": ""
       }
     ]
@@ -213,16 +243,19 @@
       {
         "id": "integration_testing-opt1",
         "text": "Continuous",
+        "description": "Integration occurs throughout entire development lifecycle with every change.",
         "factorValue": ""
       },
       {
         "id": "integration_testing-opt2",
         "text": "End Phase",
+        "description": "All development work is completed first with integration occurring at the end.",
         "factorValue": ""
       },
       {
         "id": "integration_testing-opt3",
         "text": "When Possible",
+        "description": "Integration is performed ad hoc or whenever team determines it is feasible, often constrained by resources, time, or project milestones.",
         "factorValue": ""
       }
     ]
@@ -235,16 +268,19 @@
       {
         "id": "closing-opt1",
         "text": "3rd Party Acceptance",
+        "description": "An external entity verifies that the product meets required standards.",
         "factorValue": ""
       },
       {
         "id": "closing-opt2",
         "text": "Team Acceptance",
+        "description": "The internal team signs off that the product meets quality criteria and is ready for review.",
         "factorValue": ""
       },
       {
         "id": "closing-opt3",
         "text": "Customer Acceptance",
+        "description": "Stakeholders formally confirm that the product meets requirements and is ready for use.",
         "factorValue": ""
       }
     ]
