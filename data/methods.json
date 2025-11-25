@@ -2,140 +2,141 @@
   {
     "id": "method1",
     "name": "Scrum",
-    "description": "Agile framework focused on iterative development with sprints and continuous feedback from stakeholders.",
+    "description": "An agile framework used for managing and completing complex projects, typically in software development, but it can be applied to any project requiring a collaborative and iterative approach. It focuses on delivering high-quality work in short, time-boxed iterations known as sprints (typically 1 to 4 weeks long).",
     "attributes": {
-      "project_size": "small, medium",
-      "planning": "iterative",
-      "sourcing": "internal sourcing team",
-      "goals": "speed, innovation, optimization",
-      "customer_communication": "continuous feedback loops",
-      "customer_involvement": "high involvement",
-      "design": "emergent design",
-      "development": "iterative",
-      "integration_testing": "continuous",
-      "closing": "team acceptance"
+      "project_size": "Small, Medium",
+      "planning": "Highly Adaptive (Low Governance)",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Speed to Market, Innovation and Experimentation, Optimization and Efficiency",
+      "customer_communication": "Continuous/Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
     }
   },
   {
     "id": "method2",
     "name": "SAFe",
-    "description": "Scaled Agile Framework (SAFe) brings agile principles to large and enterprise environments through synchronized program increments.",
+    "description": "A structured, scalable approach for applying agile practices across large programs, portfolios, and entire organizations. It provides a comprehensive framework of roles, planning cycles, governance structures, and coordination mechanisms to help multiple teams work together toward shared strategic objectives.",
     "attributes": {
-      "project_size": "large, enterprise",
-      "planning": "incremental, iterative",
-      "sourcing": "mixed internal/external specialists",
-      "goals": "spped, predictability",
-      "customer_communication": "continuous feedback loops, as needed",
-      "customer_involvement": "as needed involvement, medium involvement",
-      "design": "iterative design, emergent design",
-      "development": "incremental",
-      "integration_testing": "continuous",
-      "closing": "team acceptance"
+      "project_size": "Large, Enterprise",
+      "planning": "Moderate Governance (Hybrid Planning)",
+      "sourcing": "Mixed Internal/External Specialists",
+      "goals": "Speed to Market, Compliance/Risk and Stability",
+      "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
+      "customer_involvement": "Weekly or Regular Communication",
+      "design": "Iterative Design, Emergent Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
     }
   },
   {
     "id": "method3",
     "name": "Hybrid",
-    "description": "Blends agile and predictive practices; combines up-front structure with iterative delivery for flexibility and control.",
+    "description": "A hybrid project management model that combines the structured, sequential phases of the traditional Waterfall approach with the repetition and refinement cycles of iterative development. In this model, the classic Waterfall phases—such as requirements, design, development, testing, and deployment—still occur in order, but they are repeated in multiple cycles (iterations) to gradually refine and improve the project output.",
     "attributes": {
-      "project_size": "medium, enterprise, large",
-      "planning": "iterative",
-      "sourcing": "mixed internal/external team",
-      "goals": "speed, predictability",
-      "customer_communication": "milestone reviews",
-      "customer_involvement": "low involvement",
-      "design": "up-front design, iterative design, emergent design",
-      "development": "linear, iterative",
-      "integration_testing": "continuous, end phase",
-      "closing": "team acceptance, customer acceptance, 3rd party acceptance"
+      "project_size": "Medium, Large, Enterprise",
+      "planning": "Moderate Governance (Hybrid Planning)",
+      "sourcing": "Mixed Internal/External Team",
+      "goals": "Speed to Market, Compliance/Risk and Stability",
+      "customer_communication": "Structured Reporting & Controlled Decision Points",
+      "customer_involvement": "Milestone-Based Communication, Weekly or Regular Communication",
+      "design": "Up-Front Design, Iterative Design, Emergent Design",
+      "development": "Linear, Iterative",
+      "integration_testing": "Continuous, End Phase",
+      "closing": "Team Acceptance, Customer Acceptance, 3rd Party Acceptance"
     }
   },
   {
     "id": "method4",
     "name": "Waterfall",
-    "description": "Traditional linear approach with defined stages, emphasizing upfront planning and sequential execution.",
+    "description": "A linear, sequential project management model in which work flows through a series of distinct phases—each completed fully before the next begins. It is one of the earliest and most traditional methods for managing projects, especially those with stable, well-defined requirements.",
     "attributes": {
-      "project_size": "medium, large",
-      "planning": "up-front",
-      "sourcing": "mixed internal/external specialists",
-      "goals": "predictability",
-      "customer_communication": "milestone reviews",
-      "customer_involvement": "low involvement",
-      "design": "upfront design",
-      "development": "linear",
-      "integration_testing": "end phase",
-      "closing": "customer acceptance, 3rd party acceptance"
+      "project_size": "Medium, Large",
+      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "sourcing": "Mixed Internal/External Specialists",
+      "goals": "Compliance/Risk and Stability",
+      "customer_communication": "Approval-Based or Contractual Communication, Structured Reporting & Controlled Decision Points",
+      "customer_involvement": "Milestone-Based Communication, Minimal or As-Needed Communication",
+      "design": "Up-Front Design",
+      "development": "Linear",
+      "integration_testing": "End phase",
+      "closing": "Customer Acceptance, 3rd Party Acceptance"
     }
   },
   {
     "id": "method5",
     "name": "Lean Six Sigma",
-    "description": "Process improvement methodology focused on continuous flow, waste reduction, and measurable quality outcomes.",
+    "description": "A data-driven, process-improvement methodology used to reduce defects, minimize variation, and improve the quality and efficiency of business processes. It focuses on making processes more predictable and consistent by identifying root causes of problems and eliminating them through statistical analysis and structured problem-solving.",
     "attributes": {
-      "project_size": "small, medium",
-      "planning": "up-front, incremental",
-      "sourcing": "internal sourcing specialists",
-      "goals": "innovation, optimization",
-      "customer_communication": "performance metrics",
-      "customer_involvement": "low involvement, medium involvement",
-      "design": "up-front design, emergent design",
-      "development": "linear, iterative",
-      "integration_testing": "when possible",
-      "closing": "team acceptance"
+      "project_size": "Small, Medium",
+      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "sourcing": "Internal Sourcing Specialists",
+      "goals": "Innovation and Experimentation, Optimization and Efficiency",
+      "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
+      "customer_involvement": "Milestone-Based Communication, Minimal or As-Needed Communication",
+      "design": "Up-Front Design, Emergent Design",
+      "development": "Linear, Iterative",
+      "integration_testing": "When Possible",
+      "closing": "Team Acceptance"
     }
   },
   {
     "id": "method6",
     "name": "Lean Continuous Delivery",
-    "description": "Engineering-centric model emphasizing automation, rapid deployment, and continuous integration for quick feedback.",
+    "description": "A project management approach that enables teams to plan, build, test, and deliver project outputs in short, automated cycles, ensuring the product is always in a releasable state and allowing stakeholders to receive value continuously throughout the project lifecycle. This model integrates agile and DevOps principles into the management of work, focusing on rapid feedback, automation, iterative delivery, and reduced release risk.",
     "attributes": {
-      "project_size": "small, medium",
-      "planning": "incremental",
-      "sourcing": "internal sourcing team",
-      "goals": "innovation, speed",
-      "customer_communication": "continuous feedback loops",
-      "customer_involvement": "high involvement",
-      "design": "emergent design",
-      "development": "incremental",
-      "integration_testing": "continuous, when possible",
-      "closing": "customer acceptance"
+      "project_size": "Small, Medium",
+      "planning": "Highly Adaptive (Low Governance)",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Speed to Market, Innovation and Experimentation",
+      "customer_communication": "Continuous/Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Emergent Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous, When Possible",
+      "closing": "Customer Acceptance"
     }
   },
   {
     "id": "method7",
     "name": "Disciplined Agile",
-    "description": "Context-driven toolkit combining agile, lean, and governance practices; encourages flexibility in scaling and delivery.",
+    "description": "A hybrid agile approach, while also incorporating best practices from traditional approaches like waterfall. DA offers a more holistic, scalable, and flexible way of delivering solutions, addressing the entire software delivery lifecycle, from inception to retirement. It provides a comprehensive approach, offering organizations a flexible way to adopt agile practices. Disciplined Agile is designed to be framework-agnostic and provides guidance for tailoring agile practices to suit the unique needs of a particular organization, project, or team.",
     "attributes": {
-      "project_size": "small, medium, large, enterprise",
-      "planning": "iterative, flexible",
-      "sourcing": "mixed internal/external team",
-      "goals": "speed, predictability",
-      "customer_communication": "continuous feedback loops, as needed",
-      "customer_involvement": "as needed involvement, medium involvement",
-      "design": "up-front design, iterative design, emergent design",
-      "development": "iterative, incremental",
-      "integration_testing": "continuous, when possible",
-      "closing": "team acceptance, customer acceptance"
+      "project_size": "Small, Medium, Large, Enterprise",
+      "planning": "Highly Adaptive (Low Governance), Moderate Governance (Hybrid Planning)",
+      "sourcing": "Mixed Internal/External Team",
+      "goals": "Speed to Market, Compliance/Risk and Stability",
+      "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
+      "customer_involvement": "Daily or Continuous Communication, Weekly or Regular Communication",
+      "design": "Up-Front Design, Iterative Design, Emergent Design",
+      "development": "Iterative, Incremental",
+      "integration_testing": "Continuous, When Possible",
+      "closing": "Team Acceptance, Customer Acceptance"
     }
   },
   {
     "id": "method8",
     "name": "PRINCE2",
-    "description": "Structured project management approach with stage gates, defined roles, and milestone-driven oversight.",
+    "description": "A structured, process-based project management methodology that provides a detailed, standardized approach for planning, managing, and controlling projects. It emphasizes governance, clear roles, defined stages, and consistent documentation to ensure projects are delivered in a controlled, organized, and repeatable manner.",
     "attributes": {
-      "project_size": "large, enterprise",
-      "planning": "up-front, incremental",
-      "sourcing": "mixed internal/external specialists",
-      "goals": "predictability",
-      "customer_communication": "milestone reviews",
-      "customer_involvement": "low involvement",
-      "design": "up-front design",
-      "development": "linear, incremental",
-      "integration_testing": "end phase",
-      "closing": "3rd party acceptance"
+      "project_size": "Large, Enterprise",
+      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "sourcing": "Mixed Internal/External Specialists",
+      "goals": "Compliance/Risk and Stability",
+      "customer_communication": "Approval-Based or Contractual Communication",
+      "customer_involvement": "Minimal or As-Needed Communication, Milestone-Based Communication",
+      "design": "Up-Front Design",
+      "development": "Linear, Incremental",
+      "integration_testing": "End Phase",
+      "closing": "3rd Party Acceptance"
     }
   }
 ]
+
 
 
 
