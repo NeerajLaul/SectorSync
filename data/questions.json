@@ -105,7 +105,7 @@
       },
       {
         "id": "goals-opt2",
-        "text": "Compliance,Risk, and Stability",
+        "text": "Compliance, Risk, and Stability",
         "description": "Driven by regulatory, safety, or contractual constraints requiring stability and control.",
         "factorValue": ""
       },
@@ -136,7 +136,7 @@
       },
       {
         "id": "customer_communication-opt2",
-        "text": "Scheduled Touchpoints with Feedback Cycle",
+        "text": "Scheduled Touchpoints with Feedback Cycles",
         "description": "Customer engaged at planned feedback points such as milestones or reviews.",
         "factorValue": ""
       },
