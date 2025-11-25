@@ -28,27 +28,27 @@
   },
   {
     "id": "planning",
-    "question": "How do you expect to plan out your project?",
+    "question": "Given the expected level of governance, stakeholder oversight, and change control requirements, how do you anticipate your project planning will need to be structured?",
     "description": "Think about how you want to approach planning for your project.",
     "options": [
       {
         "id": "planning-opt1",
-        "text": "Iterative",
+        "text": "Highly Adaptive (Low Governance)",
         "factorValue": ""
       },
       {
         "id": "planning-opt2",
-        "text": "Up-Front",
+        "text": "Hybrid Planning (Moderate Governance)",
         "factorValue": ""
       },
       {
         "id": "planning-opt3",
-        "text": "Flexible",
+        "text": "Predictive Planning ( Structured Governance)",
         "factorValue": ""
       },
        {
         "id": "planning-opt4",
-        "text": "Incremental",
+        "text": "Stage-Gate Planning (High Governance & Compliance)",
         "factorValue": ""
       }
     ]
@@ -82,88 +82,88 @@
   },
   {
     "id": "goals",
-    "question": "Which of the following best describes the primary goal you anticipate for your project?",
+    "question": "Which primary objective will most strongly influence how the project needs to be managed??",
     "description": "Choose the most important outcome for your project.",
     "options": [
       {
         "id": "goals-opt1",
-        "text": "Speed",
+        "text": "Speed to Market",
         "factorValue": ""
       },
       {
         "id": "goals-opt2",
-        "text": "Predictability",
+        "text": "Compliance,Risk, and Stability",
         "factorValue": ""
       },
       {
         "id": "goals-opt3",
-        "text": "Innovation",
+        "text": "Innovation and Experimentation",
         "factorValue": ""
       },
       {
         "id": "goals-opt4",
-        "text": "Optimization",
+        "text": "Optimization and Efficiency",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "customer_communication",
-    "question": "Which of the following best describes the communication style you plan to utilize with your customer(s) for your project?",
+    "question": "Based on how often your customer will need to make decisions, how available they are, and how frequently feedback must occur, how do you anticipate communication and customer involvement will need to be structured?",
     "description": "Think about the situations and events that would warrant customer interactions.",
     "options": [
       {
         "id": "customer_communication-opt1",
-        "text": "Continuous Feedback Loops",
+        "text": "Continuous, Direct Collaboration",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt2",
-        "text": "As Needed",
+        "text": "Scheduled Touchpoints with Feedback Cycle",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt3",
-        "text": "Milestone Reviews",
+        "text": "Structured Reporting & Controlled Decision Points",
         "factorValue": ""
       },
       {
         "id": "customer_communication-opt4",
-        "text": "Performance Metrics",
+        "text": "Approval-Based or Contractual Communication",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "customer_involvement",
-    "question": "Which of the following best describes the communication level you plan to maintain with your customer(s) for this project?",
+    "question": "Given the expected pace of decisions, review cycles, and stakeholder availability, how frequently will communication most likely need to occur?",
     "description": "Think about how often you want to interact with your customer.",
     "options": [
       {
         "id": "customer_involvement-opt1",
-        "text": "High Involvement",
+        "text": "Daily or Continuous Communication",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt2",
-        "text": "Medium Involvement",
+        "text": "Weekly or Regular Communication",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt3",
-        "text": "Low Involvement",
+        "text": "Milestone-Based Communication",
         "factorValue": ""
       },
       {
         "id": "customer_involvement-opt4",
-        "text": "As Needed Involvement",
+        "text": "Minimal or As-Needed Communication",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "design",
-    "question": "How and when do you anticipate the engineering design phase to occur for your project?",
+    "question": "Given the level of uncertainty, regulatory needs, and expected design evolution, how will engineering design most likely need to be structured?",
     "description": "Think about when and how design would happen.",
     "options": [
       {
@@ -185,7 +185,7 @@
   },
   {
     "id": "development",
-    "question": "How you anticipate engineering development will occur over the course of the project?",
+    "question": "Given anticipated technical complexity, stakeholder involvement, and feedback needs, how do you expect engineering development will need to be managed?",
     "description": "Think about how you would want to build features.",
     "options": [
       {
@@ -207,7 +207,7 @@
   },
   {
     "id": "integration_testing",
-    "question": "How do you anticipate engineering integration and testing will be performed?",
+    "question": "Based on system risk, change frequency, and validation needs, how do you expect integration and testing will need to be conducted?",
     "description": "Think about your testing and integration cadence.",
     "options": [
       {
@@ -229,7 +229,7 @@
   },
   {
     "id": "closing",
-    "question": "What is the anticipated mode of closure for the project?",
+    "question": "Given the type of deliverables, acceptance requirements, and ownership expectations, how do you anticipate final delivery and closure will need to be managed?",
     "description": "Think about who would provide the final approval for your project.",
     "options": [
       {
