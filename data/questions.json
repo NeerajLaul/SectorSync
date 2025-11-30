@@ -32,31 +32,37 @@
   },
   {
     "id": "planning",
-    "question": "Given the expected level of governance, stakeholder oversight, and change control requirements, how do you anticipate your project planning will need to be structured?",
+    "question": "How much oversight, formality, and approval do you expect will be required to manage planning and changes during this project?",
     "description": "Think about how you want to approach planning for your project.",
     "options": [
       {
         "id": "planning-opt1",
-        "text": "Highly Adaptive (Low Governance)",
-        "description": "Flexible, feedback-driven planning with minimal documentation, suited for change-heavy environments and rapid decision-making. Planning occurs in short cycles based on evolving stakeholder needs.",
+        "text": "Minimal",
+        "description": "Planning is lightweight, flexible, and can change quickly with minimal approval.",
         "factorValue": ""
       },
       {
         "id": "planning-opt2",
-        "text": "Hybrid Planning (Moderate Governance)",
-        "description": "Mixes upfront structure with adaptive refinements, using checkpoints and controlled change to balance flexibility and oversight.",
+        "text": "Guided",
+        "description": "Planning follows a structure but allows adjustments with some review and input.",
         "factorValue": ""
       },
       {
         "id": "planning-opt3",
-        "text": "Predictive Planning ( Structured Governance)",
-        "description": "Most planning is completed before execution, with defined scope, schedule, and deliverables, and changes allowed only through formal approval.",
+        "text": "Structured",
+        "description": "Planning is documented and changes require formal review and approval.",
         "factorValue": ""
       },
        {
         "id": "planning-opt4",
-        "text": "Stage-Gate Planning (High Governance & Compliance)",
-         "description": "Strict, documentation-heavy approach with phase approvals and full upfront requirements, ideal for regulated or safety-critical projects.",
+        "text": "Restricted",
+         "description": "Planning is tightly controlled with strict approvals, documentation, and compliance requirements.",
+        "factorValue": ""
+      },
+        {
+        "id": "planning-opt5",
+        "text": "Unknown",
+         "description": "The expected level of planning formality is unclear or not yet determined.",
         "factorValue": ""
       }
     ]
@@ -187,50 +193,62 @@
   },
   {
     "id": "design",
-    "question": "Given the level of uncertainty, regulatory needs, and expected design evolution, how will engineering design most likely need to be structured?",
+    "question": "How do you expect major design decisions to be handled over the course of the project?",
     "description": "Think about when and how design would happen.",
     "options": [
       {
         "id": "design-opt1",
-        "text": "Up-Front Design",
-        "description": "Vast majority of system's design is completed, documented, and approved before any significant implementation begins.",
+        "text": "Fixed",
+        "description": "Most design decisions will be made early and are expected to remain stable.",
         "factorValue": ""
       },
       {
         "id": "design-opt2",
-        "text": "Iterative Design",
-        "description": "Cyclical process of creating, testing, analyzing, and refining the design.",
+        "text": "Adjusted",
+        "description": "Some design decisions will be made early but revisited and improved when needed.",
         "factorValue": ""
       },
       {
         "id": "design-opt3",
-        "text": "Emergent Design",
-        "description": "Design is continuous and just-in-time integrated into daily development.",
+        "text": "Flexible",
+        "description": "Design decisions are expected to continue evolving as more is learned.",
+        "factorValue": ""
+      },
+      {
+        "id": "design-opt4",
+        "text": "Unknown",
+        "description": "I do not have enough information to determine how design decisions will be handled.",
         "factorValue": ""
       }
     ]
   },
   {
     "id": "development",
-    "question": "Given anticipated technical complexity, stakeholder involvement, and feedback needs, how do you expect engineering development will need to be managed?",
+    "question": "Based on how the product is expected to perform and function, which best describes the type of system being built?",
     "description": "Think about how you would want to build features.",
     "options": [
       {
         "id": "development-opt1",
-        "text": "Linear",
-        "description": "Each phase is completed fully before moving to the next, with no overlap.",
+        "text": "Optimized",
+        "description": "The product must deliver high efficiency or performance through tightly connected components.",
         "factorValue": ""
       },
       {
         "id": "development-opt2",
-        "text": "Iterative",
-        "description": "Work is repeated in cycles, refining the product based on feedback each time.",
+        "text": "Platform-Based",
+        "description": "The product will rely on existing platforms, tools, or shared services that guide how components connect.",
         "factorValue": ""
       },
       {
         "id": "development-opt3",
-        "text": "Incremental",
-        "description": "The product is built in functional pieces, with each increment adding usable features.",
+        "text": "Modular",
+        "description": "The product should remain flexible, with components that can be replaced, upgraded, or maintained independently.",
+        "factorValue": ""
+      },
+      {
+        "id": "development-opt4",
+        "text": "Undetermined",
+        "description": "The architectural needs or structure are not yet known.",
         "factorValue": ""
       }
     ]
@@ -242,20 +260,27 @@
     "options": [
       {
         "id": "integration_testing-opt1",
-        "text": "Continuous",
-        "description": "Integration occurs throughout entire development lifecycle with every change.",
+        "text": "Integrated",
+        "description": "Most testing must be done at the system level because parts rely heavily on each other.",
         "factorValue": ""
       },
       {
         "id": "integration_testing-opt2",
-        "text": "End Phase",
-        "description": "All development work is completed first with integration occurring at the end.",
+        "text": "Layered",
+        "description": "Both component-level and system-level testing will be needed at different stages.",
         "factorValue": ""
       },
       {
         "id": "integration_testing-opt3",
-        "text": "When Possible",
-        "description": "Integration is performed ad hoc or whenever team determines it is feasible, often constrained by resources, time, or project milestones.",
+        "text": "Isolated",
+        "description": "Most parts can be tested separately since they are largely independent.
+",
+        "factorValue": ""
+      },
+      {
+        "id": "integration_testing-opt4",
+        "text": "Undetermined",
+        "description": "The testing and integration approach is not yet clear.",
         "factorValue": ""
       }
     ]
@@ -267,20 +292,26 @@
     "options": [
       {
         "id": "closing-opt1",
-        "text": "3rd Party Acceptance",
-        "description": "An external entity verifies that the product meets required standards.",
+        "text": "Internal",
+        "description": "Approval will come from internal teams, leaders, or organizational stakeholders.",
         "factorValue": ""
       },
       {
         "id": "closing-opt2",
-        "text": "Team Acceptance",
-        "description": "The internal team signs off that the product meets quality criteria and is ready for review.",
+        "text": "User",
+        "description": "Approval will come from those who directly use, request, or benefit from the product.",
         "factorValue": ""
       },
       {
         "id": "closing-opt3",
-        "text": "Customer Acceptance",
-        "description": "Stakeholders formally confirm that the product meets requirements and is ready for use.",
+        "text": "External",
+        "description": " Approval will involve outside or formal review — legal, compliance, regulators, auditors, or certification bodies.",
+        "factorValue": ""
+      },
+      {
+        "id": "closing-opt4",
+        "text": "Unknown",
+        "description": "Approval requirements are unclear or may be determined later.",
         "factorValue": ""
       }
     ]
