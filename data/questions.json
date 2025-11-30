@@ -22,7 +22,7 @@
         "description": "Involves 125–200 people, multiple teams or company-wide impact, lasts 9 months–3 years, costs $1M–$10M, and has high complexity.",
         "factorValue": ""
       },
-       {
+      {
         "id": "project_size-opt4",
         "text": "Enterprise",
         "description": "Involves more than 200 people, wide organizational or public impact, lasts over 3 years, costs over $10M, and has extremely high complexity.",
@@ -53,13 +53,13 @@
         "description": "Planning is documented and changes require formal review and approval.",
         "factorValue": ""
       },
-       {
+      {
         "id": "planning-opt4",
         "text": "Restricted",
          "description": "Planning is tightly controlled with strict approvals, documentation, and compliance requirements.",
         "factorValue": ""
       },
-        {
+      {
         "id": "planning-opt5",
         "text": "Unknown",
          "description": "The expected level of planning formality is unclear or not yet determined.",
@@ -273,8 +273,7 @@
       {
         "id": "integration_testing-opt3",
         "text": "Isolated",
-        "description": "Most parts can be tested separately since they are largely independent.
-",
+        "description": "Most parts can be tested separately since they are largely independent.",
         "factorValue": ""
       },
       {
