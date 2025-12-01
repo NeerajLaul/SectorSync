@@ -6,11 +6,11 @@ import { Label } from "../components/ui/label";
 import { Progress } from "../components/ui/progress";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-// ✅ removed scoringEngine import — frontend doesn’t use backend logic here
-
+// 🎯 Option + Question types
 interface Option {
   id: string;
   text: string;
+  description?: string;
   factorValue?: string;
 }
 
@@ -26,13 +26,14 @@ interface SurveyPageProps {
   onComplete: (answers: Record<string, string>) => void;
 }
 
+// 🎯 Single option card with inline "Text: description"
 function InteractiveOption({
   option,
   value,
   isSelected,
   onSelect,
 }: {
-  option: string;
+  option: Option;
   value: string;
   isSelected: boolean;
   onSelect: () => void;
@@ -54,20 +55,33 @@ function InteractiveOption({
   return (
     <div
       ref={optionRef}
-      className="flex items-center gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight"
+      className={`flex items-center gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
+        ${isSelected ? "border-primary ring-2 ring-primary/40" : ""}`}
       onClick={onSelect}
       onMouseMove={handleMouseMove}
     >
       <RadioGroupItem
         value={value}
-        id={option}
+        id={option.id}
         className="h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
       />
+
       <Label
-        htmlFor={option}
-        className="flex-1 cursor-pointer text-lg sm:text-xl"
+        htmlFor={option.id}
+        className="flex-1 cursor-pointer text-left"
       >
-        {option}
+        {/* 👉 Small: description */}
+        <div className="flex flex-wrap items-baseline gap-1 sm:gap-2">
+          <span className="text-lg sm:text-xl font-medium">
+            {option.text}
+            {option.description ? ":" : ""}
+          </span>
+          {option.description && (
+            <span className="text-sm sm:text-base text-muted-foreground">
+              {option.description.trim()}
+            </span>
+          )}
+        </div>
       </Label>
     </div>
   );
@@ -76,7 +90,6 @@ function InteractiveOption({
 export function SurveyPage({ onComplete }: SurveyPageProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  // ✅ answers now typed as simple key-value pairs
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
   // Fetch questions from backend
@@ -96,7 +109,10 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
   }
 
   const question = questions[currentQuestion];
-  const progress = Math.min(99.0, ((currentQuestion + 1) / questions.length) * 100);
+  const progress = Math.min(
+    99.0,
+    ((currentQuestion + 1) / questions.length) * 100
+  );
   const isLastQuestion = currentQuestion === questions.length - 1;
   const canProceed = answers[question.id] !== undefined;
 
@@ -105,7 +121,7 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
   };
 
   const handleNext = () => {
-    if (isLastQuestion) onComplete(answers); // ✅ sends raw answers to parent
+    if (isLastQuestion) onComplete(answers);
     else setCurrentQuestion(currentQuestion + 1);
   };
 
@@ -118,9 +134,13 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-950/30"></div>
 
       <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "3s" }}></div>
+      <div
+        className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-float"
+        style={{ animationDelay: "3s" }}
+      ></div>
 
       <div className="w-full max-w-4xl relative z-10">
+        {/* Progress header */}
         <div className="mb-10 glass-subtle rounded-2xl p-6 border border-white/20 dark:border-white/10">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm">
@@ -131,6 +151,7 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
           <Progress value={progress} className="h-3" />
         </div>
 
+        {/* Question card */}
         <Card className="glass-strong p-10 sm:p-12 shadow-2xl border-white/20 dark:border-white/10 transition-all duration-500">
           <div className="mb-10">
             <h2 className="text-3xl sm:text-4xl font-semibold leading-tight mb-4">
@@ -151,14 +172,20 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
             {question.options.map((option) => (
               <InteractiveOption
                 key={option.id}
-                option={option.text}
+                option={option}
                 value={option.factorValue || option.text}
-                isSelected={answers[question.id] === (option.factorValue || option.text)}
-                onSelect={() => handleAnswer(option.factorValue || option.text)}
+                isSelected={
+                  answers[question.id] ===
+                  (option.factorValue || option.text)
+                }
+                onSelect={() =>
+                  handleAnswer(option.factorValue || option.text)
+                }
               />
             ))}
           </RadioGroup>
 
+          {/* Nav buttons */}
           <div className="flex items-center justify-between mt-10 pt-8 border-t border-white/10">
             <Button
               variant="outline"
