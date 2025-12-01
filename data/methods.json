@@ -5,15 +5,15 @@
     "description": "An agile framework used for managing and completing complex projects, typically in software development, but it can be applied to any project requiring a collaborative and iterative approach. It focuses on delivering high-quality work in short, time-boxed iterations known as sprints (typically 1 to 4 weeks long).",
     "attributes": {
       "project_size": "Small, Medium",
-      "planning": "Highly Adaptive (Low Governance)",
+      "planning": "Minimal",
       "sourcing": "Internal Sourcing Team",
       "goals": "Speed to Market, Innovation and Experimentation, Optimization and Efficiency",
       "customer_communication": "Continuous/Direct Collaboration",
       "customer_involvement": "Daily or Continuous Communication",
-      "design": "Emergent Design",
-      "development": "Iterative",
-      "integration_testing": "Continuous",
-      "closing": "Team Acceptance"
+      "design": "Flexible",
+      "development": "Modular",
+      "integration_testing": "Isolated",
+      "closing": "Internal, User"
     }
   },
   {
@@ -22,15 +22,15 @@
     "description": "A structured, scalable approach for applying agile practices across large programs, portfolios, and entire organizations. It provides a comprehensive framework of roles, planning cycles, governance structures, and coordination mechanisms to help multiple teams work together toward shared strategic objectives.",
     "attributes": {
       "project_size": "Large, Enterprise",
-      "planning": "Moderate Governance (Hybrid Planning)",
+      "planning": "Guided, Restricted",
       "sourcing": "Mixed Internal/External Specialists",
       "goals": "Speed to Market, Compliance/Risk and Stability",
       "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
       "customer_involvement": "Weekly or Regular Communication",
-      "design": "Iterative Design, Emergent Design",
-      "development": "Incremental",
-      "integration_testing": "Continuous",
-      "closing": "Team Acceptance"
+      "design": "Adjusted",
+      "development": "Optimized, Platform-Based",
+      "integration_testing": "Layered, Integrated",
+      "closing": "User"
     }
   },
   {
@@ -39,15 +39,15 @@
     "description": "A hybrid project management model that combines the structured, sequential phases of the traditional Waterfall approach with the repetition and refinement cycles of iterative development. In this model, the classic Waterfall phases—such as requirements, design, development, testing, and deployment—still occur in order, but they are repeated in multiple cycles (iterations) to gradually refine and improve the project output.",
     "attributes": {
       "project_size": "Medium, Large, Enterprise",
-      "planning": "Moderate Governance (Hybrid Planning)",
+      "planning": "Guided, Structured",
       "sourcing": "Mixed Internal/External Team",
       "goals": "Speed to Market, Compliance/Risk and Stability",
       "customer_communication": "Structured Reporting & Controlled Decision Points",
       "customer_involvement": "Milestone-Based Communication, Weekly or Regular Communication",
-      "design": "Up-Front Design, Iterative Design, Emergent Design",
-      "development": "Linear, Iterative",
-      "integration_testing": "Continuous, End Phase",
-      "closing": "Team Acceptance, Customer Acceptance, 3rd Party Acceptance"
+      "design": "Adjusted",
+      "development": "Platform-Based",
+      "integration_testing": "Layered",
+      "closing": "User"
     }
   },
   {
@@ -56,15 +56,15 @@
     "description": "A linear, sequential project management model in which work flows through a series of distinct phases—each completed fully before the next begins. It is one of the earliest and most traditional methods for managing projects, especially those with stable, well-defined requirements.",
     "attributes": {
       "project_size": "Medium, Large",
-      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "planning": "Structured",
       "sourcing": "Mixed Internal/External Specialists",
       "goals": "Compliance/Risk and Stability",
       "customer_communication": "Approval-Based or Contractual Communication, Structured Reporting & Controlled Decision Points",
       "customer_involvement": "Milestone-Based Communication, Minimal or As-Needed Communication",
-      "design": "Up-Front Design",
-      "development": "Linear",
-      "integration_testing": "End phase",
-      "closing": "Customer Acceptance, 3rd Party Acceptance"
+      "design": "Fixed",
+      "development": "Optimized",
+      "integration_testing": "Integrated, Layered",
+      "closing": "External"
     }
   },
   {
@@ -73,15 +73,15 @@
     "description": "A data-driven, process-improvement methodology used to reduce defects, minimize variation, and improve the quality and efficiency of business processes. It focuses on making processes more predictable and consistent by identifying root causes of problems and eliminating them through statistical analysis and structured problem-solving.",
     "attributes": {
       "project_size": "Small, Medium",
-      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "planning": "Restricted",
       "sourcing": "Internal Sourcing Specialists",
       "goals": "Innovation and Experimentation, Optimization and Efficiency",
       "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
       "customer_involvement": "Milestone-Based Communication, Minimal or As-Needed Communication",
-      "design": "Up-Front Design, Emergent Design",
-      "development": "Linear, Iterative",
-      "integration_testing": "When Possible",
-      "closing": "Team Acceptance"
+      "design": "Fixed",
+      "development": "Optimized",
+      "integration_testing": "Integrated",
+      "closing": "External"
     }
   },
   {
@@ -90,15 +90,15 @@
     "description": "A project management approach that enables teams to plan, build, test, and deliver project outputs in short, automated cycles, ensuring the product is always in a releasable state and allowing stakeholders to receive value continuously throughout the project lifecycle. This model integrates agile and DevOps principles into the management of work, focusing on rapid feedback, automation, iterative delivery, and reduced release risk.",
     "attributes": {
       "project_size": "Small, Medium",
-      "planning": "Highly Adaptive (Low Governance)",
+      "planning": "Minimal",
       "sourcing": "Internal Sourcing Team",
       "goals": "Speed to Market, Innovation and Experimentation",
       "customer_communication": "Continuous/Direct Collaboration",
       "customer_involvement": "Daily or Continuous Communication",
-      "design": "Emergent Design",
+      "design": "Modular",
       "development": "Incremental",
-      "integration_testing": "Continuous, When Possible",
-      "closing": "Customer Acceptance"
+      "integration_testing": "Isolated, Layered",
+      "closing": "Internal"
     }
   },
   {
@@ -107,15 +107,15 @@
     "description": "A hybrid agile approach, while also incorporating best practices from traditional approaches like waterfall. DA offers a more holistic, scalable, and flexible way of delivering solutions, addressing the entire software delivery lifecycle, from inception to retirement. It provides a comprehensive approach, offering organizations a flexible way to adopt agile practices. Disciplined Agile is designed to be framework-agnostic and provides guidance for tailoring agile practices to suit the unique needs of a particular organization, project, or team.",
     "attributes": {
       "project_size": "Small, Medium, Large, Enterprise",
-      "planning": "Highly Adaptive (Low Governance), Moderate Governance (Hybrid Planning)",
+      "planning": "Minimal, Guided",
       "sourcing": "Mixed Internal/External Team",
       "goals": "Speed to Market, Compliance/Risk and Stability",
       "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
       "customer_involvement": "Daily or Continuous Communication, Weekly or Regular Communication",
-      "design": "Up-Front Design, Iterative Design, Emergent Design",
-      "development": "Iterative, Incremental",
-      "integration_testing": "Continuous, When Possible",
-      "closing": "Team Acceptance, Customer Acceptance"
+      "design": "Adjusted, Flexible",
+      "development": "Platform-Based, Modular",
+      "integration_testing": "Isolated",
+      "closing": "Internal"
     }
   },
   {
@@ -124,18 +124,19 @@
     "description": "A structured, process-based project management methodology that provides a detailed, standardized approach for planning, managing, and controlling projects. It emphasizes governance, clear roles, defined stages, and consistent documentation to ensure projects are delivered in a controlled, organized, and repeatable manner.",
     "attributes": {
       "project_size": "Large, Enterprise",
-      "planning": "Predictive Planning (Structured Governance), Stage-Gate Planning (High Governance & Compliance)",
+      "planning": "Structured, Restricted",
       "sourcing": "Mixed Internal/External Specialists",
       "goals": "Compliance/Risk and Stability",
       "customer_communication": "Approval-Based or Contractual Communication",
       "customer_involvement": "Minimal or As-Needed Communication, Milestone-Based Communication",
-      "design": "Up-Front Design",
-      "development": "Linear, Incremental",
-      "integration_testing": "End Phase",
-      "closing": "3rd Party Acceptance"
+      "design": "Fixed",
+      "development": "Optimized",
+      "integration_testing": "Integrated",
+      "closing": "External"
     }
   }
 ]
+
 
 
 
