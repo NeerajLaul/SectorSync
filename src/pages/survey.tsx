@@ -32,7 +32,7 @@ function InteractiveOption({
   isSelected,
   onSelect,
 }: {
-  option: string;
+  option: Option;
   value: string;
   isSelected: boolean;
   onSelect: () => void;
@@ -54,20 +54,29 @@ function InteractiveOption({
   return (
     <div
       ref={optionRef}
-      className="flex items-center gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight"
+      className={`flex items-center gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
+        ${isSelected ? "border-primary ring-2 ring-primary/40" : ""}`}
       onClick={onSelect}
       onMouseMove={handleMouseMove}
     >
       <RadioGroupItem
         value={value}
-        id={option}
+        id={option.id}
         className="h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
       />
-      <Label
-        htmlFor={option}
-        className="flex-1 cursor-pointer text-lg sm:text-xl"
-      >
-        {option}
+
+      <Label htmlFor={option.id} className="flex-1 cursor-pointer text-left">
+        {/* text + description on one line (wrapping as needed) */}
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+          <span className="text-lg sm:text-xl font-medium">
+            {option.text}
+          </span>
+          {option.description && (
+            <span className="text-sm text-muted-foreground sm:text-right sm:flex-1">
+              {option.description.trim()}
+            </span>
+          )}
+        </div>
       </Label>
     </div>
   );
