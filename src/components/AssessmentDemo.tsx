@@ -242,23 +242,31 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     setIsPlaying((prev) => !prev);
   };
 
-   const handleRestart = () => {
+  const handleRestart = useCallback(() => {
+    // Stop playback and clear running timer
     setIsPlaying(false);
     setCurrentStep(0);
     setPhase("intro");
     setSelectedAnswer(null);
     setShowFeature(null);
     setCurrentCaption("");
+  
+    // Clear any existing timers to avoid duplicate intervals
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    // Automatically start playing after restart
+  
+    // Reset time reference for accurate restart
+    startTimeRef.current = null;
+  
+    // Slight delay to allow React state reset before restarting
     setTimeout(() => {
-      startTimeRef.current = Date.now();
-      setIsPlaying(true);
+      startTimeRef.current = Date.now(); // fresh start time
+      setIsPlaying(true);                // resume auto-play
     }, 50);
-  };
+  }, []);
+
 
 
   const currentQuestion = demoQuestions[currentStep];
