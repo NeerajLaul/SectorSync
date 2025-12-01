@@ -53,29 +53,37 @@ function InteractiveOption({
   };
 
   return (
-  <div
-    ref={optionRef}
-    className={`flex items-start gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
-      ${isSelected ? "border-primary ring-2 ring-primary/40" : ""}`}
-    onClick={onSelect}
-    onMouseMove={handleMouseMove}
-  >
-    <RadioGroupItem
-      value={value}
-      id={option.id}
-      className="mt-1 h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
-    />
-  
-    <Label htmlFor={option.id} className="flex-1 cursor-pointer text-left">
-      <p className="text-lg sm:text-xl leading-normal">
-        <span className="font-medium">{option.text}{option.description ? ":" : ""}</span>
-        {option.description && (
-          <span className="text-muted-foreground"> {option.description.trim()}</span>
-        )}
-      </p>
-    </Label>
-  </div>
+    <div
+      ref={optionRef}
+      className={`flex items-start gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
+        ${isSelected ? "border-primary ring-2 ring-primary/40" : ""}`}
+      onClick={onSelect}
+      onMouseMove={handleMouseMove}
+    >
+      <RadioGroupItem
+        value={value}
+        id={option.id}
+        className="mt-1 h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
+      />
 
+      <Label htmlFor={option.id} className="flex-1 cursor-pointer text-left">
+        {/* One inline sentence: Small: description (wraps naturally) */}
+        <p className="text-lg sm:text-xl leading-normal">
+          <span className="font-medium">
+            {option.text}
+            {option.description ? ":" : ""}
+          </span>
+          {option.description && (
+            <span className="text-muted-foreground">
+              {" "}
+              {option.description.trim()}
+            </span>
+          )}
+        </p>
+      </Label>
+    </div>
+  );
+}
 
 export function SurveyPage({ onComplete }: SurveyPageProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
