@@ -55,7 +55,7 @@ function InteractiveOption({
   return (
     <div
       ref={optionRef}
-      className={`flex items-center gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
+      className={`flex items-start gap-4 p-5 sm:p-6 rounded-2xl glass-card border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl group cursor-spotlight
         ${isSelected ? "border-primary ring-2 ring-primary/40" : ""}`}
       onClick={onSelect}
       onMouseMove={handleMouseMove}
@@ -63,21 +63,17 @@ function InteractiveOption({
       <RadioGroupItem
         value={value}
         id={option.id}
-        className="h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
+        className="mt-1 h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:scale-110"
       />
 
-      <Label
-        htmlFor={option.id}
-        className="flex-1 cursor-pointer text-left"
-      >
-        {/* 👉 Small: description */}
-        <div className="flex flex-wrap items-baseline gap-1 sm:gap-2">
-          <span className="text-lg sm:text-xl font-medium">
-            {option.text}
-            {option.description ? ":" : ""}
-          </span>
+      <Label htmlFor={option.id} className="flex-1 cursor-pointer text-left">
+        <div className="flex flex-wrap items-baseline gap-2 text-lg sm:text-xl leading-snug">
+          {/* Answer (normal text color) */}
+          <span className="font-medium">{option.text}{option.description ? ":" : ""}</span>
+
+          {/* Description (same size but grey) */}
           {option.description && (
-            <span className="text-sm sm:text-base text-muted-foreground">
+            <span className="text-muted-foreground">
               {option.description.trim()}
             </span>
           )}
