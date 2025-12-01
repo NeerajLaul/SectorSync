@@ -242,15 +242,24 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
     setIsPlaying((prev) => !prev);
   };
 
-  const handleRestart = () => {
+   const handleRestart = () => {
     setIsPlaying(false);
-    setElapsed(0);
-    setPhase("intro");
     setCurrentStep(0);
+    setPhase("intro");
     setSelectedAnswer(null);
     setShowFeature(null);
     setCurrentCaption("");
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    // Automatically start playing after restart
+    setTimeout(() => {
+      startTimeRef.current = Date.now();
+      setIsPlaying(true);
+    }, 50);
   };
+
 
   const currentQuestion = demoQuestions[currentStep];
 
