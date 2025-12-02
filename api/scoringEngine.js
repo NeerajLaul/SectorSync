@@ -6,9 +6,20 @@ import fs from "fs";
 const router = express.Router();
 
 const methodsPath = path.join(process.cwd(), "data/methods.json");
-// FIX: The methods file is an ARRAY, so we load it as one.
-// This was NOT the bug, but the original loop treated it like an object.
+// The methods file is an ARRAY, so we load it as one.
 const methods = JSON.parse(fs.readFileSync(methodsPath, "utf8"));
+
+// Answers that should be treated as "no information" and ignored
+const UNKNOWN_TOKENS = [
+  "unknown",
+  "undetermined",
+  "not sure",
+  "unsure",
+  "n/a",
+  "na",
+  "none",
+  "prefer not to say"
+];
 
 function fuzzyMatch(userVal, methodVal) {
   if (!methodVal) return 0;
@@ -22,42 +33,50 @@ function fuzzyMatch(userVal, methodVal) {
 
 // --- REBUILT FUNCTION ---
 function scoreMethodologies(userAnswers) {
-  // FIX 3: Get the list of valid scoring factors from the first method
+  // Get the list of valid scoring factors from the first method
   // This prevents non-scoring answers (like "q1762380000245")
   // from being included in the average.
   const factorKeys = Object.keys(methods[0].attributes);
 
-  // FIX 3: Normalize *only* the relevant answers
+  // Normalize *only* the relevant, meaningful answers
   const normalized = {};
+
   for (const key of factorKeys) {
-    if (userAnswers[key]) {
-      // Only include factors that were actually answered
-      normalized[key] = String(userAnswers[key]).toLowerCase();
-    }
+    const raw = userAnswers[key];
+    if (raw === undefined || raw === null) continue;
+
+    const value = String(raw).trim();
+    if (!value) continue;
+
+    const lower = value.toLowerCase();
+
+    // Skip "unknown/undetermined/not sure" style answers entirely:
+    // they provide no signal and should not affect scores
+    if (UNKNOWN_TOKENS.includes(lower)) continue;
+
+    normalized[key] = lower;
   }
 
   // If no relevant factors were answered, return empty
   if (Object.keys(normalized).length === 0) {
-    return { ranking: [], engineVersion: "4.0.3-fuzzy-fixed" };
+    return { ranking: [], engineVersion: "4.0.4-fuzzy-unknown-skip" };
   }
 
   const allScores = [];
 
-  // FIX 1: Loop over 'methods' as an ARRAY (not Object.entries)
+  // Loop over 'methods' as an ARRAY
   for (const methodObj of methods) {
     const methodName = methodObj.name;
     const methodAttrs = methodObj.attributes;
     let total = 0;
     const contributions = [];
 
-    // Inner loop now iterates over *normalized, relevant* answers
+    // Inner loop iterates over normalized, relevant answers
     for (const [factor, userVal] of Object.entries(normalized)) {
-      
-      // FIX 2: Access attributes from 'methodAttrs' (methodObj.attributes)
       const methodVal = methodAttrs[factor];
       const score = fuzzyMatch(userVal, methodVal);
       total += score;
-      
+
       contributions.push({
         factor,
         normValue: 1,
@@ -66,16 +85,16 @@ function scoreMethodologies(userAnswers) {
       });
     }
 
-    // FIX 3: The denominator is now correct (length of relevant answers)
+    // Denominator = number of relevant answers actually used
     const avgScore = total / Object.keys(normalized).length;
 
-    // FIX 1: Push the 'methodName' (e.g., "Scrum")
     allScores.push({ method: methodName, score: avgScore, contributions });
   }
 
   allScores.sort((a, b) => b.score - a.score);
-  // Bumped version number to show the fix is active
-  return { ranking: allScores, engineVersion: "4.0.3-fuzzy-fixed" };
+
+  // Bumped version number to show unknown-handling is active
+  return { ranking: allScores, engineVersion: "4.0.4-fuzzy-unknown-skip" };
 }
 // --- END REBUILT FUNCTION ---
 
@@ -90,4 +109,5 @@ router.post("/", (req, res) => {
   }
 });
 
+export { scoreMethodologies };
 export default router;

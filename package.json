@@ -36,6 +36,7 @@
             "concurrently": "^9.2.1",
             "cors": "^2.8.5",
             "embla-carousel-react": "^8.6.0",
+            "exceljs": "^4.4.0",
             "express": "^5.1.0",
             "input-otp": "^1.4.2",
             "lucide-react": "^0.487.0",
@@ -59,10 +60,10 @@
             "vite": "6.3.5"
       },
       "scripts": {
-          "dev": "concurrently \"vite\" \"npm run server\"",
-          "build": "vite build",
-          "start": "npm run build && node server.js",
-          "serve": "vite preview",
-          "server": "node server.js"
+            "dev": "concurrently \"vite\" \"npm run server\"",
+            "build": "vite build",
+            "start": "npm run build && node server.js",
+            "serve": "vite preview",
+            "server": "node server.js"
       }
 }

@@ -731,5 +731,1475 @@
       }
     ],
     "timestamp": "2025-11-06T07:00:42.650Z"
+  },
+  "zyy5mp": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Performance Metrics",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.67
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.63
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.62
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.59
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.5599999999999998
+      }
+    ],
+    "timestamp": "2025-11-18T21:50:10.417Z"
+  },
+  "bk50dk": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Performance Metrics",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.67
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.63
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.62
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.59
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.5599999999999998
+      }
+    ],
+    "timestamp": "2025-11-18T21:50:22.978Z"
+  },
+  "9s5nc7": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Linear",
+      "integration_testing": "When Possible",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Waterfall",
+        "score": 0.7
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.63
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.61
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.55
+      },
+      {
+        "method": "SAFe",
+        "score": 0.53
+      }
+    ],
+    "timestamp": "2025-11-18T22:59:11.497Z"
+  },
+  "9h9gwe": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Linear",
+      "integration_testing": "When Possible",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Waterfall",
+        "score": 0.7
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.63
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.61
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.55
+      },
+      {
+        "method": "SAFe",
+        "score": 0.53
+      }
+    ],
+    "timestamp": "2025-11-18T23:00:28.732Z"
+  },
+  "2g9zut": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "As Needed Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.7899999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.61
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.57
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.41999999999999993
+      }
+    ],
+    "timestamp": "2025-11-18T23:04:12.594Z"
+  },
+  "85bgmw": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Flexible",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7799999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.72
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.6699999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.6299999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.43999999999999995
+      }
+    ],
+    "timestamp": "2025-11-18T23:21:02.030Z"
+  },
+  "zq4m4y": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Flexible",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7799999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.72
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.6699999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.6299999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.43999999999999995
+      }
+    ],
+    "timestamp": "2025-11-18T23:33:33.501Z"
+  },
+  "fxupk7": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Flexible",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7799999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.72
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.6699999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.6299999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.43999999999999995
+      }
+    ],
+    "timestamp": "2025-11-19T23:55:47.607Z"
+  },
+  "h51nbj": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Optimization",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Linear",
+      "integration_testing": "End Phase",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "PRINCE2",
+        "score": 0.7
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.63
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6199999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.5799999999999998
+      },
+      {
+        "method": "Scrum",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "SAFe",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.48999999999999994
+      }
+    ],
+    "timestamp": "2025-11-20T00:10:49.539Z"
+  },
+  "wvwaln": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "As Needed Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.7899999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.61
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.57
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.41999999999999993
+      }
+    ],
+    "timestamp": "2025-11-20T03:39:18.275Z"
+  },
+  "5krb32": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "As Needed Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.7899999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.61
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.57
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.41999999999999993
+      }
+    ],
+    "timestamp": "2025-11-20T03:42:55.518Z"
+  },
+  "2mpond": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Flexible",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.74
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.58
+      },
+      {
+        "method": "Scrum",
+        "score": 0.57
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5
+      }
+    ],
+    "timestamp": "2025-11-20T03:43:32.898Z"
+  },
+  "doa5nc": {
+    "answers": {
+      "project_size": "Large",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Innovation",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "Low Involvement",
+      "design": "Up-Front Design",
+      "development": "Linear",
+      "integration_testing": "When Possible",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.72
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.72
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.7199999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.6699999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.5199999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.51
+      },
+      {
+        "method": "SAFe",
+        "score": 0.51
+      }
+    ],
+    "timestamp": "2025-11-20T03:44:29.444Z"
+  },
+  "7i9ziz": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Incremental",
+      "sourcing": "Internal Sourcing Specialists",
+      "goals": "Optimization",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "When Possible",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.7699999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.74
+      },
+      {
+        "method": "Scrum",
+        "score": 0.7
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      }
+    ],
+    "timestamp": "2025-11-20T03:46:15.443Z"
+  },
+  "yei37x": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Incremental",
+      "sourcing": "Internal Sourcing Specialists",
+      "goals": "Optimization",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "When Possible",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.7699999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.74
+      },
+      {
+        "method": "Scrum",
+        "score": 0.7
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      }
+    ],
+    "timestamp": "2025-11-20T03:48:54.116Z"
+  },
+  "gc2nfr": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Up-Front",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Linear",
+      "integration_testing": "When Possible",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Waterfall",
+        "score": 0.7
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.63
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.61
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.55
+      },
+      {
+        "method": "SAFe",
+        "score": 0.53
+      }
+    ],
+    "timestamp": "2025-11-20T03:49:17.452Z"
+  },
+  "ik5b93": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "As Needed Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.7899999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.61
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.57
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.41999999999999993
+      }
+    ],
+    "timestamp": "2025-11-20T03:49:24.345Z"
+  },
+  "uj8b7o": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Flexible",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.74
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.6599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.58
+      },
+      {
+        "method": "Scrum",
+        "score": 0.57
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5
+      }
+    ],
+    "timestamp": "2025-11-20T03:49:36.538Z"
+  },
+  "jwjbzh": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Predictability",
+      "customer_communication": "Performance Metrics",
+      "customer_involvement": "Low Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "End Phase",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "PRINCE2",
+        "score": 0.7
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.6499999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.6199999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.61
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.61
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6099999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5999999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.4699999999999999
+      }
+    ],
+    "timestamp": "2025-11-20T04:06:16.996Z"
+  },
+  "gv9e8p": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Incremental",
+      "sourcing": "Internal Sourcing Specialists",
+      "goals": "Optimization",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "When Possible",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.7699999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.74
+      },
+      {
+        "method": "Scrum",
+        "score": 0.7
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      }
+    ],
+    "timestamp": "2025-11-24T00:07:12.366Z"
+  },
+  "l8iq8v": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Incremental",
+      "sourcing": "Internal Sourcing Specialists",
+      "goals": "Optimization",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "Medium Involvement",
+      "design": "Emergent Design",
+      "development": "Iterative",
+      "integration_testing": "When Possible",
+      "closing": "Customer Acceptance"
+    },
+    "results": [
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.7699999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.74
+      },
+      {
+        "method": "Scrum",
+        "score": 0.7
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.4699999999999999
+      }
+    ],
+    "timestamp": "2025-11-24T00:15:27.126Z"
+  },
+  "w2d474": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Team",
+      "goals": "Optimization",
+      "customer_communication": "Milestone Reviews",
+      "customer_involvement": "High Involvement",
+      "design": "Iterative Design",
+      "development": "Linear",
+      "integration_testing": "End Phase",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "PRINCE2",
+        "score": 0.7
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.63
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.6199999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.5799999999999998
+      },
+      {
+        "method": "Scrum",
+        "score": 0.5599999999999998
+      },
+      {
+        "method": "SAFe",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.48999999999999994
+      }
+    ],
+    "timestamp": "2025-11-24T00:15:42.334Z"
+  },
+  "z7o3p1": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Incremental",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Speed",
+      "customer_communication": "Continuous Feedback Loops",
+      "customer_involvement": "As Needed Involvement",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "SAFe",
+        "score": 0.7899999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery Model",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Scrum",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid (Iterative Waterfall)",
+        "score": 0.61
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.57
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.51
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.41999999999999993
+      }
+    ],
+    "timestamp": "2025-11-24T00:15:49.657Z"
+  },
+  "7vd5fv": {
+    "answers": {
+      "project_size": "Medium",
+      "planning": "Predictive Planning ( Structured Governance)",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Compliance, Risk, and Stability",
+      "customer_communication": "Continuous, Direct Collaboration",
+      "customer_involvement": "Minimal or As-Needed Communication",
+      "design": "Iterative Design",
+      "development": "Incremental",
+      "integration_testing": "End Phase",
+      "closing": "3rd Party Acceptance"
+    },
+    "results": [
+      {
+        "method": "PRINCE2",
+        "score": 0.66
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.6399999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.63
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.6199999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.5999999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.57
+      },
+      {
+        "method": "Scrum",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.5499999999999999
+      }
+    ],
+    "timestamp": "2025-11-25T22:44:12.071Z"
+  },
+  "vhxbvi": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Highly Adaptive (Low Governance)",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Speed to Market",
+      "customer_communication": "Continuous, Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Iterative Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.8799999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.7499999999999998
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.61
+      },
+      {
+        "method": "SAFe",
+        "score": 0.6
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.59
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.45
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.45
+      }
+    ],
+    "timestamp": "2025-11-26T00:18:50.444Z"
+  },
+  "p28kwq": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Highly Adaptive (Low Governance)",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Speed to Market",
+      "customer_communication": "Continuous, Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Iterative Design",
+      "development": "Iterative",
+      "integration_testing": "Continuous",
+      "closing": "Team Acceptance"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.8799999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.7499999999999998
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7299999999999999
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.61
+      },
+      {
+        "method": "SAFe",
+        "score": 0.6
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.59
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.45
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.45
+      }
+    ],
+    "timestamp": "2025-11-30T22:47:49.109Z"
+  },
+  "uwc6z7": {
+    "answers": {
+      "project_size": "Enterprise",
+      "planning": "Structured",
+      "sourcing": "Mixed Internal/External Sourcing Specialists",
+      "goals": "Innovation and Experimentation",
+      "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
+      "customer_involvement": "Milestone-Based Communication",
+      "design": "Adjusted",
+      "development": "Modular",
+      "integration_testing": "Isolated",
+      "closing": "User"
+    },
+    "results": [
+      {
+        "method": "Disciplined Agile",
+        "score": 0.6799999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.65
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.65
+      },
+      {
+        "method": "Scrum",
+        "score": 0.5999999999999999
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.51
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.4999999999999999
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.47999999999999987
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.45999999999999996
+      }
+    ],
+    "timestamp": "2025-12-01T00:29:27.812Z"
+  },
+  "p4weiv": {
+    "answers": {
+      "project_size": "Large",
+      "planning": "Structured",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Optimization and Efficiency",
+      "customer_communication": "Scheduled Touchpoints with Feedback Cycles",
+      "customer_involvement": "Minimal or As-Needed Communication",
+      "design": "Adjusted",
+      "development": "Undetermined",
+      "integration_testing": "Layered",
+      "closing": "External"
+    },
+    "results": [
+      {
+        "method": "Waterfall",
+        "score": 0.6499999999999999
+      },
+      {
+        "method": "SAFe",
+        "score": 0.63
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.63
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.58
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.57
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.5599999999999999
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.48
+      },
+      {
+        "method": "Scrum",
+        "score": 0.45
+      }
+    ],
+    "timestamp": "2025-12-01T00:35:55.321Z"
+  },
+  "eqywbv": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Minimal",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Compliance, Risk, and Stability",
+      "customer_communication": "Continuous, Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Fixed",
+      "development": "Optimized",
+      "integration_testing": "Integrated",
+      "closing": "Internal"
+    },
+    "results": [
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.69
+      },
+      {
+        "method": "Scrum",
+        "score": 0.6699999999999999
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.65
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.5999999999999999
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.58
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.5799999999999998
+      },
+      {
+        "method": "SAFe",
+        "score": 0.48999999999999994
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.3899999999999999
+      }
+    ],
+    "timestamp": "2025-12-01T02:31:42.614Z"
+  },
+  "dke1fu": {
+    "answers": {
+      "project_size": "Small",
+      "planning": "Minimal",
+      "sourcing": "Internal Sourcing Team",
+      "goals": "Speed to Market",
+      "customer_communication": "Continuous, Direct Collaboration",
+      "customer_involvement": "Daily or Continuous Communication",
+      "design": "Flexible",
+      "development": "Modular",
+      "integration_testing": "Isolated",
+      "closing": "User"
+    },
+    "results": [
+      {
+        "method": "Scrum",
+        "score": 0.9
+      },
+      {
+        "method": "Disciplined Agile",
+        "score": 0.7
+      },
+      {
+        "method": "Lean Continuous Delivery",
+        "score": 0.6899999999999998
+      },
+      {
+        "method": "SAFe",
+        "score": 0.47999999999999987
+      },
+      {
+        "method": "Hybrid",
+        "score": 0.47999999999999987
+      },
+      {
+        "method": "Lean Six Sigma",
+        "score": 0.41
+      },
+      {
+        "method": "Waterfall",
+        "score": 0.35999999999999993
+      },
+      {
+        "method": "PRINCE2",
+        "score": 0.35999999999999993
+      }
+    ],
+    "timestamp": "2025-12-01T02:33:05.726Z"
   }
 }
