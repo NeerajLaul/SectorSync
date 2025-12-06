@@ -35,11 +35,6 @@ export interface CompanyProfile {
   logoUrl?: string;
 }
 
-interface QuickInsights {
-  positives?: string[];
-  negatives?: string[];
-}
-
 interface BenchmarkPageProps {
   results: ScoringResult;
   onBack: () => void;
@@ -47,9 +42,6 @@ interface BenchmarkPageProps {
 
   /** Optional: actual KPI values, keyed by metric key (e.g. "cycle_time", "lead_time", "rework", etc.) */
   kpis?: Record<string, number>;
-
-  /** Optional: quick insights + watch outs to show on the page */
-  quickInsights?: QuickInsights;
 }
 
 /** ====== Methodology & Pillars ====== */
@@ -651,7 +643,7 @@ const METHODOLOGY_FAMILY: Record<Methodology, ApproachFamily> = {
   Scrum: "Agile",
   SAFe: "Agile",
   "Disciplined Agile": "Agile",
-  Hybrid: "Agile", // treating Hybrid & CD as Agile-ish for grouping
+  Hybrid: "Agile",
   "Continuous Delivery": "Agile",
   "Lean Six Sigma": "Lean",
   Waterfall: "Predictive",
@@ -694,13 +686,45 @@ function familyLabel(f: ApproachFamily) {
   return "Lean methodologies";
 }
 
+/** ====== Approach success/adoption copy, by family ====== */
+function getFamilyContext(family: ApproachFamily) {
+  if (family === "Agile") {
+    return {
+      title: "Agile success & adoption",
+      bullets: [
+        "Overall project success rate ≈ 75.4%.",
+        "Used in 70%+ of organizations globally.",
+        "Adoption spans 55% IT, 53% healthcare, 53% financial services.",
+        "Scrum is used by ≈ 87% of Agile teams.",
+      ],
+    };
+  }
+  if (family === "Lean") {
+    return {
+      title: "Lean / Lean-Agile success",
+      bullets: [
+        "Overall project success rate ≈ 74.6%.",
+        "Lean emphasizes waste reduction, flow efficiency, and quality.",
+        "Boeing and Toyota have reported major cycle time and defect reductions using Lean practices.",
+      ],
+    };
+  }
+  return {
+    title: "Predictive success & adoption",
+    bullets: [
+      "Overall project success rate ≈ 74.4%.",
+      "≈ 44% of organizations still rely on predictive approaches.",
+      "≈ 34% expect to decrease reliance, shifting toward more adaptive models.",
+    ],
+  };
+}
+
 /** ====== Component ====== */
 export function BenchmarkPage({
   results,
   onBack,
   company,
   kpis,
-  quickInsights,
 }: BenchmarkPageProps) {
   // Determine user's top methodology (exactly the 8 you support)
   const topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
@@ -714,7 +738,7 @@ export function BenchmarkPage({
     [cohortKey]
   );
 
-  // Pick metrics for this methodology (for the radar)
+  // Pick metrics for this methodology (for the radar + tiles)
   const highlightedMetrics = useMemo(
     () => selectMetricsForMethod(topMethodology),
     [topMethodology]
@@ -859,25 +883,18 @@ export function BenchmarkPage({
     }));
   }, [highlightedMetrics, topMethodology]);
 
-  /** === Family metrics + companies (Agile, Predictive, Lean) === */
-  const agileMetrics = useMemo(
-    () => selectMetricsForFamily("Agile"),
-    []
-  );
-  const predictiveMetrics = useMemo(
-    () => selectMetricsForFamily("Predictive"),
-    []
-  );
-  const leanMetrics = useMemo(
-    () => selectMetricsForFamily("Lean"),
-    []
+  /** === Family-level metrics + companies (only for THIS family) === */
+  const familyMetrics = useMemo(
+    () => selectMetricsForFamily(family),
+    [family]
   );
 
-  const exemplarsByFamily = (f: ApproachFamily) =>
-    EXEMPLARS.filter((ex) => FAMILY_METHODS[f].includes(ex.methodology));
+  const exemplarsForFamily = useMemo(
+    () => EXEMPLARS.filter((ex) => FAMILY_METHODS[family].includes(ex.methodology)),
+    [family]
+  );
 
-  const positives = quickInsights?.positives ?? [];
-  const negatives = quickInsights?.negatives ?? [];
+  const familyContext = getFamilyContext(family);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 py-10 px-4">
@@ -909,7 +926,9 @@ export function BenchmarkPage({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Badge>Answer-Driven Cohort</Badge>
-                <Badge variant="secondary">{topMethodology}</Badge>
+                <Badge variant="secondary">
+                  {topMethodology} ({familyLabel(family)})
+                </Badge>
               </div>
               <h2 className="text-2xl">{cohort.title}</h2>
               <p className="text-muted-foreground max-w-2xl">
@@ -1064,144 +1083,48 @@ export function BenchmarkPage({
           </Card>
         </div>
 
-        {/* Family-level metrics: Agile, Predictive, Lean */}
+        {/* Family-level metrics & companies (ONLY this family) */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl">Key Metrics by Approach Family</h3>
+            <h3 className="text-xl">Key Metrics for {familyLabel(family)}</h3>
             <Badge variant="outline">
-              Your framework: {topMethodology} ({familyLabel(family)})
+              Your framework: {topMethodology}
             </Badge>
           </div>
           <p className="text-sm text-muted-foreground mb-4">
-            Each family highlights the metrics that most distinguish Agile, Predictive, and Lean approaches.
-            Your recommended framework is called out in its family, with real-world companies that use it.
+            These are the metrics that most distinguish {familyLabel(family)}.
+            Your recommended framework sits inside this family, with examples of organizations using similar approaches.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Agile */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Metrics for the family */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <h4 className="font-semibold text-sm">
-                    {familyLabel("Agile")}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    Frameworks: Scrum, SAFe, Disciplined Agile, Hybrid, Continuous Delivery
-                  </p>
-                </div>
-                {family === "Agile" && (
-                  <Badge variant="secondary" className="text-[11px]">
-                    Your result: {topMethodology}
-                  </Badge>
-                )}
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">Key metrics:</p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {agileMetrics.slice(0, 6).map((m) => (
-                    <li key={m.key}>
-                      <span className="font-medium">{m.name}</span> – {m.category} (
-                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">
-                  Companies using these frameworks:
-                </p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {exemplarsByFamily("Agile").map((e) => (
-                    <li key={e.company}>
-                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="text-xs font-medium">Core metrics:</p>
+              <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                {familyMetrics.slice(0, 10).map((m) => (
+                  <li key={m.key}>
+                    <span className="font-medium">{m.name}</span> – {m.category} (
+                    {m.idealTrend === "up" ? "higher is better" : "lower is better"})
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Predictive */}
+            {/* Companies using methods in this family */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <h4 className="font-semibold text-sm">
-                    {familyLabel("Predictive")}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    Frameworks: Waterfall, PRINCE2
-                  </p>
-                </div>
-                {family === "Predictive" && (
-                  <Badge variant="secondary" className="text-[11px]">
-                    Your result: {topMethodology}
-                  </Badge>
-                )}
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">Key metrics:</p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {predictiveMetrics.slice(0, 6).map((m) => (
-                    <li key={m.key}>
-                      <span className="font-medium">{m.name}</span> – {m.category} (
-                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">
-                  Companies using these frameworks:
-                </p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {exemplarsByFamily("Predictive").map((e) => (
-                    <li key={e.company}>
-                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Lean */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <h4 className="font-semibold text-sm">
-                    {familyLabel("Lean")}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    Frameworks: Lean Six Sigma
-                  </p>
-                </div>
-                {family === "Lean" && (
-                  <Badge variant="secondary" className="text-[11px]">
-                    Your result: {topMethodology}
-                  </Badge>
-                )}
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">Key metrics:</p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {leanMetrics.slice(0, 6).map((m) => (
-                    <li key={m.key}>
-                      <span className="font-medium">{m.name}</span> – {m.category} (
-                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-medium">
-                  Companies using these frameworks:
-                </p>
-                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                  {exemplarsByFamily("Lean").map((e) => (
-                    <li key={e.company}>
-                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="text-xs font-medium">
+                Companies using {familyLabel(family)} frameworks:
+              </p>
+              <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                {exemplarsForFamily.map((e) => (
+                  <li key={e.company}>
+                    {e.company}{" "}
+                    <span className="italic text-[11px]">
+                      ({e.methodology})
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </Card>
@@ -1237,77 +1160,20 @@ export function BenchmarkPage({
           </div>
           <p className="text-xs text-muted-foreground mt-4">
             Tip: Keep batch size small and reduce queue/approval wait time to
-            improve Cycle/Lead Time across all approaches.
+            improve Cycle/Lead Time across {familyLabel(family)}.
           </p>
         </Card>
 
-        {/* Quick Insights + Watch outs */}
+        {/* Approach Success & Adoption context (ONLY for this family) */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl">Quick Insights</h3>
-            <Sparkles className="h-5 w-5 text-yellow-500" />
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <h4 className="text-sm font-medium mb-2">Why it fits</h4>
-              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                {positives.length ? (
-                  positives.map((p) => <li key={p}>{p}</li>)
-                ) : (
-                  <li>—</li>
-                )}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium mb-2">Watch outs</h4>
-              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                {negatives.length ? (
-                  negatives.map((n) => <li key={n}>{n}</li>)
-                ) : (
-                  <li>—</li>
-                )}
-              </ul>
-            </div>
-          </div>
-        </Card>
-
-        {/* Approach Success & Adoption context */}
-        <Card className="glass-card p-6 border-white/20 dark:border-white/10">
-          <h3 className="text-xl mb-3">Approach Success & Adoption</h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div>
-              <h4 className="font-semibold mb-1">Agile</h4>
-              <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                <li>Overall project success rate ≈ 75.4%.</li>
-                <li>Used in 70%+ of organizations globally.</li>
-                <li>
-                  Adoption spans 55% IT, 53% healthcare, 53% financial services.
-                </li>
-                <li>Scrum is used by ≈ 87% of Agile teams.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-1">Lean / Lean-Agile</h4>
-              <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                <li>Overall project success rate ≈ 74.6%.</li>
-                <li>
-                  Boeing’s 737 fuselage assembly: ~50% faster, ~75% fewer defects with Lean.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-1">Predictive (Waterfall)</h4>
-              <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                <li>Overall project success rate ≈ 74.4%.</li>
-                <li>~44% of organizations still rely on predictive approaches.</li>
-                <li>
-                  ~34% expect to decrease reliance, shifting to more adaptive models.
-                </li>
-              </ul>
-            </div>
-          </div>
+          <h3 className="text-xl mb-3">{familyContext.title}</h3>
+          <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+            {familyContext.bullets.map((b) => (
+              <li key={b}>{b}</li>
+            ))}
+          </ul>
           <p className="text-[11px] text-muted-foreground mt-3">
-            Sources: businessmap.io, mosaicapp.com, parabol.co, monday.com, assemblymag.com.
+            Sources: businessmap.io, mosaicapp.com, parabol.co, monday.com, assemblymag.com, and public case studies.
           </p>
         </Card>
 
@@ -1351,7 +1217,7 @@ export function BenchmarkPage({
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
             SectorSync benchmarks your recommended framework against cohorts,
-            industry peers, and real-world examples across Agile, Predictive, and Lean approaches.
+            industry peers, and real-world examples across {familyLabel(family)}.
           </p>
         </div>
       </div>
