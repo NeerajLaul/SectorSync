@@ -30,7 +30,7 @@ import {
 /** ====== Types ====== */
 export interface CompanyProfile {
   name?: string;
-  industry?: string; // e.g., "Retail/Consumer/ e-Commerce"
+  industry?: string; // e.g., "E-commerce/Retail"
   employeeCount?: number;
   logoUrl?: string;
 }
@@ -40,13 +40,6 @@ interface QuickInsights {
   negatives?: string[];
 }
 
-interface DORAKpis {
-  leadTimeDays?: number;
-  deployFreqDays?: number;
-  changeFailRatePct?: number;
-  recoveryTimeDays?: number;
-}
-
 interface BenchmarkPageProps {
   results: ScoringResult;
   onBack: () => void;
@@ -54,9 +47,6 @@ interface BenchmarkPageProps {
 
   /** Optional: actual KPI values, keyed by metric key (e.g. "cycle_time", "lead_time", "rework", etc.) */
   kpis?: Record<string, number>;
-
-  /** Optional: your DORA-style KPIs */
-  doraKpis?: DORAKpis;
 
   /** Optional: quick insights + watch outs to show on the page */
   quickInsights?: QuickInsights;
@@ -73,7 +63,13 @@ type Methodology =
   | "Hybrid"
   | "Continuous Delivery";
 
-type Pillar = "Flow" | "Quality" | "Predictability" | "Value" | "Customer" | "Waste";
+type Pillar =
+  | "Flow"
+  | "Quality"
+  | "Predictability"
+  | "Value"
+  | "Customer"
+  | "Waste";
 
 /** ====== Metric Catalog (unified, methodology-aware) ====== */
 interface Metric {
@@ -439,33 +435,6 @@ const INDUSTRY_PEERS: IndustryPeerData[] = [
   },
 ];
 
-/** ====== DORA Benchmarks from your research ====== */
-interface DORAIndustryStats {
-  industry: string;
-  performanceRating: number;
-  leadTimeDays: number;
-  deployFreqDays: number;
-  changeFailRatePct: number;
-  recoveryTimeDays: number;
-}
-
-const DORA_INDUSTRY_STATS: DORAIndustryStats[] = [
-  { industry: "All", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 1 },
-  { industry: "Education", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 17, recoveryTimeDays: 5 },
-  { industry: "Energy", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 17.5, changeFailRatePct: 28, recoveryTimeDays: 5 },
-  { industry: "Financial Services", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 14, changeFailRatePct: 17, recoveryTimeDays: 1 },
-  { industry: "Government", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 24.5, changeFailRatePct: 23, recoveryTimeDays: 4 },
-  { industry: "Healthcare & Pharmaceuticals", performanceRating: 6.5, leadTimeDays: 21, deployFreqDays: 24.5, changeFailRatePct: 14, recoveryTimeDays: 3 },
-  { industry: "Industrials & Manufacturing", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 6 },
-  { industry: "Insurance", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 4 },
-  { industry: "Media/Entertainment", performanceRating: 7, leadTimeDays: 7, deployFreqDays: 7, changeFailRatePct: 15, recoveryTimeDays: 1 },
-  { industry: "Non-Profit", performanceRating: 7, leadTimeDays: 7, deployFreqDays: 17.5, changeFailRatePct: 15, recoveryTimeDays: 2 },
-  { industry: "Retail/Consumer/ e-Commerce", performanceRating: 7.5, leadTimeDays: 7, deployFreqDays: 5, changeFailRatePct: 15, recoveryTimeDays: 1 },
-  { industry: "Technology", performanceRating: 7, leadTimeDays: 14, deployFreqDays: 10.5, changeFailRatePct: 17, recoveryTimeDays: 2 },
-  { industry: "Telecommunications", performanceRating: 6, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 19, recoveryTimeDays: 3 },
-  { industry: "Other", performanceRating: 7, leadTimeDays: 10.5, deployFreqDays: 10.5, changeFailRatePct: 18, recoveryTimeDays: 1 },
-];
-
 /** ====== Cohorts from answers ====== */
 type CohortKey = string;
 
@@ -595,7 +564,7 @@ interface Exemplar {
   notes: string;
   sourceUrl?: string;
 
-  // Optional numeric values (only render bars if present)
+  // Optional numeric values for story-level charts
   cycle_time_days?: number;
   lead_time_days?: number;
   escapes?: number;
@@ -675,54 +644,30 @@ const EXEMPLARS: Exemplar[] = [
   },
 ];
 
-/** ====== Methodology families & industry mappings ====== */
-type ApproachFamily = "Agile" | "Lean" | "Predictive" | "HybridDevOps";
+/** ====== Methodology families & industry mappings (3 families only) ====== */
+type ApproachFamily = "Agile" | "Predictive" | "Lean";
 
 const METHODOLOGY_FAMILY: Record<Methodology, ApproachFamily> = {
   Scrum: "Agile",
   SAFe: "Agile",
   "Disciplined Agile": "Agile",
-  Hybrid: "HybridDevOps",
-  "Continuous Delivery": "HybridDevOps",
+  Hybrid: "Agile", // treating Hybrid & CD as Agile-ish for grouping
+  "Continuous Delivery": "Agile",
   "Lean Six Sigma": "Lean",
   Waterfall: "Predictive",
   PRINCE2: "Predictive",
 };
 
-const STORY_INDUSTRY_BY_FAMILY: Record<ApproachFamily, string[]> = {
-  Agile: ["E-commerce/Retail", "SaaS", "FinTech", "Healthcare"],
-  Lean: ["Manufacturing", "Healthcare"],
-  Predictive: ["Manufacturing", "Healthcare"],
-  HybridDevOps: [
-    "E-commerce/Retail",
-    "SaaS",
-    "FinTech",
-    "Healthcare",
-    "Manufacturing",
-  ],
+const FAMILY_METHODS: Record<ApproachFamily, Methodology[]> = {
+  Agile: ["Scrum", "SAFe", "Disciplined Agile", "Hybrid", "Continuous Delivery"],
+  Predictive: ["Waterfall", "PRINCE2"],
+  Lean: ["Lean Six Sigma"],
 };
 
-const DORA_INDUSTRY_BY_FAMILY: Record<ApproachFamily, string[]> = {
-  Agile: [
-    "Technology",
-    "Retail/Consumer/ e-Commerce",
-    "Media/Entertainment",
-    "Financial Services",
-    "Non-Profit",
-  ],
-  Lean: [
-    "Industrials & Manufacturing",
-    "Healthcare & Pharmaceuticals",
-    "Energy",
-  ],
-  Predictive: ["Government", "Insurance", "Energy", "Telecommunications"],
-  HybridDevOps: [
-    "Technology",
-    "Retail/Consumer/ e-Commerce",
-    "Media/Entertainment",
-    "Financial Services",
-    "Telecommunications",
-  ],
+const STORY_INDUSTRY_BY_FAMILY: Record<ApproachFamily, string[]> = {
+  Agile: ["E-commerce/Retail", "SaaS", "FinTech", "Healthcare"],
+  Predictive: ["Manufacturing", "Healthcare"],
+  Lean: ["Manufacturing", "Healthcare"],
 };
 
 /** ====== Helpers ====== */
@@ -733,13 +678,28 @@ function selectMetricsForMethod(
   return METRICS.filter((m) => (m.relevance[method] ?? 0) >= threshold);
 }
 
+function selectMetricsForFamily(
+  family: ApproachFamily,
+  threshold = 0.6
+): Metric[] {
+  const methods = FAMILY_METHODS[family];
+  return METRICS.filter((m) =>
+    methods.some((meth) => (m.relevance[meth] ?? 0) >= threshold)
+  );
+}
+
+function familyLabel(f: ApproachFamily) {
+  if (f === "Agile") return "Agile methodologies";
+  if (f === "Predictive") return "Predictive methodologies";
+  return "Lean methodologies";
+}
+
 /** ====== Component ====== */
 export function BenchmarkPage({
   results,
   onBack,
   company,
   kpis,
-  doraKpis,
   quickInsights,
 }: BenchmarkPageProps) {
   // Determine user's top methodology (exactly the 8 you support)
@@ -754,7 +714,7 @@ export function BenchmarkPage({
     [cohortKey]
   );
 
-  // Pick metrics for this methodology
+  // Pick metrics for this methodology (for the radar)
   const highlightedMetrics = useMemo(
     () => selectMetricsForMethod(topMethodology),
     [topMethodology]
@@ -786,16 +746,18 @@ export function BenchmarkPage({
   );
 
   // Exemplar(s) filtered by selected methodology
-  const exemplars = useMemo(
+  const exemplarsForTop = useMemo(
     () => EXEMPLARS.filter((ex) => ex.methodology === topMethodology),
     [topMethodology]
   );
   const [selectedExemplar, setSelectedExemplar] = useState<string>(
-    exemplars[0]?.company ?? ""
+    exemplarsForTop[0]?.company ?? ""
   );
   const exemplar = useMemo(
-    () => exemplars.find((e) => e.company === selectedExemplar) ?? exemplars[0],
-    [exemplars, selectedExemplar]
+    () =>
+      exemplarsForTop.find((e) => e.company === selectedExemplar) ??
+      exemplarsForTop[0],
+    [exemplarsForTop, selectedExemplar]
   );
 
   /** === Bars: Cohort vs Industry vs Exemplar vs Your KPI (story-level) === */
@@ -897,85 +859,22 @@ export function BenchmarkPage({
     }));
   }, [highlightedMetrics, topMethodology]);
 
-  /** === DORA: DevOps-level benchmarks filtered by methodology family === */
-  const allDora = useMemo(
-    () => DORA_INDUSTRY_STATS.find((d) => d.industry === "All")!,
+  /** === Family metrics + companies (Agile, Predictive, Lean) === */
+  const agileMetrics = useMemo(
+    () => selectMetricsForFamily("Agile"),
+    []
+  );
+  const predictiveMetrics = useMemo(
+    () => selectMetricsForFamily("Predictive"),
+    []
+  );
+  const leanMetrics = useMemo(
+    () => selectMetricsForFamily("Lean"),
     []
   );
 
-  const doraIndustryOptions = useMemo(() => {
-    const tags = DORA_INDUSTRY_BY_FAMILY[family];
-    const base = DORA_INDUSTRY_STATS.filter((d) => d.industry !== "All");
-    const filtered = base.filter((d) => tags.includes(d.industry));
-    return filtered.length ? filtered : base;
-  }, [family]);
-
-  const [selectedDoraIndustry, setSelectedDoraIndustry] = useState<string>(() => {
-    if (company?.industry) {
-      const match = doraIndustryOptions.find(
-        (d) => d.industry === company.industry
-      );
-      if (match) return match.industry;
-    }
-    return doraIndustryOptions[0]?.industry ?? "All";
-  });
-
-  const selectedDora = useMemo(
-    () =>
-      DORA_INDUSTRY_STATS.find((d) => d.industry === selectedDoraIndustry) ??
-      allDora,
-    [selectedDoraIndustry, allDora]
-  );
-
-  const doraBarRows = useMemo(() => {
-    const rows: Array<Record<string, number | string>> = [];
-
-    function pushRow(label: string, opts: {
-      field: keyof DORAIndustryStats;
-      kpiField?: keyof DORAKpis;
-    }) {
-      const row: Record<string, number | string> = { metric: label };
-
-      row["All Industries"] = allDora[opts.field] as number;
-      row[selectedDora.industry] = selectedDora[opts.field] as number;
-
-      if (doraKpis && opts.kpiField && doraKpis[opts.kpiField] != null) {
-        row["Your DORA KPI"] = doraKpis[opts.kpiField] as number;
-      }
-
-      rows.push(row);
-    }
-
-    pushRow("Lead Time (days)", {
-      field: "leadTimeDays",
-      kpiField: "leadTimeDays",
-    });
-    pushRow("Deploy Frequency (days between)", {
-      field: "deployFreqDays",
-      kpiField: "deployFreqDays",
-    });
-    pushRow("Change Fail Rate (%)", {
-      field: "changeFailRatePct",
-      kpiField: "changeFailRatePct",
-    });
-    pushRow("Failed Deployment Recovery (days)", {
-      field: "recoveryTimeDays",
-      kpiField: "recoveryTimeDays",
-    });
-    pushRow("Performance Rating (0–10)", {
-      field: "performanceRating",
-    });
-
-    return rows;
-  }, [allDora, selectedDora, doraKpis]);
-
-  const doraSeriesKeys = useMemo(() => {
-    const s = new Set<string>();
-    doraBarRows.forEach((r) =>
-      Object.keys(r).forEach((k) => k !== "metric" && s.add(k))
-    );
-    return Array.from(s);
-  }, [doraBarRows]);
+  const exemplarsByFamily = (f: ApproachFamily) =>
+    EXEMPLARS.filter((ex) => FAMILY_METHODS[f].includes(ex.methodology));
 
   const positives = quickInsights?.positives ?? [];
   const negatives = quickInsights?.negatives ?? [];
@@ -1030,7 +929,7 @@ export function BenchmarkPage({
         <Card className="glass-card border-white/20 dark:border-white/10 p-5">
           <div className="flex flex-wrap items-center gap-4">
             <Badge variant="secondary" className="px-3 py-1">
-              Compare with industries that also lean into {topMethodology}
+              Compare with industries that also lean into {familyLabel(family)}
             </Badge>
 
             {/* Industry (story-level peers) */}
@@ -1049,13 +948,13 @@ export function BenchmarkPage({
               ))}
             </div>
 
-            {/* Exemplars for the selected methodology */}
+            {/* Exemplars for the selected framework */}
             <Separator orientation="vertical" className="h-6 mx-1" />
             <div className="flex flex-wrap gap-2">
-              {exemplars.length === 0 ? (
+              {exemplarsForTop.length === 0 ? (
                 <Badge variant="outline">No public exemplars</Badge>
               ) : (
-                exemplars.map((e) => (
+                exemplarsForTop.map((e) => (
                   <Button
                     key={e.company}
                     variant={
@@ -1094,12 +993,13 @@ export function BenchmarkPage({
           <Card className="glass-card p-6 border-white/20 dark:border-white/10">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl">
-                Cohort vs Industry vs Exemplar{ kpis ? " vs Your KPI" : "" }
+                Cohort vs Industry vs {exemplar ? exemplar.company : "Exemplar"}
+                {kpis ? " vs Your KPI" : ""}
               </h3>
               <Info className="h-5 w-5 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Benchmarks grounded in your answers; company bars appear when public numbers are available.
+              Benchmarks grounded in your answers; exemplar bars appear where public numbers are available.
               {kpis &&
                 " Your KPI column shows your current baseline for each metric."}
             </p>
@@ -1108,7 +1008,7 @@ export function BenchmarkPage({
                 <BarChart data={barRows} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" />
-                  <YAxis dataKey="metric" type="category" width={180} />
+                  <YAxis dataKey="metric" type="category" width={190} />
                   <Tooltip />
                   <Legend />
                   {seriesKeys.map((k) => (
@@ -1140,7 +1040,7 @@ export function BenchmarkPage({
               <Info className="h-5 w-5 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Shows which metric families matter most for this methodology in
+              Shows which metric families matter most for your selected framework in
               SectorSync.
             </p>
             <div className="h-[360px]">
@@ -1164,83 +1064,153 @@ export function BenchmarkPage({
           </Card>
         </div>
 
-        {/* DORA DevOps Benchmarks */}
+        {/* Family-level metrics: Agile, Predictive, Lean */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-            <div>
-              <h3 className="text-xl">DORA DevOps Benchmarks</h3>
-              <p className="text-sm text-muted-foreground">
-                Lead time, deploy frequency, change fail rate, and recovery time from the DORA quick check.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 items-center">
-              <span className="text-xs text-muted-foreground mr-2">
-                Compare against industries that also use this approach:
-              </span>
-              {doraIndustryOptions.map((d) => (
-                <Button
-                  key={d.industry}
-                  variant={
-                    selectedDoraIndustry === d.industry ? "default" : "outline"
-                  }
-                  size="sm"
-                  className="h-7 text-xs"
-                  onClick={() => setSelectedDoraIndustry(d.industry)}
-                >
-                  {d.industry}
-                </Button>
-              ))}
-            </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl">Key Metrics by Approach Family</h3>
+            <Badge variant="outline">
+              Your framework: {topMethodology} ({familyLabel(family)})
+            </Badge>
           </div>
-
-          <p className="text-xs text-muted-foreground mb-2">
-            Bars compare{" "}
-            <span className="font-medium">All industries</span> vs{" "}
-            <span className="font-medium">{selectedDora.industry}</span>
-            {doraKpis && " vs your current DORA-style KPIs."}
+          <p className="text-sm text-muted-foreground mb-4">
+            Each family highlights the metrics that most distinguish Agile, Predictive, and Lean approaches.
+            Your recommended framework is called out in its family, with real-world companies that use it.
           </p>
 
-          <div className="h-[360px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={doraBarRows} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="metric" type="category" width={220} />
-                <Tooltip />
-                <Legend />
-                {doraSeriesKeys.map((k) => (
-                  <Bar
-                    key={k}
-                    dataKey={k}
-                    fill={
-                      k === "All Industries"
-                        ? "#6b7280"
-                        : k === "Your DORA KPI"
-                        ? "#ec4899"
-                        : "#22c55e"
-                    }
-                  />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Agile */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-semibold text-sm">
+                    {familyLabel("Agile")}
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Frameworks: Scrum, SAFe, Disciplined Agile, Hybrid, Continuous Delivery
+                  </p>
+                </div>
+                {family === "Agile" && (
+                  <Badge variant="secondary" className="text-[11px]">
+                    Your result: {topMethodology}
+                  </Badge>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">Key metrics:</p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {agileMetrics.slice(0, 6).map((m) => (
+                    <li key={m.key}>
+                      <span className="font-medium">{m.name}</span> – {m.category} (
+                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">
+                  Companies using these frameworks:
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {exemplarsByFamily("Agile").map((e) => (
+                    <li key={e.company}>
+                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Predictive */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-semibold text-sm">
+                    {familyLabel("Predictive")}
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Frameworks: Waterfall, PRINCE2
+                  </p>
+                </div>
+                {family === "Predictive" && (
+                  <Badge variant="secondary" className="text-[11px]">
+                    Your result: {topMethodology}
+                  </Badge>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">Key metrics:</p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {predictiveMetrics.slice(0, 6).map((m) => (
+                    <li key={m.key}>
+                      <span className="font-medium">{m.name}</span> – {m.category} (
+                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">
+                  Companies using these frameworks:
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {exemplarsByFamily("Predictive").map((e) => (
+                    <li key={e.company}>
+                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Lean */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-semibold text-sm">
+                    {familyLabel("Lean")}
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Frameworks: Lean Six Sigma
+                  </p>
+                </div>
+                {family === "Lean" && (
+                  <Badge variant="secondary" className="text-[11px]">
+                    Your result: {topMethodology}
+                  </Badge>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">Key metrics:</p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {leanMetrics.slice(0, 6).map((m) => (
+                    <li key={m.key}>
+                      <span className="font-medium">{m.name}</span> – {m.category} (
+                      {m.idealTrend === "up" ? "higher is better" : "lower is better"})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium">
+                  Companies using these frameworks:
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  {exemplarsByFamily("Lean").map((e) => (
+                    <li key={e.company}>
+                      {e.company} <span className="italic text-[11px]">({e.methodology})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-          <p className="text-[11px] text-muted-foreground mt-3">
-            Source:{" "}
-            <a
-              href="https://dora.dev/quickcheck/"
-              target="_blank"
-              rel="noreferrer"
-              className="underline text-primary"
-            >
-              dora.dev/quickcheck
-            </a>
-            .
-          </p>
         </Card>
 
-        {/* Metric tiles */}
+        {/* Metric tiles for the user's specific framework */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
-          <h3 className="text-xl mb-4">Key Metrics for {topMethodology}</h3>
+          <h3 className="text-xl mb-4">
+            Key Metrics for {topMethodology}
+          </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {highlightedMetrics.map((m) => (
               <div
@@ -1267,7 +1237,7 @@ export function BenchmarkPage({
           </div>
           <p className="text-xs text-muted-foreground mt-4">
             Tip: Keep batch size small and reduce queue/approval wait time to
-            improve Cycle/Lead Time across all methodologies.
+            improve Cycle/Lead Time across all approaches.
           </p>
         </Card>
 
@@ -1311,7 +1281,7 @@ export function BenchmarkPage({
                 <li>Overall project success rate ≈ 75.4%.</li>
                 <li>Used in 70%+ of organizations globally.</li>
                 <li>
-                  Agile adoption: 55% IT, 53% healthcare, 53% financial services.
+                  Adoption spans 55% IT, 53% healthcare, 53% financial services.
                 </li>
                 <li>Scrum is used by ≈ 87% of Agile teams.</li>
               </ul>
@@ -1350,7 +1320,7 @@ export function BenchmarkPage({
             <span className="font-medium">{topMethodology}</span>.
           </p>
           <ul className="text-sm list-disc pl-5 space-y-2">
-            {exemplars.map((e) => (
+            {exemplarsForTop.map((e) => (
               <li
                 key={e.company}
                 className="flex flex-wrap items-center gap-2"
@@ -1380,8 +1350,8 @@ export function BenchmarkPage({
         {/* Footer */}
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            SectorSync adapts metrics to your methodology while benchmarking
-            against cohorts, industry peers, public exemplars, and DORA DevOps data.
+            SectorSync benchmarks your recommended framework against cohorts,
+            industry peers, and real-world examples across Agile, Predictive, and Lean approaches.
           </p>
         </div>
       </div>
