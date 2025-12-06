@@ -368,7 +368,7 @@ const METRICS: Metric[] = [
   },
 ];
 
-/** ====== Story-level Industry Peer Averages ====== */
+/** ====== Industry Peer Averages (story-level) ====== */
 interface IndustryPeerData {
   industry: string;
   cycle_time_days: number;
@@ -686,6 +686,10 @@ function familyLabel(f: ApproachFamily) {
   return "Lean methodologies";
 }
 
+function trendLabel(ideal: "up" | "down") {
+  return ideal === "up" ? "Higher is better" : "Lower is better";
+}
+
 /** ====== Approach success/adoption copy, by family ====== */
 function getFamilyContext(family: ApproachFamily) {
   if (family === "Agile") {
@@ -705,13 +709,13 @@ function getFamilyContext(family: ApproachFamily) {
       bullets: [
         "Overall project success rate ≈ 74.6%.",
         "Lean emphasizes waste reduction, flow efficiency, and quality.",
-        "Boeing and Toyota have reported major cycle time and defect reductions using Lean practices.",
+        "Boeing and Toyota have reported major cycle-time and defect reductions using Lean practices.",
       ],
     };
   }
   return {
     title: "Predictive success & adoption",
-    bullets: [
+      bullets: [
       "Overall project success rate ≈ 74.4%.",
       "≈ 44% of organizations still rely on predictive approaches.",
       "≈ 34% expect to decrease reliance, shifting toward more adaptive models.",
@@ -738,10 +742,14 @@ export function BenchmarkPage({
     [cohortKey]
   );
 
-  // Pick metrics for this methodology (for the radar + tiles)
+  // Metrics for specific framework & family
   const highlightedMetrics = useMemo(
     () => selectMetricsForMethod(topMethodology),
     [topMethodology]
+  );
+  const familyMetrics = useMemo(
+    () => selectMetricsForFamily(family),
+    [family]
   );
 
   /** === Story-level industry peers filtered by methodology family === */
@@ -883,17 +891,11 @@ export function BenchmarkPage({
     }));
   }, [highlightedMetrics, topMethodology]);
 
-  /** === Family-level metrics + companies (only for THIS family) === */
-  const familyMetrics = useMemo(
-    () => selectMetricsForFamily(family),
-    [family]
-  );
-
+  /** === Family-level exemplars & context === */
   const exemplarsForFamily = useMemo(
     () => EXEMPLARS.filter((ex) => FAMILY_METHODS[family].includes(ex.methodology)),
     [family]
   );
-
   const familyContext = getFamilyContext(family);
 
   return (
@@ -1018,7 +1020,8 @@ export function BenchmarkPage({
               <Info className="h-5 w-5 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Benchmarks grounded in your answers; exemplar bars appear where public numbers are available.
+              Benchmarks grounded in your answers; exemplar bars appear where public
+              numbers are available.
               {kpis &&
                 " Your KPI column shows your current baseline for each metric."}
             </p>
@@ -1086,28 +1089,58 @@ export function BenchmarkPage({
         {/* Family-level metrics & companies (ONLY this family) */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl">Key Metrics for {familyLabel(family)}</h3>
+            <div>
+              <h3 className="text-xl">Core Metrics for {familyLabel(family)}</h3>
+              <p className="text-xs text-muted-foreground">
+                Highlighting the metrics that matter most for {familyLabel(family)}.
+                Your result:{" "}
+                <span className="font-semibold">{topMethodology}</span>.
+              </p>
+            </div>
             <Badge variant="outline">
-              Your framework: {topMethodology}
+              Framework: {topMethodology}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">
-            These are the metrics that most distinguish {familyLabel(family)}.
-            Your recommended framework sits inside this family, with examples of organizations using similar approaches.
-          </p>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Metrics for the family */}
-            <div className="space-y-3">
-              <p className="text-xs font-medium">Core metrics:</p>
-              <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-                {familyMetrics.slice(0, 10).map((m) => (
-                  <li key={m.key}>
-                    <span className="font-medium">{m.name}</span> – {m.category} (
-                    {m.idealTrend === "up" ? "higher is better" : "lower is better"})
-                  </li>
-                ))}
-              </ul>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Metrics, grouped by pillar */}
+            <div className="lg:col-span-2 space-y-4">
+              {(["Flow","Quality","Predictability","Value","Customer","Waste"] as Pillar[])
+                .map((pillar) => {
+                  const pillarMetrics = familyMetrics.filter((m) => m.category === pillar);
+                  if (!pillarMetrics.length) return null;
+                  return (
+                    <div key={pillar} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm font-semibold">{pillar}</h4>
+                          <Badge variant="secondary" className="text-[10px]">
+                            {pillarMetrics.length} metrics
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {pillarMetrics.map((m) => (
+                          <div
+                            key={m.key}
+                            className="px-3 py-2 rounded-full border border-white/20 dark:border-white/10
+                                       bg-white/60 dark:bg-gray-900/60 text-xs flex items-center gap-2"
+                          >
+                            <span className="font-medium">{m.name}</span>
+                            {m.units && (
+                              <span className="text-[10px] text-muted-foreground">
+                                ({m.units})
+                              </span>
+                            )}
+                            <span className="text-[10px] text-muted-foreground">
+                              {trendLabel(m.idealTrend)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
 
             {/* Companies using methods in this family */}
@@ -1125,6 +1158,10 @@ export function BenchmarkPage({
                   </li>
                 ))}
               </ul>
+              <p className="text-[11px] text-muted-foreground mt-2">
+                Use these metrics as your shortlist when instrumenting dashboards and OKRs
+                for {topMethodology}.
+              </p>
             </div>
           </div>
         </Card>
@@ -1150,9 +1187,7 @@ export function BenchmarkPage({
                 <p className="text-xs">
                   Ideal trend:{" "}
                   <span className="font-medium">
-                    {m.idealTrend === "up"
-                      ? "Higher is better"
-                      : "Lower is better"}
+                    {trendLabel(m.idealTrend)}
                   </span>
                 </p>
               </div>
