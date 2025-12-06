@@ -4,24 +4,62 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Separator } from "../components/ui/separator";
 import { ScoringResult } from "../utils/scoringEngine";
-import { Info, ArrowLeft, BarChart3, Sparkles, Link as LinkIcon } from "lucide-react";
 import {
-  BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer,
-  RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+  Info,
+  ArrowLeft,
+  BarChart3,
+  Sparkles,
+  Link as LinkIcon,
+} from "lucide-react";
+import {
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+  ResponsiveContainer,
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
 } from "recharts";
 
-/** ====== Types you already have or can adapt ====== */
+/** ====== Types ====== */
 export interface CompanyProfile {
   name?: string;
-  industry?: string;        // e.g., "E-commerce/Retail"
+  industry?: string; // e.g., "Retail/Consumer/ e-Commerce"
   employeeCount?: number;
   logoUrl?: string;
+}
+
+interface QuickInsights {
+  positives?: string[];
+  negatives?: string[];
+}
+
+interface DORAKpis {
+  leadTimeDays?: number;
+  deployFreqDays?: number;
+  changeFailRatePct?: number;
+  recoveryTimeDays?: number;
 }
 
 interface BenchmarkPageProps {
   results: ScoringResult;
   onBack: () => void;
   company?: CompanyProfile;
+
+  /** Optional: actual KPI values, keyed by metric key (e.g. "cycle_time", "lead_time", "rework", etc.) */
+  kpis?: Record<string, number>;
+
+  /** Optional: your DORA-style KPIs */
+  doraKpis?: DORAKpis;
+
+  /** Optional: quick insights + watch outs to show on the page */
+  quickInsights?: QuickInsights;
 }
 
 /** ====== Methodology & Pillars ====== */
@@ -50,67 +88,299 @@ interface Metric {
 
 const METRICS: Metric[] = [
   // Flow
-  { key: "cycle_time", name: "Cycle Time", description: "Start → finish time per item (P50).",
-    category: "Flow", idealTrend: "down", units: "days",
-    relevance: { Scrum:1, SAFe:1, Waterfall:0.4, PRINCE2:0.5, "Lean Six Sigma":1, "Disciplined Agile":1, Hybrid:0.8, "Continuous Delivery":1 } },
-  { key: "lead_time", name: "Lead Time", description: "Request → release time (P50).",
-    category: "Flow", idealTrend: "down", units: "days",
-    relevance: { Scrum:1, SAFe:1, Waterfall:0.7, PRINCE2:0.8, "Lean Six Sigma":1, "Disciplined Agile":1, Hybrid:0.9, "Continuous Delivery":1 } },
-  { key: "throughput", name: "Throughput", description: "Items finished per period.",
-    category: "Flow", idealTrend: "up",
-    relevance: { Scrum:1, SAFe:0.9, Waterfall:0.5, PRINCE2:0.6, "Lean Six Sigma":0.9, "Disciplined Agile":1, Hybrid:0.8, "Continuous Delivery":1 } },
-  { key: "flow_eff", name: "Flow Efficiency", description: "Active time ÷ total time.",
-    category: "Flow", idealTrend: "up", units: "%",
-    relevance: { Scrum:0.8, SAFe:0.9, Waterfall:0.4, PRINCE2:0.5, "Lean Six Sigma":1, "Disciplined Agile":0.9, Hybrid:0.8, "Continuous Delivery":0.9 } },
+  {
+    key: "cycle_time",
+    name: "Cycle Time",
+    description: "Start → finish time per item (P50).",
+    category: "Flow",
+    idealTrend: "down",
+    units: "days",
+    relevance: {
+      Scrum: 1,
+      SAFe: 1,
+      Waterfall: 0.4,
+      PRINCE2: 0.5,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 1,
+      Hybrid: 0.8,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "lead_time",
+    name: "Lead Time",
+    description: "Request → release time (P50).",
+    category: "Flow",
+    idealTrend: "down",
+    units: "days",
+    relevance: {
+      Scrum: 1,
+      SAFe: 1,
+      Waterfall: 0.7,
+      PRINCE2: 0.8,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 1,
+      Hybrid: 0.9,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "throughput",
+    name: "Throughput",
+    description: "Items finished per period.",
+    category: "Flow",
+    idealTrend: "up",
+    relevance: {
+      Scrum: 1,
+      SAFe: 0.9,
+      Waterfall: 0.5,
+      PRINCE2: 0.6,
+      "Lean Six Sigma": 0.9,
+      "Disciplined Agile": 1,
+      Hybrid: 0.8,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "flow_eff",
+    name: "Flow Efficiency",
+    description: "Active time ÷ total time.",
+    category: "Flow",
+    idealTrend: "up",
+    units: "%",
+    relevance: {
+      Scrum: 0.8,
+      SAFe: 0.9,
+      Waterfall: 0.4,
+      PRINCE2: 0.5,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 0.9,
+      Hybrid: 0.8,
+      "Continuous Delivery": 0.9,
+    },
+  },
 
   // Quality
-  { key: "escapes", name: "Escapes to Prod", description: "Defects discovered after release.",
-    category: "Quality", idealTrend: "down",
-    relevance: { Scrum:1, SAFe:1, Waterfall:1, PRINCE2:1, "Lean Six Sigma":1, "Disciplined Agile":1, Hybrid:1, "Continuous Delivery":1 } },
-  { key: "rework", name: "Rework %", description: "Items reopened or reworked.",
-    category: "Quality", idealTrend: "down", units: "%",
-    relevance: { Scrum:1, SAFe:1, Waterfall:1, PRINCE2:1, "Lean Six Sigma":1, "Disciplined Agile":1, Hybrid:1, "Continuous Delivery":1 } },
-  { key: "first_pass", name: "First Pass Yield", description: "Done without rework.",
-    category: "Quality", idealTrend: "up", units: "%",
-    relevance: { Scrum:0.6, SAFe:0.8, Waterfall:0.9, PRINCE2:0.9, "Lean Six Sigma":1, "Disciplined Agile":0.8, Hybrid:0.9, "Continuous Delivery":0.7 } },
+  {
+    key: "escapes",
+    name: "Escapes to Prod",
+    description: "Defects discovered after release.",
+    category: "Quality",
+    idealTrend: "down",
+    relevance: {
+      Scrum: 1,
+      SAFe: 1,
+      Waterfall: 1,
+      PRINCE2: 1,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 1,
+      Hybrid: 1,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "rework",
+    name: "Rework %",
+    description: "Items reopened or reworked.",
+    category: "Quality",
+    idealTrend: "down",
+    units: "%",
+    relevance: {
+      Scrum: 1,
+      SAFe: 1,
+      Waterfall: 1,
+      PRINCE2: 1,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 1,
+      Hybrid: 1,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "first_pass",
+    name: "First Pass Yield",
+    description: "Done without rework.",
+    category: "Quality",
+    idealTrend: "up",
+    units: "%",
+    relevance: {
+      Scrum: 0.6,
+      SAFe: 0.8,
+      Waterfall: 0.9,
+      PRINCE2: 0.9,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 0.8,
+      Hybrid: 0.9,
+      "Continuous Delivery": 0.7,
+    },
+  },
 
   // Predictability
-  { key: "plan_rel", name: "Plan Reliability", description: "Committed vs completed per interval.",
-    category: "Predictability", idealTrend: "up", units: "%",
-    relevance: { Scrum:1, SAFe:0.9, Waterfall:0.9, PRINCE2:0.95, "Lean Six Sigma":0.6, "Disciplined Agile":0.9, Hybrid:0.9, "Continuous Delivery":0.7 } },
-  { key: "spi", name: "SPI", description: "Schedule Performance Index (EV/PV).",
-    category: "Predictability", idealTrend: "up",
-    relevance: { Scrum:0.3, SAFe:0.5, Waterfall:1, PRINCE2:1, "Lean Six Sigma":0.5, "Disciplined Agile":0.6, Hybrid:0.8, "Continuous Delivery":0.3 } },
-  { key: "cpi", name: "CPI", description: "Cost Performance Index (EV/AC).",
-    category: "Predictability", idealTrend: "up",
-    relevance: { Scrum:0.2, SAFe:0.5, Waterfall:1, PRINCE2:1, "Lean Six Sigma":0.7, "Disciplined Agile":0.5, Hybrid:0.8, "Continuous Delivery":0.2 } },
+  {
+    key: "plan_rel",
+    name: "Plan Reliability",
+    description: "Committed vs completed per interval.",
+    category: "Predictability",
+    idealTrend: "up",
+    units: "%",
+    relevance: {
+      Scrum: 1,
+      SAFe: 0.9,
+      Waterfall: 0.9,
+      PRINCE2: 0.95,
+      "Lean Six Sigma": 0.6,
+      "Disciplined Agile": 0.9,
+      Hybrid: 0.9,
+      "Continuous Delivery": 0.7,
+    },
+  },
+  {
+    key: "spi",
+    name: "SPI",
+    description: "Schedule Performance Index (EV/PV).",
+    category: "Predictability",
+    idealTrend: "up",
+    relevance: {
+      Scrum: 0.3,
+      SAFe: 0.5,
+      Waterfall: 1,
+      PRINCE2: 1,
+      "Lean Six Sigma": 0.5,
+      "Disciplined Agile": 0.6,
+      Hybrid: 0.8,
+      "Continuous Delivery": 0.3,
+    },
+  },
+  {
+    key: "cpi",
+    name: "CPI",
+    description: "Cost Performance Index (EV/AC).",
+    category: "Predictability",
+    idealTrend: "up",
+    relevance: {
+      Scrum: 0.2,
+      SAFe: 0.5,
+      Waterfall: 1,
+      PRINCE2: 1,
+      "Lean Six Sigma": 0.7,
+      "Disciplined Agile": 0.5,
+      Hybrid: 0.8,
+      "Continuous Delivery": 0.2,
+    },
+  },
 
   // Value
-  { key: "ttv", name: "Time-to-Value", description: "Start → first measurable outcome.",
-    category: "Value", idealTrend: "down", units: "days",
-    relevance: { Scrum:1, SAFe:0.9, Waterfall:0.8, PRINCE2:0.8, "Lean Six Sigma":0.8, "Disciplined Agile":1, Hybrid:1, "Continuous Delivery":1 } },
-  { key: "bv", name: "Business Value", description: "Value delivered per period (relative).",
-    category: "Value", idealTrend: "up",
-    relevance: { Scrum:1, SAFe:1, Waterfall:0.9, PRINCE2:0.9, "Lean Six Sigma":0.7, "Disciplined Agile":1, Hybrid:1, "Continuous Delivery":1 } },
+  {
+    key: "ttv",
+    name: "Time-to-Value",
+    description: "Start → first measurable outcome.",
+    category: "Value",
+    idealTrend: "down",
+    units: "days",
+    relevance: {
+      Scrum: 1,
+      SAFe: 0.9,
+      Waterfall: 0.8,
+      PRINCE2: 0.8,
+      "Lean Six Sigma": 0.8,
+      "Disciplined Agile": 1,
+      Hybrid: 1,
+      "Continuous Delivery": 1,
+    },
+  },
+  {
+    key: "bv",
+    name: "Business Value",
+    description: "Value delivered per period (relative).",
+    category: "Value",
+    idealTrend: "up",
+    relevance: {
+      Scrum: 1,
+      SAFe: 1,
+      Waterfall: 0.9,
+      PRINCE2: 0.9,
+      "Lean Six Sigma": 0.7,
+      "Disciplined Agile": 1,
+      Hybrid: 1,
+      "Continuous Delivery": 1,
+    },
+  },
 
   // Customer
-  { key: "nps", name: "NPS/CSAT", description: "Customer satisfaction/sentiment.",
-    category: "Customer", idealTrend: "up",
-    relevance: { Scrum:0.8, SAFe:0.8, Waterfall:0.8, PRINCE2:0.9, "Lean Six Sigma":0.8, "Disciplined Agile":0.8, Hybrid:0.8, "Continuous Delivery":0.8 } },
-  { key: "sla", name: "SLA/SLO Adherence", description: "Reliability against promises.",
-    category: "Customer", idealTrend: "up", units: "%",
-    relevance: { Scrum:0.8, SAFe:0.9, Waterfall:0.9, PRINCE2:0.9, "Lean Six Sigma":0.9, "Disciplined Agile":0.8, Hybrid:0.9, "Continuous Delivery":0.9 } },
+  {
+    key: "nps",
+    name: "NPS/CSAT",
+    description: "Customer satisfaction/sentiment.",
+    category: "Customer",
+    idealTrend: "up",
+    relevance: {
+      Scrum: 0.8,
+      SAFe: 0.8,
+      Waterfall: 0.8,
+      PRINCE2: 0.9,
+      "Lean Six Sigma": 0.8,
+      "Disciplined Agile": 0.8,
+      Hybrid: 0.8,
+      "Continuous Delivery": 0.8,
+    },
+  },
+  {
+    key: "sla",
+    name: "SLA/SLO Adherence",
+    description: "Reliability against promises.",
+    category: "Customer",
+    idealTrend: "up",
+    units: "%",
+    relevance: {
+      Scrum: 0.8,
+      SAFe: 0.9,
+      Waterfall: 0.9,
+      PRINCE2: 0.9,
+      "Lean Six Sigma": 0.9,
+      "Disciplined Agile": 0.8,
+      Hybrid: 0.9,
+      "Continuous Delivery": 0.9,
+    },
+  },
 
   // Waste
-  { key: "queue_ratio", name: "Queue/Wait Ratio", description: "Wait ÷ active time.",
-    category: "Waste", idealTrend: "down",
-    relevance: { Scrum:0.9, SAFe:1, Waterfall:0.7, PRINCE2:0.8, "Lean Six Sigma":1, "Disciplined Agile":0.9, Hybrid:1, "Continuous Delivery":0.9 } },
-  { key: "batch_size", name: "Batch Size", description: "Avg. items per release.",
-    category: "Waste", idealTrend: "down",
-    relevance: { Scrum:0.9, SAFe:1, Waterfall:0.7, PRINCE2:0.8, "Lean Six Sigma":1, "Disciplined Agile":0.9, Hybrid:1, "Continuous Delivery":1 } },
+  {
+    key: "queue_ratio",
+    name: "Queue/Wait Ratio",
+    description: "Wait ÷ active time.",
+    category: "Waste",
+    idealTrend: "down",
+    relevance: {
+      Scrum: 0.9,
+      SAFe: 1,
+      Waterfall: 0.7,
+      PRINCE2: 0.8,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 0.9,
+      Hybrid: 1,
+      "Continuous Delivery": 0.9,
+    },
+  },
+  {
+    key: "batch_size",
+    name: "Batch Size",
+    description: "Avg. items per release.",
+    category: "Waste",
+    idealTrend: "down",
+    relevance: {
+      Scrum: 0.9,
+      SAFe: 1,
+      Waterfall: 0.7,
+      PRINCE2: 0.8,
+      "Lean Six Sigma": 1,
+      "Disciplined Agile": 0.9,
+      Hybrid: 1,
+      "Continuous Delivery": 1,
+    },
+  },
 ];
 
-/** ====== Industry Peer Averages (editable seeds) ====== */
+/** ====== Story-level Industry Peer Averages ====== */
 interface IndustryPeerData {
   industry: string;
   cycle_time_days: number;
@@ -122,15 +392,83 @@ interface IndustryPeerData {
 }
 
 const INDUSTRY_PEERS: IndustryPeerData[] = [
-  { industry: "E-commerce/Retail", cycle_time_days: 6.5, lead_time_days: 8, escapes: 6, rework: 9, plan_rel: 82, ttv_days: 6 },
-  { industry: "SaaS",                cycle_time_days: 5,   lead_time_days: 6, escapes: 5, rework: 8, plan_rel: 85, ttv_days: 5 },
-  { industry: "FinTech",             cycle_time_days: 8,   lead_time_days:10, escapes: 4, rework: 7, plan_rel: 88, ttv_days: 9 },
-  { industry: "Healthcare",          cycle_time_days: 9,   lead_time_days:12, escapes: 5, rework: 8, plan_rel: 86, ttv_days:10 },
-  { industry: "Manufacturing",       cycle_time_days:10,   lead_time_days:14, escapes: 4, rework: 6, plan_rel: 90, ttv_days:12 },
+  {
+    industry: "E-commerce/Retail",
+    cycle_time_days: 6.5,
+    lead_time_days: 8,
+    escapes: 6,
+    rework: 9,
+    plan_rel: 82,
+    ttv_days: 6,
+  },
+  {
+    industry: "SaaS",
+    cycle_time_days: 5,
+    lead_time_days: 6,
+    escapes: 5,
+    rework: 8,
+    plan_rel: 85,
+    ttv_days: 5,
+  },
+  {
+    industry: "FinTech",
+    cycle_time_days: 8,
+    lead_time_days: 10,
+    escapes: 4,
+    rework: 7,
+    plan_rel: 88,
+    ttv_days: 9,
+  },
+  {
+    industry: "Healthcare",
+    cycle_time_days: 9,
+    lead_time_days: 12,
+    escapes: 5,
+    rework: 8,
+    plan_rel: 86,
+    ttv_days: 10,
+  },
+  {
+    industry: "Manufacturing",
+    cycle_time_days: 10,
+    lead_time_days: 14,
+    escapes: 4,
+    rework: 6,
+    plan_rel: 90,
+    ttv_days: 12,
+  },
+];
+
+/** ====== DORA Benchmarks from your research ====== */
+interface DORAIndustryStats {
+  industry: string;
+  performanceRating: number;
+  leadTimeDays: number;
+  deployFreqDays: number;
+  changeFailRatePct: number;
+  recoveryTimeDays: number;
+}
+
+const DORA_INDUSTRY_STATS: DORAIndustryStats[] = [
+  { industry: "All", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 1 },
+  { industry: "Education", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 17, recoveryTimeDays: 5 },
+  { industry: "Energy", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 17.5, changeFailRatePct: 28, recoveryTimeDays: 5 },
+  { industry: "Financial Services", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 14, changeFailRatePct: 17, recoveryTimeDays: 1 },
+  { industry: "Government", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 24.5, changeFailRatePct: 23, recoveryTimeDays: 4 },
+  { industry: "Healthcare & Pharmaceuticals", performanceRating: 6.5, leadTimeDays: 21, deployFreqDays: 24.5, changeFailRatePct: 14, recoveryTimeDays: 3 },
+  { industry: "Industrials & Manufacturing", performanceRating: 6.5, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 6 },
+  { industry: "Insurance", performanceRating: 6, leadTimeDays: 21, deployFreqDays: 17.5, changeFailRatePct: 18, recoveryTimeDays: 4 },
+  { industry: "Media/Entertainment", performanceRating: 7, leadTimeDays: 7, deployFreqDays: 7, changeFailRatePct: 15, recoveryTimeDays: 1 },
+  { industry: "Non-Profit", performanceRating: 7, leadTimeDays: 7, deployFreqDays: 17.5, changeFailRatePct: 15, recoveryTimeDays: 2 },
+  { industry: "Retail/Consumer/ e-Commerce", performanceRating: 7.5, leadTimeDays: 7, deployFreqDays: 5, changeFailRatePct: 15, recoveryTimeDays: 1 },
+  { industry: "Technology", performanceRating: 7, leadTimeDays: 14, deployFreqDays: 10.5, changeFailRatePct: 17, recoveryTimeDays: 2 },
+  { industry: "Telecommunications", performanceRating: 6, leadTimeDays: 17.5, deployFreqDays: 17.5, changeFailRatePct: 19, recoveryTimeDays: 3 },
+  { industry: "Other", performanceRating: 7, leadTimeDays: 10.5, deployFreqDays: 10.5, changeFailRatePct: 18, recoveryTimeDays: 1 },
 ];
 
 /** ====== Cohorts from answers ====== */
 type CohortKey = string;
+
 interface UserContext {
   size: "small" | "medium" | "large";
   planning: "iterative" | "continuous_flow" | "up_front";
@@ -140,20 +478,31 @@ interface UserContext {
 }
 
 function mapAnswersToContext(results: ScoringResult): UserContext {
-  const a = results.answers || {};
+  const a = (results as any).answers || {};
   const planning =
-    a.planning === "Up-front" ? "up_front" :
-    a.planning === "Continuous Flow" ? "continuous_flow" : "iterative";
+    a.planning === "Up-front"
+      ? "up_front"
+      : a.planning === "Continuous Flow"
+      ? "continuous_flow"
+      : "iterative";
   const sourcing =
-    a.sourcing === "Heavily Outsourced" ? "outsourced" :
-    (a.sourcing === "Mixed" || a.sourcing === "Mixed Internal/External") ? "mixed" : "internal";
+    a.sourcing === "Heavily Outsourced"
+      ? "outsourced"
+      : a.sourcing === "Mixed" || a.sourcing === "Mixed Internal/External"
+      ? "mixed"
+      : "internal";
   const goal =
-    a.goals === "Speed" ? "speed" :
-    a.goals === "Innovation" ? "innovation" : "predictable";
+    a.goals === "Speed"
+      ? "speed"
+      : a.goals === "Innovation"
+      ? "innovation"
+      : "predictable";
 
   return {
     size: (a.project_size ?? "medium").toLowerCase(),
-    planning, sourcing, goal,
+    planning,
+    sourcing,
+    goal,
     compliance: (a.compliance ?? "medium").toLowerCase(),
   } as UserContext;
 }
@@ -172,13 +521,23 @@ const DEFAULT_COHORT: CohortBenchmark = {
   title: "Product Teams Optimizing for Speed",
   description: "Cross-functional teams using small batches and continuous testing.",
   metricValues: {
-    cycle_time: 6, lead_time: 8, throughput: 25, flow_eff: 28,
-    escapes: 5, rework: 8, first_pass: 92,
-    plan_rel: 85, spi: 1.0, cpi: 1.0,
-    ttv: 7, bv: 100,
-    nps: 45, sla: 99,
-    queue_ratio: 1.8, batch_size: 5,
-  }
+    cycle_time: 6,
+    lead_time: 8,
+    throughput: 25,
+    flow_eff: 28,
+    escapes: 5,
+    rework: 8,
+    first_pass: 92,
+    plan_rel: 85,
+    spi: 1.0,
+    cpi: 1.0,
+    ttv: 7,
+    bv: 100,
+    nps: 45,
+    sla: 99,
+    queue_ratio: 1.8,
+    batch_size: 5,
+  },
 };
 
 const COHORT_BENCHMARKS: Record<CohortKey, CohortBenchmark> = {
@@ -186,26 +545,46 @@ const COHORT_BENCHMARKS: Record<CohortKey, CohortBenchmark> = {
     title: "Large, Regulated, Up-Front Planning",
     description: "Heavier governance with strong predictability and quality controls.",
     metricValues: {
-      cycle_time: 12, lead_time: 14, throughput: 12, flow_eff: 18,
-      escapes: 3, rework: 7, first_pass: 95,
-      plan_rel: 90, spi: 1.02, cpi: 1.01,
-      ttv: 14, bv: 120,
-      nps: 40, sla: 99.5,
-      queue_ratio: 2.5, batch_size: 12,
-    }
+      cycle_time: 12,
+      lead_time: 14,
+      throughput: 12,
+      flow_eff: 18,
+      escapes: 3,
+      rework: 7,
+      first_pass: 95,
+      plan_rel: 90,
+      spi: 1.02,
+      cpi: 1.01,
+      ttv: 14,
+      bv: 120,
+      nps: 40,
+      sla: 99.5,
+      queue_ratio: 2.5,
+      batch_size: 12,
+    },
   },
   "size:medium|plan:iterative|comp:medium|src:mixed|goal:speed": DEFAULT_COHORT,
   "size:small|plan:iterative|comp:low|src:internal|goal:innovation": {
     title: "Startup-like Innovation",
     description: "Rapid prototyping, trunk-based development, feature flags.",
     metricValues: {
-      cycle_time: 4, lead_time: 5, throughput: 35, flow_eff: 35,
-      escapes: 7, rework: 10, first_pass: 90,
-      plan_rel: 80, spi: 0.98, cpi: 0.98,
-      ttv: 4, bv: 80,
-      nps: 50, sla: 98,
-      queue_ratio: 1.2, batch_size: 3,
-    }
+      cycle_time: 4,
+      lead_time: 5,
+      throughput: 35,
+      flow_eff: 35,
+      escapes: 7,
+      rework: 10,
+      first_pass: 90,
+      plan_rel: 80,
+      spi: 0.98,
+      cpi: 0.98,
+      ttv: 4,
+      bv: 80,
+      nps: 50,
+      sla: 98,
+      queue_ratio: 1.2,
+      batch_size: 3,
+    },
   },
 };
 
@@ -239,7 +618,8 @@ const EXEMPLARS: Exemplar[] = [
     company: "John Deere",
     methodology: "SAFe",
     notes: "Scaled Agile adoption across IT/operations; case studies on scaling.",
-    sourceUrl: "https://www.scruminc.com/agile-unleashed-scale-john-deere-case-study/",
+    sourceUrl:
+      "https://www.scruminc.com/agile-unleashed-scale-john-deere-case-study/",
   },
 
   // Waterfall
@@ -263,14 +643,16 @@ const EXEMPLARS: Exemplar[] = [
     company: "Toyota",
     methodology: "Lean Six Sigma",
     notes: "TPS/Lean heritage; defect reduction, waste elimination.",
-    sourceUrl: "https://global.toyota/en/company/vision-and-philosophy/production-system/",
+    sourceUrl:
+      "https://global.toyota/en/company/vision-and-philosophy/production-system/",
   },
 
   // Disciplined Agile
   {
     company: "TD Bank (example adopter)",
     methodology: "Disciplined Agile",
-    notes: "Large enterprises have reported DA(D)/Disciplined Agile adoption; limited public metrics.",
+    notes:
+      "Large enterprises have reported DA(D)/Disciplined Agile adoption; limited public metrics.",
     sourceUrl: "https://www.pmi.org/disciplined-agile",
   },
 
@@ -278,7 +660,8 @@ const EXEMPLARS: Exemplar[] = [
   {
     company: "Nike, Inc.",
     methodology: "Hybrid",
-    notes: "Digital retail blends Agile trains + governed release windows; internal blogs discuss transformation.",
+    notes:
+      "Digital retail blends Agile trains + governed release windows; internal blogs discuss transformation.",
     sourceUrl: "https://medium.com/nikeengineering/",
   },
 
@@ -286,94 +669,316 @@ const EXEMPLARS: Exemplar[] = [
   {
     company: "Amazon",
     methodology: "Continuous Delivery",
-    notes: "High deploy cadence, short lead times; frequent CD/DevOps case studies.",
+    notes:
+      "High deploy cadence, short lead times; frequent CD/DevOps case studies.",
     sourceUrl: "https://aws.amazon.com/blogs/devops/",
   },
 ];
 
+/** ====== Methodology families & industry mappings ====== */
+type ApproachFamily = "Agile" | "Lean" | "Predictive" | "HybridDevOps";
+
+const METHODOLOGY_FAMILY: Record<Methodology, ApproachFamily> = {
+  Scrum: "Agile",
+  SAFe: "Agile",
+  "Disciplined Agile": "Agile",
+  Hybrid: "HybridDevOps",
+  "Continuous Delivery": "HybridDevOps",
+  "Lean Six Sigma": "Lean",
+  Waterfall: "Predictive",
+  PRINCE2: "Predictive",
+};
+
+const STORY_INDUSTRY_BY_FAMILY: Record<ApproachFamily, string[]> = {
+  Agile: ["E-commerce/Retail", "SaaS", "FinTech", "Healthcare"],
+  Lean: ["Manufacturing", "Healthcare"],
+  Predictive: ["Manufacturing", "Healthcare"],
+  HybridDevOps: [
+    "E-commerce/Retail",
+    "SaaS",
+    "FinTech",
+    "Healthcare",
+    "Manufacturing",
+  ],
+};
+
+const DORA_INDUSTRY_BY_FAMILY: Record<ApproachFamily, string[]> = {
+  Agile: [
+    "Technology",
+    "Retail/Consumer/ e-Commerce",
+    "Media/Entertainment",
+    "Financial Services",
+    "Non-Profit",
+  ],
+  Lean: [
+    "Industrials & Manufacturing",
+    "Healthcare & Pharmaceuticals",
+    "Energy",
+  ],
+  Predictive: ["Government", "Insurance", "Energy", "Telecommunications"],
+  HybridDevOps: [
+    "Technology",
+    "Retail/Consumer/ e-Commerce",
+    "Media/Entertainment",
+    "Financial Services",
+    "Telecommunications",
+  ],
+};
+
 /** ====== Helpers ====== */
-function selectMetricsForMethod(method: Methodology, threshold = 0.55): Metric[] {
-  return METRICS.filter(m => (m.relevance[method] ?? 0) >= threshold);
+function selectMetricsForMethod(
+  method: Methodology,
+  threshold = 0.55
+): Metric[] {
+  return METRICS.filter((m) => (m.relevance[method] ?? 0) >= threshold);
 }
 
 /** ====== Component ====== */
-export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) {
+export function BenchmarkPage({
+  results,
+  onBack,
+  company,
+  kpis,
+  doraKpis,
+  quickInsights,
+}: BenchmarkPageProps) {
   // Determine user's top methodology (exactly the 8 you support)
   const topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
+  const family = METHODOLOGY_FAMILY[topMethodology];
 
   // Build cohort from answers
   const userCtx = useMemo(() => mapAnswersToContext(results), [results]);
   const cohortKey = useMemo(() => toCohortKey(userCtx), [userCtx]);
-  const cohort = useMemo(() => COHORT_BENCHMARKS[cohortKey] ?? DEFAULT_COHORT, [cohortKey]);
+  const cohort = useMemo(
+    () => COHORT_BENCHMARKS[cohortKey] ?? DEFAULT_COHORT,
+    [cohortKey]
+  );
 
   // Pick metrics for this methodology
-  const highlightedMetrics = useMemo(() => selectMetricsForMethod(topMethodology), [topMethodology]);
+  const highlightedMetrics = useMemo(
+    () => selectMetricsForMethod(topMethodology),
+    [topMethodology]
+  );
 
-  // Industry baseline
-  const defaultIndustry = company?.industry ?? "E-commerce/Retail";
-  const [selectedIndustry, setSelectedIndustry] = useState<string>(defaultIndustry);
+  /** === Story-level industry peers filtered by methodology family === */
+  const storyIndustryOptions = useMemo(() => {
+    const tags = STORY_INDUSTRY_BY_FAMILY[family];
+    const candidates = INDUSTRY_PEERS.filter((p) => tags.includes(p.industry));
+    return candidates.length ? candidates : INDUSTRY_PEERS;
+  }, [family]);
+
+  const [selectedIndustry, setSelectedIndustry] = useState<string>(() => {
+    if (company?.industry) {
+      const match = storyIndustryOptions.find(
+        (p) => p.industry === company.industry
+      );
+      if (match) return match.industry;
+    }
+    return storyIndustryOptions[0]?.industry ?? INDUSTRY_PEERS[0].industry;
+  });
+
   const industryPeer = useMemo(
-    () => INDUSTRY_PEERS.find(p => p.industry === selectedIndustry) || INDUSTRY_PEERS[0],
-    [selectedIndustry]
+    () =>
+      storyIndustryOptions.find((p) => p.industry === selectedIndustry) ??
+      storyIndustryOptions[0] ??
+      INDUSTRY_PEERS[0],
+    [storyIndustryOptions, selectedIndustry]
   );
 
   // Exemplar(s) filtered by selected methodology
   const exemplars = useMemo(
-    () => EXEMPLARS.filter(ex => ex.methodology === topMethodology),
+    () => EXEMPLARS.filter((ex) => ex.methodology === topMethodology),
     [topMethodology]
   );
-  const [selectedExemplar, setSelectedExemplar] = useState<string>(exemplars[0]?.company ?? "");
+  const [selectedExemplar, setSelectedExemplar] = useState<string>(
+    exemplars[0]?.company ?? ""
+  );
   const exemplar = useMemo(
-    () => exemplars.find(e => e.company === selectedExemplar) ?? exemplars[0],
+    () => exemplars.find((e) => e.company === selectedExemplar) ?? exemplars[0],
     [exemplars, selectedExemplar]
   );
 
-  /** === Bars: Cohort vs Industry vs Exemplar (numeric shown only if present) === */
+  /** === Bars: Cohort vs Industry vs Exemplar vs Your KPI (story-level) === */
   const barRows = useMemo(() => {
     const rows: Array<Record<string, number | string>> = [];
 
-    function pushRow(label: string, keys: { cohort?: string; industry?: keyof IndustryPeerData; exemplar?: keyof Exemplar }) {
+    function pushRow(label: string, opts: {
+      cohort?: string;
+      industry?: keyof IndustryPeerData;
+      exemplar?: keyof Exemplar;
+      kpiKey?: string;
+    }) {
       const row: Record<string, number | string> = { metric: label };
 
-      if (keys.cohort && cohort.metricValues[keys.cohort] != null) {
-        row["Cohort Avg"] = cohort.metricValues[keys.cohort]!;
+      if (opts.cohort && cohort.metricValues[opts.cohort] != null) {
+        row["Cohort Avg"] = cohort.metricValues[opts.cohort]!;
       }
-      if (keys.industry) {
-        const val = industryPeer[keys.industry];
+      if (opts.industry) {
+        const val = industryPeer[opts.industry];
         if (typeof val === "number") row["Industry Avg"] = val;
       }
-      if (exemplar && keys.exemplar && exemplar[keys.exemplar] != null) {
-        row[exemplar.company] = exemplar[keys.exemplar] as number;
+      if (exemplar && opts.exemplar && exemplar[opts.exemplar] != null) {
+        row[exemplar.company] = exemplar[opts.exemplar] as number;
       }
+      if (kpis && opts.kpiKey && kpis[opts.kpiKey] != null) {
+        row["Your KPI"] = kpis[opts.kpiKey]!;
+      }
+
       rows.push(row);
     }
 
-    pushRow("Cycle Time (days)", { cohort: "cycle_time", industry: "cycle_time_days", exemplar: "cycle_time_days" });
-    pushRow("Lead Time (days)",  { cohort: "lead_time",  industry: "lead_time_days",  exemplar: "lead_time_days" });
-    pushRow("Escapes (per period)", { cohort: "escapes", industry: "escapes", exemplar: "escapes" });
-    pushRow("Rework (%)", { cohort: "rework", industry: "rework", exemplar: "rework" });
-    pushRow("Plan Reliability (%)", { cohort: "plan_rel", industry: "plan_rel", exemplar: "plan_rel" });
-    pushRow("Time-to-Value (days)", { cohort: "ttv", industry: "ttv_days", exemplar: "ttv_days" });
+    pushRow("Cycle Time (days)", {
+      cohort: "cycle_time",
+      industry: "cycle_time_days",
+      exemplar: "cycle_time_days",
+      kpiKey: "cycle_time",
+    });
+    pushRow("Lead Time (days)", {
+      cohort: "lead_time",
+      industry: "lead_time_days",
+      exemplar: "lead_time_days",
+      kpiKey: "lead_time",
+    });
+    pushRow("Escapes (per period)", {
+      cohort: "escapes",
+      industry: "escapes",
+      exemplar: "escapes",
+      kpiKey: "escapes",
+    });
+    pushRow("Rework (%)", {
+      cohort: "rework",
+      industry: "rework",
+      exemplar: "rework",
+      kpiKey: "rework",
+    });
+    pushRow("Plan Reliability (%)", {
+      cohort: "plan_rel",
+      industry: "plan_rel",
+      exemplar: "plan_rel",
+      kpiKey: "plan_rel",
+    });
+    pushRow("Time-to-Value (days)", {
+      cohort: "ttv",
+      industry: "ttv_days",
+      exemplar: "ttv_days",
+      kpiKey: "ttv",
+    });
 
     return rows;
-  }, [cohort, industryPeer, exemplar]);
+  }, [cohort, industryPeer, exemplar, kpis]);
 
   const seriesKeys = useMemo(() => {
     const s = new Set<string>();
-    barRows.forEach(r => Object.keys(r).forEach(k => k !== "metric" && s.add(k)));
+    barRows.forEach((r) =>
+      Object.keys(r).forEach((k) => k !== "metric" && s.add(k))
+    );
     return Array.from(s);
   }, [barRows]);
 
   /** === Radar: pillar emphasis for selected methodology === */
   const pillarScores = useMemo(() => {
     const buckets: Record<Pillar, number[]> = {
-      Flow: [], Quality: [], Predictability: [], Value: [], Customer: [], Waste: []
+      Flow: [],
+      Quality: [],
+      Predictability: [],
+      Value: [],
+      Customer: [],
+      Waste: [],
     };
-    highlightedMetrics.forEach(m => buckets[m.category].push(m.relevance[topMethodology]));
-    const avg = (arr: number[]) => (arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length) : 0);
+    highlightedMetrics.forEach((m) =>
+      buckets[m.category].push(m.relevance[topMethodology])
+    );
+    const avg = (arr: number[]) =>
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
     const toPct = (v: number) => Math.round(v * 100);
-    return (Object.keys(buckets) as Pillar[]).map(p => ({ pillar: p, Score: toPct(avg(buckets[p])) }));
+    return (Object.keys(buckets) as Pillar[]).map((p) => ({
+      pillar: p,
+      Score: toPct(avg(buckets[p])),
+    }));
   }, [highlightedMetrics, topMethodology]);
+
+  /** === DORA: DevOps-level benchmarks filtered by methodology family === */
+  const allDora = useMemo(
+    () => DORA_INDUSTRY_STATS.find((d) => d.industry === "All")!,
+    []
+  );
+
+  const doraIndustryOptions = useMemo(() => {
+    const tags = DORA_INDUSTRY_BY_FAMILY[family];
+    const base = DORA_INDUSTRY_STATS.filter((d) => d.industry !== "All");
+    const filtered = base.filter((d) => tags.includes(d.industry));
+    return filtered.length ? filtered : base;
+  }, [family]);
+
+  const [selectedDoraIndustry, setSelectedDoraIndustry] = useState<string>(() => {
+    if (company?.industry) {
+      const match = doraIndustryOptions.find(
+        (d) => d.industry === company.industry
+      );
+      if (match) return match.industry;
+    }
+    return doraIndustryOptions[0]?.industry ?? "All";
+  });
+
+  const selectedDora = useMemo(
+    () =>
+      DORA_INDUSTRY_STATS.find((d) => d.industry === selectedDoraIndustry) ??
+      allDora,
+    [selectedDoraIndustry, allDora]
+  );
+
+  const doraBarRows = useMemo(() => {
+    const rows: Array<Record<string, number | string>> = [];
+
+    function pushRow(label: string, opts: {
+      field: keyof DORAIndustryStats;
+      kpiField?: keyof DORAKpis;
+    }) {
+      const row: Record<string, number | string> = { metric: label };
+
+      row["All Industries"] = allDora[opts.field] as number;
+      row[selectedDora.industry] = selectedDora[opts.field] as number;
+
+      if (doraKpis && opts.kpiField && doraKpis[opts.kpiField] != null) {
+        row["Your DORA KPI"] = doraKpis[opts.kpiField] as number;
+      }
+
+      rows.push(row);
+    }
+
+    pushRow("Lead Time (days)", {
+      field: "leadTimeDays",
+      kpiField: "leadTimeDays",
+    });
+    pushRow("Deploy Frequency (days between)", {
+      field: "deployFreqDays",
+      kpiField: "deployFreqDays",
+    });
+    pushRow("Change Fail Rate (%)", {
+      field: "changeFailRatePct",
+      kpiField: "changeFailRatePct",
+    });
+    pushRow("Failed Deployment Recovery (days)", {
+      field: "recoveryTimeDays",
+      kpiField: "recoveryTimeDays",
+    });
+    pushRow("Performance Rating (0–10)", {
+      field: "performanceRating",
+    });
+
+    return rows;
+  }, [allDora, selectedDora, doraKpis]);
+
+  const doraSeriesKeys = useMemo(() => {
+    const s = new Set<string>();
+    doraBarRows.forEach((r) =>
+      Object.keys(r).forEach((k) => k !== "metric" && s.add(k))
+    );
+    return Array.from(s);
+  }, [doraBarRows]);
+
+  const positives = quickInsights?.positives ?? [];
+  const negatives = quickInsights?.negatives ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 py-10 px-4">
@@ -387,7 +992,9 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
             <div>
               <h1 className="text-3xl md:text-4xl">Methodology-Aware Benchmark</h1>
               <p className="text-muted-foreground">
-                Adaptive metrics for <span className="font-medium">{topMethodology}</span> • {company?.name ?? "Your Organization"}
+                Adaptive metrics for{" "}
+                <span className="font-medium">{topMethodology}</span> •{" "}
+                {company?.name ?? "Your Organization"}
               </p>
             </div>
           </div>
@@ -406,11 +1013,15 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
                 <Badge variant="secondary">{topMethodology}</Badge>
               </div>
               <h2 className="text-2xl">{cohort.title}</h2>
-              <p className="text-muted-foreground max-w-2xl">{cohort.description}</p>
+              <p className="text-muted-foreground max-w-2xl">
+                {cohort.description}
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-yellow-500" />
-              <span className="text-sm text-muted-foreground">Personalized to your context</span>
+              <span className="text-sm text-muted-foreground">
+                Personalized to your context
+              </span>
             </div>
           </div>
         </Card>
@@ -418,14 +1029,18 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
         {/* Controls */}
         <Card className="glass-card border-white/20 dark:border-white/10 p-5">
           <div className="flex flex-wrap items-center gap-4">
-            <Badge variant="secondary" className="px-3 py-1">Compare With</Badge>
+            <Badge variant="secondary" className="px-3 py-1">
+              Compare with industries that also lean into {topMethodology}
+            </Badge>
 
-            {/* Industry */}
+            {/* Industry (story-level peers) */}
             <div className="flex flex-wrap gap-2">
-              {INDUSTRY_PEERS.map(ind => (
+              {storyIndustryOptions.map((ind) => (
                 <Button
                   key={ind.industry}
-                  variant={selectedIndustry === ind.industry ? "default" : "outline"}
+                  variant={
+                    selectedIndustry === ind.industry ? "default" : "outline"
+                  }
                   onClick={() => setSelectedIndustry(ind.industry)}
                   className="h-8 text-sm"
                 >
@@ -440,10 +1055,12 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
               {exemplars.length === 0 ? (
                 <Badge variant="outline">No public exemplars</Badge>
               ) : (
-                exemplars.map(e => (
+                exemplars.map((e) => (
                   <Button
                     key={e.company}
-                    variant={exemplar?.company === e.company ? "default" : "outline"}
+                    variant={
+                      exemplar?.company === e.company ? "default" : "outline"
+                    }
                     onClick={() => setSelectedExemplar(e.company)}
                     className="h-8 text-sm"
                   >
@@ -458,7 +1075,12 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
               <LinkIcon className="h-3.5 w-3.5" />
               <span>{exemplar.notes}</span>
               {exemplar.sourceUrl && (
-                <a className="text-primary underline inline-flex items-center gap-1" href={exemplar.sourceUrl} target="_blank" rel="noreferrer">
+                <a
+                  className="text-primary underline inline-flex items-center gap-1"
+                  href={exemplar.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <LinkIcon className="h-3.5 w-3.5" /> Source
                 </a>
               )}
@@ -466,32 +1088,41 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
           )}
         </Card>
 
-        {/* Charts */}
+        {/* Charts: Story-level metrics */}
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Bar comparison */}
           <Card className="glass-card p-6 border-white/20 dark:border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl">Cohort vs Industry vs Exemplar</h3>
+              <h3 className="text-xl">
+                Cohort vs Industry vs Exemplar{ kpis ? " vs Your KPI" : "" }
+              </h3>
               <Info className="h-5 w-5 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               Benchmarks grounded in your answers; company bars appear when public numbers are available.
+              {kpis &&
+                " Your KPI column shows your current baseline for each metric."}
             </p>
             <div className="h-[360px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barRows} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" />
-                  <YAxis dataKey="metric" type="category" width={170} />
+                  <YAxis dataKey="metric" type="category" width={180} />
                   <Tooltip />
                   <Legend />
-                  {seriesKeys.map(k => (
+                  {seriesKeys.map((k) => (
                     <Bar
                       key={k}
                       dataKey={k}
                       fill={
-                        k === "Cohort Avg" ? "#3b82f6" :
-                        k === "Industry Avg" ? "#22c55e" : "#f97316"
+                        k === "Cohort Avg"
+                          ? "#3b82f6"
+                          : k === "Industry Avg"
+                          ? "#22c55e"
+                          : k === "Your KPI"
+                          ? "#e11d48"
+                          : "#f97316"
                       }
                     />
                   ))}
@@ -503,11 +1134,14 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
           {/* Radar: pillar emphasis */}
           <Card className="glass-card p-6 border-white/20 dark:border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl">Pillar Emphasis for {topMethodology}</h3>
+              <h3 className="text-xl">
+                Pillar Emphasis for {topMethodology}
+              </h3>
               <Info className="h-5 w-5 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Shows which metric families matter most for this methodology in SectorSync.
+              Shows which metric families matter most for this methodology in
+              SectorSync.
             </p>
             <div className="h-[360px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -515,7 +1149,13 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
                   <PolarGrid />
                   <PolarAngleAxis dataKey="pillar" />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                  <Radar name="Emphasis" dataKey="Score" stroke="#a855f7" fill="#a855f7" fillOpacity={0.35} />
+                  <Radar
+                    name="Emphasis"
+                    dataKey="Score"
+                    stroke="#a855f7"
+                    fill="#a855f7"
+                    fillOpacity={0.35}
+                  />
                   <Legend />
                   <Tooltip />
                 </RadarChart>
@@ -524,25 +1164,180 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
           </Card>
         </div>
 
+        {/* DORA DevOps Benchmarks */}
+        <Card className="glass-card p-6 border-white/20 dark:border-white/10">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <div>
+              <h3 className="text-xl">DORA DevOps Benchmarks</h3>
+              <p className="text-sm text-muted-foreground">
+                Lead time, deploy frequency, change fail rate, and recovery time from the DORA quick check.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="text-xs text-muted-foreground mr-2">
+                Compare against industries that also use this approach:
+              </span>
+              {doraIndustryOptions.map((d) => (
+                <Button
+                  key={d.industry}
+                  variant={
+                    selectedDoraIndustry === d.industry ? "default" : "outline"
+                  }
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setSelectedDoraIndustry(d.industry)}
+                >
+                  {d.industry}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground mb-2">
+            Bars compare{" "}
+            <span className="font-medium">All industries</span> vs{" "}
+            <span className="font-medium">{selectedDora.industry}</span>
+            {doraKpis && " vs your current DORA-style KPIs."}
+          </p>
+
+          <div className="h-[360px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={doraBarRows} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis dataKey="metric" type="category" width={220} />
+                <Tooltip />
+                <Legend />
+                {doraSeriesKeys.map((k) => (
+                  <Bar
+                    key={k}
+                    dataKey={k}
+                    fill={
+                      k === "All Industries"
+                        ? "#6b7280"
+                        : k === "Your DORA KPI"
+                        ? "#ec4899"
+                        : "#22c55e"
+                    }
+                  />
+                ))}
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-3">
+            Source:{" "}
+            <a
+              href="https://dora.dev/quickcheck/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline text-primary"
+            >
+              dora.dev/quickcheck
+            </a>
+            .
+          </p>
+        </Card>
+
         {/* Metric tiles */}
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
           <h3 className="text-xl mb-4">Key Metrics for {topMethodology}</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {highlightedMetrics.map(m => (
-              <div key={m.key} className="rounded-lg border border-white/20 dark:border-white/10 p-4">
+            {highlightedMetrics.map((m) => (
+              <div
+                key={m.key}
+                className="rounded-lg border border-white/20 dark:border-white/10 p-4"
+              >
                 <div className="flex items-center justify-between mb-1">
                   <div className="font-medium">{m.name}</div>
                   <Badge variant="outline">{m.category}</Badge>
                 </div>
-                <p className="text-xs text-muted-foreground mb-2">{m.description}</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  {m.description}
+                </p>
                 <p className="text-xs">
-                  Ideal trend: <span className="font-medium">{m.idealTrend === "up" ? "Higher is better" : "Lower is better"}</span>
+                  Ideal trend:{" "}
+                  <span className="font-medium">
+                    {m.idealTrend === "up"
+                      ? "Higher is better"
+                      : "Lower is better"}
+                  </span>
                 </p>
               </div>
             ))}
           </div>
           <p className="text-xs text-muted-foreground mt-4">
-            Tip: Keep batch size small and reduce queue/approval wait time to improve Cycle/Lead Time across all methodologies.
+            Tip: Keep batch size small and reduce queue/approval wait time to
+            improve Cycle/Lead Time across all methodologies.
+          </p>
+        </Card>
+
+        {/* Quick Insights + Watch outs */}
+        <Card className="glass-card p-6 border-white/20 dark:border-white/10">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl">Quick Insights</h3>
+            <Sparkles className="h-5 w-5 text-yellow-500" />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-sm font-medium mb-2">Why it fits</h4>
+              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                {positives.length ? (
+                  positives.map((p) => <li key={p}>{p}</li>)
+                ) : (
+                  <li>—</li>
+                )}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium mb-2">Watch outs</h4>
+              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                {negatives.length ? (
+                  negatives.map((n) => <li key={n}>{n}</li>)
+                ) : (
+                  <li>—</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        </Card>
+
+        {/* Approach Success & Adoption context */}
+        <Card className="glass-card p-6 border-white/20 dark:border-white/10">
+          <h3 className="text-xl mb-3">Approach Success & Adoption</h3>
+          <div className="grid md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <h4 className="font-semibold mb-1">Agile</h4>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>Overall project success rate ≈ 75.4%.</li>
+                <li>Used in 70%+ of organizations globally.</li>
+                <li>
+                  Agile adoption: 55% IT, 53% healthcare, 53% financial services.
+                </li>
+                <li>Scrum is used by ≈ 87% of Agile teams.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-1">Lean / Lean-Agile</h4>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>Overall project success rate ≈ 74.6%.</li>
+                <li>
+                  Boeing’s 737 fuselage assembly: ~50% faster, ~75% fewer defects with Lean.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-1">Predictive (Waterfall)</h4>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>Overall project success rate ≈ 74.4%.</li>
+                <li>~44% of organizations still rely on predictive approaches.</li>
+                <li>
+                  ~34% expect to decrease reliance, shifting to more adaptive models.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-3">
+            Sources: businessmap.io, mosaicapp.com, parabol.co, monday.com, assemblymag.com.
           </p>
         </Card>
 
@@ -550,15 +1345,25 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
         <Card className="glass-card p-6 border-white/20 dark:border-white/10">
           <h3 className="text-xl mb-3">Sources & Case Studies</h3>
           <p className="text-xs text-muted-foreground mb-3">
-            Public case studies and official pages associated with organizations using <span className="font-medium">{topMethodology}</span>.
+            Public case studies and official pages associated with organizations
+            using{" "}
+            <span className="font-medium">{topMethodology}</span>.
           </p>
           <ul className="text-sm list-disc pl-5 space-y-2">
             {exemplars.map((e) => (
-              <li key={e.company} className="flex flex-wrap items-center gap-2">
+              <li
+                key={e.company}
+                className="flex flex-wrap items-center gap-2"
+              >
                 <span className="font-medium">{e.company}:</span>
                 <span className="text-muted-foreground">{e.notes}</span>
                 {e.sourceUrl && (
-                  <a href={e.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary underline">
+                  <a
+                    href={e.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-primary underline"
+                  >
                     <LinkIcon className="h-3.5 w-3.5" /> Source
                   </a>
                 )}
@@ -566,14 +1371,17 @@ export function BenchmarkPage({ results, onBack, company }: BenchmarkPageProps) 
             ))}
           </ul>
           <p className="text-xs text-muted-foreground mt-4">
-            Where companies have not published numeric values for specific metrics, SectorSync displays cohort and industry benchmarks and labels company data as partial.
+            Where companies have not published numeric values for specific
+            metrics, SectorSync displays cohort and industry benchmarks and
+            labels company data as partial.
           </p>
         </Card>
 
         {/* Footer */}
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            SectorSync adapts metrics to your methodology while benchmarking against cohorts, industry peers, and public exemplars.
+            SectorSync adapts metrics to your methodology while benchmarking
+            against cohorts, industry peers, public exemplars, and DORA DevOps data.
           </p>
         </div>
       </div>
