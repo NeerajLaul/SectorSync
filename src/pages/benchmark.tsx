@@ -631,7 +631,7 @@ export function BenchmarkPage({
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-xl">
-                Where {familyLabel(family)} is used in practice
+                Where {familyLabel(family)} are used in practice
               </h2>
               <p className="text-xs text-muted-foreground">
                 These sectors are the most common home for frameworks like{" "}
