@@ -8,7 +8,18 @@ import {
   BarChart3,
   Link as LinkIcon,
   Sparkles,
+  Info,
 } from "lucide-react";
+import {
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 /** ====== Types ====== */
 export interface CompanyProfile {
@@ -43,7 +54,7 @@ type Pillar =
   | "Customer"
   | "Waste";
 
-/** ====== Metric Catalog (unified, methodology-aware) ====== */
+/** ====== Metric Catalog (framework-aware) ====== */
 interface Metric {
   key: string;
   name: string;
@@ -348,7 +359,7 @@ const METRICS: Metric[] = [
   },
 ];
 
-/** ====== Exemplar Companies per methodology (with source notes) ====== */
+/** ====== Exemplar Companies per methodology ====== */
 interface Exemplar {
   company: string;
   methodology: Methodology;
@@ -357,15 +368,12 @@ interface Exemplar {
 }
 
 const EXEMPLARS: Exemplar[] = [
-  // Scrum
   {
     company: "Spotify",
     methodology: "Scrum",
     notes: "Squads/tribes model; iterative delivery using Scrum practices.",
     sourceUrl: "https://engineering.atspotify.com/",
   },
-
-  // SAFe
   {
     company: "John Deere",
     methodology: "SAFe",
@@ -373,24 +381,18 @@ const EXEMPLARS: Exemplar[] = [
     sourceUrl:
       "https://www.scruminc.com/agile-unleashed-scale-john-deere-case-study/",
   },
-
-  // Waterfall
   {
     company: "Boeing",
     methodology: "Waterfall",
     notes: "Large systems engineering with gated, compliance-heavy releases.",
     sourceUrl: "https://www.boeing.com/",
   },
-
-  // PRINCE2
   {
     company: "VocaLink (Mastercard)",
     methodology: "PRINCE2",
     notes: "PRINCE2 used for major payment-system projects.",
     sourceUrl: "https://www.whatisprince2.net/case-studies",
   },
-
-  // Lean Six Sigma
   {
     company: "Toyota",
     methodology: "Lean Six Sigma",
@@ -398,8 +400,6 @@ const EXEMPLARS: Exemplar[] = [
     sourceUrl:
       "https://global.toyota/en/company/vision-and-philosophy/production-system/",
   },
-
-  // Disciplined Agile
   {
     company: "TD Bank (example adopter)",
     methodology: "Disciplined Agile",
@@ -407,8 +407,6 @@ const EXEMPLARS: Exemplar[] = [
       "Large enterprises have reported DA(D)/Disciplined Agile adoption; limited public metrics.",
     sourceUrl: "https://www.pmi.org/disciplined-agile",
   },
-
-  // Hybrid
   {
     company: "Nike, Inc.",
     methodology: "Hybrid",
@@ -416,8 +414,6 @@ const EXEMPLARS: Exemplar[] = [
       "Digital retail blends Agile trains + governed release windows; internal blogs discuss transformation.",
     sourceUrl: "https://medium.com/nikeengineering/",
   },
-
-  // Continuous Delivery
   {
     company: "Amazon",
     methodology: "Continuous Delivery",
@@ -427,7 +423,7 @@ const EXEMPLARS: Exemplar[] = [
   },
 ];
 
-/** ====== Methodology families (just for light context) ====== */
+/** ====== Methodology families ====== */
 type ApproachFamily = "Agile" | "Predictive" | "Lean";
 
 const METHODOLOGY_FAMILY: Record<Methodology, ApproachFamily> = {
@@ -445,6 +441,82 @@ const FAMILY_METHODS: Record<ApproachFamily, Methodology[]> = {
   Agile: ["Scrum", "SAFe", "Disciplined Agile", "Hybrid", "Continuous Delivery"],
   Predictive: ["Waterfall", "PRINCE2"],
   Lean: ["Lean Six Sigma"],
+};
+
+/** ====== Industries that use each family ====== */
+interface FrameworkIndustryUsage {
+  name: string;
+  tagline: string;
+  details: string;
+}
+
+const FAMILY_INDUSTRIES: Record<ApproachFamily, FrameworkIndustryUsage[]> = {
+  Agile: [
+    {
+      name: "Software & IT",
+      tagline: "Scrum and SAFe for product delivery.",
+      details:
+        "Agile is dominant in software and IT, where teams deliver digital products, platforms, and internal tools with rapid iteration.",
+    },
+    {
+      name: "Healthcare & Life Sciences",
+      tagline: "Agile for digital health and clinical apps.",
+      details:
+        "Healthcare orgs adopt Agile to ship patient portals, clinical apps, and EHR integrations while navigating heavy regulation.",
+    },
+    {
+      name: "Financial Services & FinTech",
+      tagline: "Agile for digital banking and payments.",
+      details:
+        "Banks and fintechs blend Scrum/SAFe with governance to modernize legacy systems and launch customer-facing features faster.",
+    },
+    {
+      name: "Retail / e-Commerce",
+      tagline: "Continuous experiments and feature drops.",
+      details:
+        "Retail and e-commerce teams use Agile and Continuous Delivery for UX experiments, personalization, and peak-season readiness.",
+    },
+  ],
+  Predictive: [
+    {
+      name: "Government & Public Sector",
+      tagline: "Formal stage-gates and compliance.",
+      details:
+        "Predictive methods like Waterfall and PRINCE2 remain common where auditability, fixed budgets, and multi-year programs dominate.",
+    },
+    {
+      name: "Large Infrastructure & Construction",
+      tagline: "Up-front definition and fixed milestones.",
+      details:
+        "High-capex projects with complex dependencies often rely on predictive planning, change control boards, and earned value metrics.",
+    },
+    {
+      name: "Highly Regulated Enterprises",
+      tagline: "Heavy governance with controlled change.",
+      details:
+        "Organizations with strict regulatory oversight use predictive approaches for core systems while experimenting elsewhere with Agile.",
+    },
+  ],
+  Lean: [
+    {
+      name: "Manufacturing & Industrials",
+      tagline: "Lean Six Sigma for waste and defect reduction.",
+      details:
+        "Manufacturers use Lean and Six Sigma to cut cycle time, improve first-pass yield, and standardize work across plants and lines.",
+    },
+    {
+      name: "Aerospace & Automotive",
+      tagline: "Lean for complex assembly and safety.",
+      details:
+        "Aerospace and automotive firms apply Lean to complex assembly, reducing variation and defects while protecting safety margins.",
+    },
+    {
+      name: "Service & Operations Teams",
+      tagline: "Lean for continuous improvement.",
+      details:
+        "Ops, shared services, and support teams adopt Lean to remove bottlenecks, smooth flow, and improve SLA and responsiveness.",
+    },
+  ],
 };
 
 /** ====== Helpers ====== */
@@ -471,7 +543,7 @@ export function BenchmarkPage({
   onBack,
   company,
 }: BenchmarkPageProps) {
-  // Determine user's top methodology (exactly the 8 you support)
+  // User's recommended framework
   const topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
   const family = METHODOLOGY_FAMILY[topMethodology];
 
@@ -479,6 +551,37 @@ export function BenchmarkPage({
   const frameworkMetrics = useMemo(
     () => selectMetricsForMethod(topMethodology),
     [topMethodology]
+  );
+
+  // Pillar emphasis (pillar map)
+  const pillarScores = useMemo(() => {
+    const buckets: Record<Pillar, number[]> = {
+      Flow: [],
+      Quality: [],
+      Predictability: [],
+      Value: [],
+      Customer: [],
+      Waste: [],
+    };
+
+    frameworkMetrics.forEach((m) => {
+      buckets[m.category].push(m.relevance[topMethodology]);
+    });
+
+    const avg = (arr: number[]) =>
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    const toPct = (v: number) => Math.round(v * 100);
+
+    return (Object.keys(buckets) as Pillar[]).map((pillar) => ({
+      pillar,
+      Score: toPct(avg(buckets[pillar])),
+    }));
+  }, [frameworkMetrics, topMethodology]);
+
+  // Industries that use this family of frameworks
+  const industriesForFamily = useMemo(
+    () => FAMILY_INDUSTRIES[family],
+    [family]
   );
 
   // Companies using this framework
@@ -498,7 +601,7 @@ export function BenchmarkPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 py-10 px-4">
-      <div className="mx-auto w-full max-w-5xl space-y-8">
+      <div className="mx-auto w-full max-w-6xl space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -523,7 +626,42 @@ export function BenchmarkPage({
           </Button>
         </div>
 
-        {/* Key metrics for the framework */}
+        {/* 1) Industries that use this framework family */}
+        <Card className="glass-card border-white/20 dark:border-white/10 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl">
+                Where {familyLabel(family)} is used in practice
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                These sectors are the most common home for frameworks like{" "}
+                <span className="font-semibold">{topMethodology}</span>. Use
+                this to frame your story when you talk about “who else works
+                this way.”
+              </p>
+            </div>
+            <Badge variant="secondary" className="text-[11px]">
+              {familyLabel(family)}
+            </Badge>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {industriesForFamily.map((ind) => (
+              <div
+                key={ind.name}
+                className="rounded-lg border border-white/20 dark:border-white/10 p-4 bg-white/60 dark:bg-gray-900/60"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="font-medium">{ind.name}</div>
+                </div>
+                <p className="text-xs font-semibold mb-1">{ind.tagline}</p>
+                <p className="text-xs text-muted-foreground">{ind.details}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* 2) Key metrics for the framework */}
         <Card className="glass-card border-white/20 dark:border-white/10 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -568,7 +706,42 @@ export function BenchmarkPage({
           </div>
         </Card>
 
-        {/* Companies using this framework & related ones */}
+        {/* 3) Pillar map: what this framework values */}
+        <Card className="glass-card border-white/20 dark:border-white/10 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl">
+                Pillar Emphasis for {topMethodology}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Shows which metric families this framework emphasizes the most
+                across Flow, Quality, Predictability, Value, Customer, and Waste.
+              </p>
+            </div>
+            <Info className="h-5 w-5 text-muted-foreground" />
+          </div>
+
+          <div className="h-[320px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={pillarScores}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="pillar" />
+                <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                <Radar
+                  name="Emphasis"
+                  dataKey="Score"
+                  stroke="#a855f7"
+                  fill="#a855f7"
+                  fillOpacity={0.35}
+                />
+                <Legend />
+                <Tooltip />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        {/* 4) Companies using this framework & related ones */}
         <Card className="glass-card border-white/20 dark:border-white/10 p-6 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl">
@@ -592,7 +765,10 @@ export function BenchmarkPage({
             ) : (
               <ul className="text-sm list-disc pl-5 space-y-2">
                 {exemplarsForTop.map((e) => (
-                  <li key={e.company} className="flex flex-wrap items-center gap-2">
+                  <li
+                    key={e.company}
+                    className="flex flex-wrap items-center gap-2"
+                  >
                     <span className="font-medium">{e.company}:</span>
                     <span className="text-muted-foreground">{e.notes}</span>
                     {e.sourceUrl && (
@@ -637,8 +813,8 @@ export function BenchmarkPage({
         {/* Footer */}
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            SectorSync highlights the KPIs that matter most for your recommended
-            framework and shows who else uses similar ways of working.
+            SectorSync shows where your framework is used, the KPIs that matter
+            most, what it values across pillars, and who else works this way.
           </p>
         </div>
       </div>
