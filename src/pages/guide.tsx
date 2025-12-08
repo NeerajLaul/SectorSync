@@ -64,7 +64,7 @@ export function GuidePage({ onStartAssessment }: GuidePageProps) {
           <Card className="glass-card p-8 border-white/20 dark:border-white/10">
             <h2 className="text-3xl mb-6 text-center">Watch How It Works</h2>
             <p className="text-center text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Interactive demo of the 12-question assessment and sample results
+              Interactive demo of the 10-question assessment and sample results
             </p>
             {/* Embedded Interactive Demo */}
             <AssessmentDemo onStartRealAssessment={onStartAssessment} />
@@ -81,7 +81,7 @@ export function GuidePage({ onStartAssessment }: GuidePageProps) {
               </div>
               <h3 className="text-xl mb-3">1. Answer Questions</h3>
               <p className="text-muted-foreground">
-                Complete 12 carefully crafted questions about your project context, team structure, 
+                Complete 10 carefully crafted questions about your project context, team structure, 
                 planning approach, and business goals. Each question helps us understand your unique needs.
               </p>
             </InteractiveCard>
