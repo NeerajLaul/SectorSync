@@ -442,9 +442,9 @@ export function ResultsPage({
           {/* Tile 1: Benchmark CTA */}
           <InteractiveCard className="glass-card p-6 flex flex-col justify-between h-full border-white/20 dark:border-white/10 transition-all duration-300 hover:scale-[1.02]">
             <div>
-              <h3 className="text-lg font-semibold mb-2">Industry Benchmark</h3>
+              <h3 className="text-lg font-semibold mb-2">Framework KPI Benchmark</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Compare your organization to leading peers: cadence, governance, sourcing, and delivery patterns.
+                Explore how this framework is used across key industries, the metrics that matter most, and the organizations that exemplify it in real-world delivery.
               </p>
             </div>
             <div>
