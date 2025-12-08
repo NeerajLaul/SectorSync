@@ -62,7 +62,7 @@ const CAPTION_SCRIPT = [
   },
   {
     time: 4,
-    text: "Answer just 12 quick questions about your project",
+    text: "Answer just 10 quick questions about your project",
     duration: 3,
   },
   {
@@ -75,7 +75,7 @@ const CAPTION_SCRIPT = [
     text: "Get your top 3 methodology matches instantly",
     duration: 3,
   },
-  { time: 13, text: "View industry benchmarks for context", duration: 2.5 },
+  { time: 13, text: "View framework KPI benchmarks for context", duration: 2.5 },
   { time: 15.5, text: "Share results in stunning pitch mode", duration: 2.5 },
   { time: 18, text: "Export or print your recommendations", duration: 2.5 },
   {
