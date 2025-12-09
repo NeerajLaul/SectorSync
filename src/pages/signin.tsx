@@ -24,7 +24,7 @@ export function SignInPage({ onSignIn, onSignUp, onSkip }: SignInPageProps) {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("https://sectorsync-production.up.railway.app/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
