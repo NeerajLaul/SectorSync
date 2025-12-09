@@ -10,20 +10,16 @@ import axios from "axios";
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_dev_secret";
 
-// ⬇️ FIX 1: Added 'const' and fallback logic
-const FRONTEND_URL = process.env.FRONTEND_URL || "https://sector-sync.vercel.app";
+// ⬇️ HARDCODED PRODUCTION URL
+const FRONTEND_URL = "https://sector-sync.vercel.app";
 
-// ⬇️ FIX 2: Auto-detect production without needing ENV variables
+// ⬇️ HARDCODED PRODUCTION COOKIE
+// Forces browser to accept cross-domain cookies from Railway to Vercel
 const setTokenCookie = (res, token) => {
-  // If the frontend URL is NOT localhost, assume we are in production
-  const isProduction = !FRONTEND_URL.includes("localhost");
-  
   res.cookie("token", token, {
     httpOnly: true,
-    // CRITICAL: 'none' is required for Cross-Domain (Vercel -> Railway)
-    sameSite: isProduction ? "none" : "lax", 
-    // CRITICAL: Secure MUST be true if SameSite is None
-    secure: isProduction, 
+    sameSite: "none", // REQUIRED: Allows Vercel to see Railway's cookie
+    secure: true,     // REQUIRED: Must be true if sameSite is none
     maxAge: 7 * 24 * 60 * 60 * 1000, 
   });
 };
@@ -33,10 +29,7 @@ router.get("/google", (req, res) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
   const url = client.generateAuthUrl({
     access_type: "offline",
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile", 
-      "https://www.googleapis.com/auth/userinfo.email"
-    ],
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
     redirect_uri: process.env.GOOGLE_CALLBACK_URL,
   });
   res.redirect(url);
@@ -71,7 +64,7 @@ router.get("/google/callback", async (req, res) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "7d" });
     setTokenCookie(res, token);
     
-    // Redirect to Vercel (Production) or Localhost (Dev)
+    // Always redirect to production Vercel
     res.redirect(`${FRONTEND_URL}/`); 
   } catch (err) {
     console.error("Google Login Error:", err);
@@ -97,7 +90,6 @@ router.get("/github/callback", async (req, res) => {
     }, { headers: { Accept: "application/json" } });
 
     const accessToken = tokenRes.data.access_token;
-
     const userRes = await axios.get("https://api.github.com/user", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -117,13 +109,7 @@ router.get("/github/callback", async (req, res) => {
     if (!user) {
       const randomPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
-      user = await User.create({
-        fullName: name,
-        email,
-        password: hashedPassword,
-        company: "GitHub User",
-      });
+      user = await User.create({ fullName: name, email, password: hashedPassword, company: "GitHub User" });
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "7d" });
@@ -174,12 +160,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  const isProduction = !FRONTEND_URL.includes("localhost");
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-  });
+  res.clearCookie("token", { httpOnly: true, sameSite: "none", secure: true });
   res.json({ success: true });
 });
 
@@ -192,7 +173,6 @@ router.get("/me", async (req, res) => {
     const user = await User.findById(decoded.userId).select("-password");
     if (!user) return res.status(401).json({ error: "User not found" });
 
-    // History Logic
     let history = [];
     if (user.assessments && user.assessments.length > 0) {
       try {
