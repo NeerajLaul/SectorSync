@@ -92,7 +92,8 @@ export function SurveyPage({ onComplete }: SurveyPageProps) {
 
   // Fetch questions from backend
   useEffect(() => {
-    fetch("/api/questions")
+    fetch('https://sectorsync-production.up.railway.app/api/questions')
+
       .then((res) => res.json())
       .then((data) => setQuestions(data))
       .catch((err) => console.error("Error fetching questions:", err));
