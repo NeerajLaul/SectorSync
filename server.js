@@ -20,8 +20,15 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // ⬇️ PURE PRODUCTION CORS
 // This explicitly tells the browser: "Only sector-sync.vercel.app can send cookies here."
 app.use(cors({
-  origin: "https://sector-sync.vercel.app", 
-  credentials: true, 
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // "null, true" tells the browser: "Yes, I accept THIS specific origin."
+    // It prevents the "*" wildcard error completely.
+    return callback(null, true);
+  },
+  credentials: true, // This allows cookies to pass
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
 
@@ -51,3 +58,4 @@ app.use("/api/scoringEngine", scoringRouter);
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => res.send("API Running"));
+
