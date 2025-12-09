@@ -7,6 +7,7 @@ import { OAuth2Client } from "google-auth-library";
 import cookieParser from "cookie-parser";
 import axios from "axios"; // Added for GitHub
 
+FRONTEND_URL = "https://sector-sync.vercel.app/"
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_dev_secret";
 
@@ -269,3 +270,4 @@ router.get("/me", async (req, res) => {
 });
 
 export default router;
+
