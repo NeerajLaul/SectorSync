@@ -1,7 +1,8 @@
-import { motion } from 'motion/react';
-import { Button } from './ui/button';
-import { Card } from './ui/card';
-import { Badge } from './ui/badge';
+// 1. Change import from 'motion/react' to 'framer-motion' for stability
+import { motion } from 'framer-motion'; 
+import { Button } from '../components/ui/button';
+import { Card } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
 import { ArrowRight, CheckCircle2, HelpCircle, Lightbulb, Target } from 'lucide-react';
 
 interface ToolGuidePageProps {
@@ -45,49 +46,48 @@ export function ToolGuidePage({ onStartQuiz }: ToolGuidePageProps) {
     },
   ];
 
-const methodologyDetails = [
-  {
-    name: 'Scrum',
-    description: 'Iterative agile framework using short sprints and feedback loops.',
-    bestFor: 'Small, adaptive teams',
-  },
-  {
-    name: 'SAFe',
-    description: 'Scaled agile system coordinating multiple enterprise teams.',
-    bestFor: 'Large organizations',
-  },
-  {
-    name: 'Disciplined Agile',
-    description: 'Toolkit blending agile methods with context-driven flexibility.',
-    bestFor: 'Adaptive mixed teams',
-  },
-  {
-    name: 'Hybrid (Iterative Waterfall)',
-    description: 'Combines structured planning with iterative execution.',
-    bestFor: 'Medium to large projects',
-  },
-  {
-    name: 'Continuous Delivery Model',
-    description: 'Focuses on frequent, automated software releases.',
-    bestFor: 'DevOps and tech projects',
-  },
-  {
-    name: 'Six Sigma',
-    description: 'Data-driven framework for reducing defects and variation.',
-    bestFor: 'Quality-focused industries',
-  },
-  {
-    name: 'Waterfall',
-    description: 'Sequential model with clear, phase-based progression.',
-    bestFor: 'Fixed, well-defined projects',
-  },
-  {
-    name: 'PRINCE2',
-    description: 'Governance-based, stage-driven project framework.',
-    bestFor: 'Formal or regulated environments',
-  },
-];
-
+  const methodologyDetails = [
+    {
+      name: 'Scrum',
+      description: 'Iterative agile framework using short sprints and feedback loops.',
+      bestFor: 'Small, adaptive teams',
+    },
+    {
+      name: 'SAFe',
+      description: 'Scaled agile system coordinating multiple enterprise teams.',
+      bestFor: 'Large organizations',
+    },
+    {
+      name: 'Disciplined Agile',
+      description: 'Toolkit blending agile methods with context-driven flexibility.',
+      bestFor: 'Adaptive mixed teams',
+    },
+    {
+      name: 'Hybrid (Iterative Waterfall)',
+      description: 'Combines structured planning with iterative execution.',
+      bestFor: 'Medium to large projects',
+    },
+    {
+      name: 'Continuous Delivery Model',
+      description: 'Focuses on frequent, automated software releases.',
+      bestFor: 'DevOps and tech projects',
+    },
+    {
+      name: 'Six Sigma',
+      description: 'Data-driven framework for reducing defects and variation.',
+      bestFor: 'Quality-focused industries',
+    },
+    {
+      name: 'Waterfall',
+      description: 'Sequential model with clear, phase-based progression.',
+      bestFor: 'Fixed, well-defined projects',
+    },
+    {
+      name: 'PRINCE2',
+      description: 'Governance-based, stage-driven project framework.',
+      bestFor: 'Formal or regulated environments',
+    },
+  ];
 
   return (
     <div className="space-y-16">
@@ -140,7 +140,7 @@ const methodologyDetails = [
                   </div>
                 </div>
               </div>
-            </Card>``
+            </Card>
           </motion.div>
         ))}
       </motion.div>
