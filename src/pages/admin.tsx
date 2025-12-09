@@ -261,7 +261,7 @@ function DataEditor({ type, title }: { type: "questions" | "methods", title: str
 
     const deleteItem = async (id: string) => {
         if (!confirm("Delete this item? This cannot be undone.")) return;
-        const res = await fetch(`/api/admin/data/${type}/${id}`, { method: "DELETE" });
+        const res = await fetch(`https://sectorsync-production.up.railway.app/api/admin/data/${type}/${id}`, { method: "DELETE" });
         if (res.ok) loadData();
     };
 
@@ -270,7 +270,7 @@ function DataEditor({ type, title }: { type: "questions" | "methods", title: str
             const payload = { ...itemData };
             if (payload._id === "new") delete payload._id;
 
-            const res = await fetch(`/api/admin/data/${type}`, {
+            const res = await fetch(`https://sectorsync-production.up.railway.app/api/admin/data/${type}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -350,16 +350,16 @@ export default function AdminPage() {
     const [answers, setAnswers] = useState<any[]>([]);
 
     const fetchData = async () => {
-        fetch("/api/admin/summary").then(r => r.json()).then(d => d.success && setSummary(d.summary));
-        fetch("/api/admin/users").then(r => r.json()).then(d => d.success && setUsers(d.users));
-        fetch("/api/admin/answers").then(r => r.json()).then(d => d.success && setAnswers(d.answers));
+        fetch("https://sectorsync-production.up.railway.app/api/admin/summary").then(r => r.json()).then(d => d.success && setSummary(d.summary));
+        fetch("https://sectorsync-production.up.railway.app/api/admin/users").then(r => r.json()).then(d => d.success && setUsers(d.users));
+        fetch("https://sectorsync-production.up.railway.app/api/admin/answers").then(r => r.json()).then(d => d.success && setAnswers(d.answers));
     };
 
     useEffect(() => { fetchData(); }, []);
 
     const handleReset = async () => {
         if (!confirm("Reset all history?")) return;
-        await fetch("/api/admin/reset/answers", { method: "DELETE" });
+        await fetch("https://sectorsync-production.up.railway.app/api/admin/reset/answers", { method: "DELETE" });
         window.location.reload();
     };
 
@@ -522,3 +522,4 @@ export default function AdminPage() {
         </div>
     );
 }
+
