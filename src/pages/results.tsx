@@ -246,7 +246,7 @@ export function ResultsPage({
   useEffect(() => {
     if (!results || !results.ranking?.length || results.restored) return;
 
-    fetch("/api/answers", {
+    fetch("https://sectorsync-production.up.railway.app/api/answers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
