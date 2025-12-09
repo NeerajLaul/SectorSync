@@ -77,7 +77,7 @@ export default function App() {
 
   // --------- CHECK SESSION ON MOUNT ---------
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("https://sectorsync-production.up.railway.app/api/auth/me")
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error("Not logged in");
@@ -110,7 +110,7 @@ export default function App() {
 
   const handleSignIn = async (email: string, password: string) => {
     try {
-      const res = await fetch("/api/auth/me");
+      const res = await fetch("https://sectorsync-production.up.railway.app/api/auth/me");
       if (res.ok) {
         const data = await res.json();
         setUser({
@@ -138,7 +138,7 @@ export default function App() {
   };
 
   const handleSignOut = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("https://sectorsync-production.up.railway.app/api/auth/logout", { method: "POST" });
     setUser(null);
     setResults(null);
     setHistory([]);
@@ -171,7 +171,7 @@ export default function App() {
   const handleComplete = async (answers: UserAnswers) => {
     try {
       // 1. Send answers to backend scoring engine
-      const res = await fetch("/api/scoringEngine", {
+      const res = await fetch("https://sectorsync-production.up.railway.app/api/scoringEngine", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(answers),
@@ -253,7 +253,7 @@ export default function App() {
       // Fallback: Call backend to score these answers
       try {
         console.log("Recomputing scores via backend...");
-        const res = await fetch("/api/scoringEngine", {
+        const res = await fetch("https://sectorsync-production.up.railway.app/api/scoringEngine", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data.answers),
