@@ -1,10 +1,10 @@
 import express from "express";
-import cors from "cors"; // We keep this just in case, but it's barely needed now
+import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser"; 
-import path from "path"; // ⬅️ NEW IMPORT
-import { fileURLToPath } from "url"; // ⬅️ NEW IMPORT
+import path from "path"; 
+import { fileURLToPath } from "url"; 
 
 import authRoutes from "./api/auth.js";
 import questionsRouter from "./api/questions.js";
@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors()); // Standard CORS is fine now since we are on the same domain
+app.use(cors()); 
 
 // --- 1. API ROUTES ---
 app.use("/api/questions", questionsRouter);
@@ -36,11 +36,11 @@ app.use("/api/scoringEngine", scoringRouter);
 app.use("/api/auth", authRoutes);
 
 // --- 2. SERVE FRONTEND (STATIC FILES) ---
-// This tells Express to serve the "dist" folder (where React lives)
+// This serves the React app for the root URL "/"
 app.use(express.static(path.join(__dirname, "dist")));
 
 // --- 3. CATCH-ALL ROUTE ---
-// If a user goes to /profile or /admin, send them to React's index.html
+// If the user refreshes on /profile, this sends them back to React
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
