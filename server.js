@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import path from "path";
 import cookieParser from "cookie-parser"; 
 import authRoutes from "./api/auth.js";
 
@@ -13,13 +12,34 @@ import answersRouter from "./api/answers.js";
 import methodsRouter from "./api/methods.js";
 import adminRouter from "./api/admin.js";
 import scoringRouter from "./api/scoringEngine.js";
-import authRouter from "./api/auth.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-app.use(cors());
+// --- 🔒 CORS CONFIGURATION (The Fix) ---
+const allowedOrigins = [
+  "http://localhost:3000",                // Local React
+  "http://localhost:5173",                // Local Vite
+  process.env.FRONTEND_URL,               // Your Vercel URL (e.g. https://sector-sync.vercel.app)
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // <--- CRITICAL: Allows cookies to be sent back and forth
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+}));
+// ----------------------------------------
+
 app.use(express.json());
 app.use(cookieParser());
 
