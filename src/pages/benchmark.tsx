@@ -426,6 +426,8 @@ const EXEMPLARS: Exemplar[] = [
 /** ====== Methodology families ====== */
 type ApproachFamily = "Agile" | "Predictive" | "Lean";
 
+
+
 const METHODOLOGY_FAMILY: Record<Methodology, ApproachFamily> = {
   Scrum: "Agile",
   SAFe: "Agile",
@@ -545,6 +547,9 @@ export function BenchmarkPage({
 }: BenchmarkPageProps) {
   // User's recommended framework
   const topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
+  if (topMethodology === "Lean Continuous Delivery") {
+      topMethodology = "Continuous Delivery";
+  }
   const family = METHODOLOGY_FAMILY[topMethodology];
 
   // Key metrics for this framework
