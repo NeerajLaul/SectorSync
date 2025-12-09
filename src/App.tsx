@@ -77,7 +77,7 @@ export default function App() {
 
   // --------- CHECK SESSION ON MOUNT ---------
   useEffect(() => {
-    fetch("https://sectorsync-production.up.railway.app/api/auth/me")
+    fetch("https://sectorsync-production.up.railway.app/api/auth/me", { credentials: "include" })
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error("Not logged in");
