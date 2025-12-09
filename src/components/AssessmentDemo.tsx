@@ -122,7 +122,7 @@ export function AssessmentDemo({ onStartRealAssessment }: AssessmentDemoProps) {
 
   // --- Fetch questions from backend once ---
   useEffect(() => {
-    fetch("http://localhost:5000/api/questions")
+    fetch("/api/questions")
       .then((res) => res.json())
       .then((data: Question[]) => {
         const safeData = Array.isArray(data) ? data : [];
