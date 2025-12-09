@@ -1,354 +1,404 @@
-import { useState } from 'react';
-import { AnimatePresence } from 'motion/react';
-import { Header } from './components/Header';
-import { HomePage } from './components/HomePage';
-import { ToolGuidePage } from './components/ToolGuidePage';
-import { WelcomeScreen } from './components/WelcomeScreen';
-import { QuestionCard } from './components/QuestionCard';
-import { ResultsCard } from './components/ResultsCard';
-import { ProgressBar } from './components/ProgressBar';
-import { scoreMethodologies, FACTOR_OPTIONS, type UserAnswers } from './utils/scoringEngine';
+// App.tsx
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { Navigation } from "./components/layout/Navigation";
+import { IndexPage } from "./pages/index";
+import { GuidePage } from "./pages/guide";
+import { AboutPage } from "./pages/about";
+import { SurveyPage } from "./pages/survey";
+import { ResultsPage } from "./pages/results";
+import { PitchPage } from "./pages/pitch";
+import { PrintPage } from "./pages/print";
+import AdminPage from "./pages/admin";
+import { MoodPlayer } from "./components/MoodPlayer";
+import { BenchmarkPage } from "./pages/benchmark";
+import { FindResultsPage } from "./pages/findResults";
+import { SignInPage } from "./pages/signin";
+import { SignUpPage, SignUpData } from "./pages/signup";
+import { ProjectNaming } from "./components/ProjectNaming";
+import ProfilePage, { PastResult, UserProfile } from "./pages/profilepage";
+import { Loader2 } from "lucide-react";
 
-interface Option {
-  id: string;
-  text: string;
-  icon: string;
-  factorValue: string;
+// ---------------- Types ----------------
+
+export type AppPage = "home" | "guide" | "about" | "profile";
+
+export type AppState =
+  | "landing"
+  | "signin"
+  | "signup"
+  | "project-naming"
+  | "questionnaire"
+  | "results"
+  | "pitch"
+  | "print"
+  | "benchmark"
+  | "profile"
+  | "findresults";
+
+interface UserSession {
+  email: string;
+  fullName?: string;
+  company?: string;
 }
 
-interface Question {
-  id: number;
-  question: string;
-  factor: string;
-  options: Option[];
+// Ensure these types match what your backend returns
+export interface ScoringResult {
+  ranking: { method: string; score: number; contributions: any[] }[];
+  engineVersion: string;
+  answers?: Record<string, string>;
+  restored?: boolean;
 }
 
-interface Methodology {
-  name: string;
-  icon: string;
-  description: string;
-  bestFor: string[];
-  keyPrinciples: string[];
-}
+export type UserAnswers = Record<string, string>;
 
-interface MethodologyResult extends Methodology {
-  score: number;
-  key: string;
-}
-
-// Questions mapped to the 12 factors from the backend
-const questions: Question[] = [
-  {
-    id: 1,
-    question: "What is your project size?",
-    factor: "project_size",
-    options: [
-      { id: 'q1-a', text: 'Small', icon: '📦', factorValue: 'Small' },
-      { id: 'q1-b', text: 'Medium', icon: '📋', factorValue: 'Medium' },
-      { id: 'q1-c', text: 'Large', icon: '🏢', factorValue: 'Large' },
-    ],
-  },
-  {
-    id: 2,
-    question: "What is your planning approach?",
-    factor: "planning",
-    options: [
-      { id: 'q2-a', text: 'Iterative - plan as we go', icon: '🔄', factorValue: 'Iterative' },
-      { id: 'q2-b', text: 'Continuous Flow - minimal upfront planning', icon: '🌊', factorValue: 'Continuous Flow' },
-      { id: 'q2-c', text: 'Up-front - comprehensive planning before execution', icon: '📋', factorValue: 'Up-front' },
-    ],
-  },
-  {
-    id: 3,
-    question: "How is your project sourced?",
-    factor: "sourcing",
-    options: [
-      { id: 'q3-a', text: 'Internal Sourcing - all in-house team', icon: '🏠', factorValue: 'Internal Sourcing' },
-      { id: 'q3-b', text: 'Mixed Internal/External', icon: '🤝', factorValue: 'Mixed Internal/External' },
-      { id: 'q3-c', text: 'Heavily Outsourced', icon: '🌐', factorValue: 'Heavily Outsourced' },
-    ],
-  },
-  {
-    id: 4,
-    question: "What is your primary project goal?",
-    factor: "goals",
-    options: [
-      { id: 'q4-a', text: 'Speed - get to market fast', icon: '🚀', factorValue: 'Speed' },
-      { id: 'q4-b', text: 'Predictable - minimize risk and uncertainty', icon: '📊', factorValue: 'Predictable' },
-      { id: 'q4-c', text: 'Innovation - explore new solutions', icon: '💡', factorValue: 'Innovation' },
-    ],
-  },
-  {
-    id: 5,
-    question: "What is your customer size?",
-    factor: "customer_size",
-    options: [
-      { id: 'q5-a', text: 'Small', icon: '👤', factorValue: 'Small' },
-      { id: 'q5-b', text: 'Medium', icon: '👥', factorValue: 'Medium' },
-      { id: 'q5-c', text: 'Large', icon: '🏢', factorValue: 'Large' },
-    ],
-  },
-  {
-    id: 6,
-    question: "How do you communicate with customers?",
-    factor: "customer_communication",
-    options: [
-      { id: 'q6-a', text: 'Continuous Feedback Loops', icon: '🔁', factorValue: 'Continuous Feedback Loops' },
-      { id: 'q6-b', text: 'Milestone Reviews', icon: '🎯', factorValue: 'Milestone Reviews' },
-      { id: 'q6-c', text: 'Performance Metrics', icon: '📈', factorValue: 'Performance Metrics' },
-    ],
-  },
-  {
-    id: 7,
-    question: "What is your payment method?",
-    factor: "payment_method",
-    options: [
-      { id: 'q7-a', text: 'Time & Materials', icon: '⏱️', factorValue: 'Time & Materials' },
-      { id: 'q7-b', text: 'Milestone Payments', icon: '🎯', factorValue: 'Milestone Payments' },
-      { id: 'q7-c', text: 'Firm Fixed Price', icon: '💰', factorValue: 'Firm Fixed Price' },
-    ],
-  },
-  {
-    id: 8,
-    question: "What is your design approach?",
-    factor: "design",
-    options: [
-      { id: 'q8-a', text: 'Emergent - design evolves', icon: '🌱', factorValue: 'Emergent' },
-      { id: 'q8-b', text: 'Partial / Iterative Design', icon: '🔄', factorValue: 'Partial / Iterative Design' },
-      { id: 'q8-c', text: 'Upfront/Complete Design', icon: '📐', factorValue: 'Upfront/Complete Design' },
-    ],
-  },
-  {
-    id: 9,
-    question: "What is your team structure?",
-    factor: "teams",
-    options: [
-      { id: 'q9-a', text: 'Cross-functional teams', icon: '🤝', factorValue: 'Cross-functional' },
-      { id: 'q9-b', text: 'Specialist teams', icon: '🎯', factorValue: 'Specialist' },
-      { id: 'q9-c', text: 'Structured Silo Teams', icon: '🏢', factorValue: 'Structured Silo Teams' },
-    ],
-  },
-  {
-    id: 10,
-    question: "What is your development approach?",
-    factor: "development",
-    options: [
-      { id: 'q10-a', text: 'Iterative - short cycles with feedback', icon: '🔁', factorValue: 'Iterative' },
-      { id: 'q10-b', text: 'Incremental - build up features gradually', icon: '📈', factorValue: 'Incremental' },
-      { id: 'q10-c', text: 'Linear - sequential phases', icon: '➡️', factorValue: 'Linear' },
-    ],
-  },
-  {
-    id: 11,
-    question: "How do you approach integration and testing?",
-    factor: "integration_testing",
-    options: [
-      { id: 'q11-a', text: 'Continuous integration and testing', icon: '🔄', factorValue: 'Continuous' },
-      { id: 'q11-b', text: 'When possible throughout development', icon: '⚡', factorValue: 'When possible' },
-      { id: 'q11-c', text: 'End Phase - testing at the end', icon: '🎯', factorValue: 'End Phase' },
-    ],
-  },
-  {
-    id: 12,
-    question: "How do you close/accept projects?",
-    factor: "closing",
-    options: [
-      { id: 'q12-a', text: 'Team Acceptance - internal approval', icon: '👥', factorValue: 'Team Acceptance' },
-      { id: 'q12-b', text: 'Customer Acceptance', icon: '🤝', factorValue: 'Customer Acceptance' },
-      { id: 'q12-c', text: '3rd Party Acceptance - formal external review', icon: '✅', factorValue: '3rd Party Acceptance' },
-    ],
-  },
-];
-
-const methodologies: { [key: string]: Methodology } = {
-  "Scrum": {
-    name: 'Scrum',
-    icon: '🏉',
-    description: 'Scrum is a lightweight agile framework that organizes work into time-boxed sprints with defined roles, ceremonies, and artifacts. Ideal for small to medium teams that want iterative development with regular deliveries and continuous feedback.',
-    bestFor: ['Small teams (5-9 people)', 'Evolving requirements', 'Fast feedback cycles', 'Internal projects'],
-    keyPrinciples: [
-      'Work in fixed-length sprints (1-4 weeks)',
-      'Daily stand-ups for team synchronization',
-      'Sprint planning, review, and retrospectives',
-      'Self-organizing cross-functional teams',
-    ],
-  },
-  "SAFe": {
-    name: 'SAFe',
-    icon: '🌐',
-    description: 'Scaled Agile Framework (SAFe) is an enterprise-scale agile framework that coordinates multiple teams through Program Increments and alignment ceremonies. Perfect for large organizations implementing agile at scale with structured coordination.',
-    bestFor: ['Large organizations (50+ people)', 'Multiple coordinated teams', 'Enterprise portfolio management', 'Outsourced or mixed teams'],
-    keyPrinciples: [
-      'Organize around value streams',
-      'Program Increments (PI) for alignment',
-      'Continuous delivery pipeline',
-      'Lean-Agile leadership at all levels',
-    ],
-  },
-  "Hybrid": {
-    name: 'Hybrid',
-    icon: '⚖️',
-    description: 'Hybrid combines elements from multiple methodologies to fit your unique context. Balances upfront planning with iterative execution, offering flexibility for medium to large projects with mixed stakeholder needs.',
-    bestFor: ['Medium to large projects', 'Mixed internal/external teams', 'Milestone-based delivery', 'Balanced documentation needs'],
-    keyPrinciples: [
-      'Combine best practices from multiple methods',
-      'Tailor to project and organizational context',
-      'Balance structure with flexibility',
-      'Incremental delivery with gates',
-    ],
-  },
-  "Waterfall": {
-    name: 'Waterfall',
-    icon: '💧',
-    description: 'Waterfall is a linear, sequential approach where each phase must be completed before the next begins. Best for projects with well-defined, stable requirements, heavy outsourcing, and strong governance needs.',
-    bestFor: ['Fixed scope projects', 'Heavily outsourced work', 'Regulated industries', 'Comprehensive documentation needs'],
-    keyPrinciples: [
-      'Sequential phases with clear gates',
-      'Comprehensive upfront planning and design',
-      'Extensive documentation at each phase',
-      'Formal change control processes',
-    ],
-  },
-  "Lean Six Sigma": {
-    name: 'Lean Six Sigma',
-    icon: '📊',
-    description: 'Lean Six Sigma combines Lean manufacturing principles with Six Sigma quality methodologies. Focuses on eliminating waste, reducing variation, and driving continuous improvement through data-driven analysis.',
-    bestFor: ['Quality improvement initiatives', 'Process optimization', 'Performance metrics focus', 'Continuous improvement culture'],
-    keyPrinciples: [
-      'Define, Measure, Analyze, Improve, Control (DMAIC)',
-      'Data-driven decision making',
-      'Eliminate waste and reduce variation',
-      'Focus on customer value and satisfaction',
-    ],
-  },
-  "PRINCE2": {
-    name: 'PRINCE2',
-    icon: '👑',
-    description: 'PRINCE2 (Projects IN Controlled Environments) is a process-based project management method that emphasizes governance, defined roles, and stage-based delivery. It’s best suited for projects requiring formal oversight, documentation, and stakeholder control within structured environments.',
-    bestFor: [
-      'Government and public sector projects',
-      'Large organizations with defined hierarchies',
-      'Projects requiring strict compliance and documentation',
-      'Formal stage-based reviews and governance'
-    ],
-    keyPrinciples: [
-      'Defined roles and responsibilities for all participants',
-      'Stage-based planning with controlled transitions',
-      'Focus on business justification throughout the project',
-      'Manage by exception — clear thresholds for authority',
-      'Regular reporting and documentation for accountability'
-    ],
-  },
-};
+// ---------------- App ----------------
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'guide' | 'quiz'>('home');
-  const [stage, setStage] = useState<'welcome' | 'quiz' | 'results'>('welcome');
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<UserAnswers>({});
-  const [results, setResults] = useState<MethodologyResult[]>([]);
+  const [currentPage, setCurrentPage] = useState<AppPage>("home");
+  const [state, setState] = useState<AppState>("landing");
 
-  const handleNavigate = (newPage: string) => {
-    setPage(newPage as 'home' | 'guide' | 'quiz');
-    if (newPage === 'quiz') {
-      setStage('welcome');
+  // Global Auth Loading State
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  // Backend / scoring result
+  const [results, setResults] = useState<ScoringResult | null>(null);
+  const [resultId, setResultId] = useState<string | null>(null);
+
+  // Auth / profile
+  const [user, setUser] = useState<UserSession | null>(null);
+
+  // History (Loaded from Cloud)
+  const [history, setHistory] = useState<PastResult[]>([]);
+
+  // Project naming metadata
+  const [currentProjectName, setCurrentProjectName] = useState<string | undefined>(undefined);
+  const [currentProjectDescription, setCurrentProjectDescription] = useState<string | undefined>(undefined);
+
+  // --------- CHECK SESSION ON MOUNT ---------
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw new Error("Not logged in");
+      })
+      .then((data) => {
+        setUser({
+          email: data.email,
+          fullName: data.fullName,
+          company: data.company
+        });
+        if (data.history && Array.isArray(data.history)) {
+          setHistory(data.history);
+        }
+      })
+      .catch(() => setUser(null))
+      .finally(() => setIsAuthLoading(false));
+  }, []);
+
+  // --------- Navigation ----------
+
+  const handleNavigate = (page: string) => {
+    setCurrentPage(page as AppPage);
+    setState(page === "profile" ? "profile" : "landing");
+  };
+
+  // --------- Auth flow ----------
+
+  const handleShowSignIn = () => setState("signin");
+  const handleShowSignUp = () => setState("signup");
+
+  const handleSignIn = async (email: string, password: string) => {
+    try {
+      const res = await fetch("/api/auth/me");
+      if (res.ok) {
+        const data = await res.json();
+        setUser({
+          email: data.email,
+          fullName: data.fullName,
+          company: data.company
+        });
+        if (data.history) setHistory(data.history);
+        setState("landing");
+        setCurrentPage("home");
+      }
+    } catch (err) {
+      console.error("Auth fetch failed", err);
     }
   };
 
-  const handleStartQuiz = () => {
-    setPage('quiz');
-    setStage('quiz');
-    setCurrentQuestion(0);
-    setAnswers({});
+  const handleSignUp = (data: SignUpData) => {
+    setUser({
+      email: data.email,
+      fullName: data.fullName,
+      company: data.company,
+    });
+    setState("landing");
+    setCurrentPage("home");
   };
 
-  const handleStart = () => {
-    setStage('quiz');
-    setCurrentQuestion(0);
-    setAnswers({});
+  const handleSignOut = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setUser(null);
+    setResults(null);
+    setHistory([]);
+    setState("landing");
+    setCurrentPage("home");
   };
 
-  const handleOptionSelect = (option: Option) => {
-    const currentFactor = questions[currentQuestion].factor;
-    const newAnswers = { ...answers, [currentFactor]: option.factorValue };
-    setAnswers(newAnswers);
+  const handleSkipAuth = () => {
+    setState("landing");
+    setCurrentPage("home");
+  };
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      // Calculate results using scoring engine
-      const scoringResult = scoreMethodologies(newAnswers);
-      
-      // Take top 3 and map to our methodology data
-      const top3 = scoringResult.ranking.slice(0, 3).map(result => ({
-        ...methodologies[result.method],
-        score: result.score,
-        key: result.method,
-      }));
-      
-      setResults(top3);
-      setStage('results');
+  // --------- Assessment flow ----------
+
+  const handleStartAssessment = () => setState("project-naming");
+
+  const handleProjectNamed = (name: string, desc?: string) => {
+    setCurrentProjectName(name);
+    setCurrentProjectDescription(desc);
+    setState("questionnaire");
+  };
+
+  const handleSkipProjectNaming = () => {
+    setCurrentProjectName(undefined);
+    setCurrentProjectDescription(undefined);
+    setState("questionnaire");
+  };
+
+  // ⬇️ UPDATED handleComplete (Adds instant history update)
+  const handleComplete = async (answers: UserAnswers) => {
+    try {
+      // 1. Send answers to backend scoring engine
+      const res = await fetch("/api/scoringEngine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(answers),
+      });
+
+      if (!res.ok) throw new Error("Scoring failed");
+
+      const finalResults: ScoringResult = await res.json();
+
+      // 2. Merge answers back (Crucial for saving later)
+      const resultWithAnswers = {
+        ...finalResults,
+        answers: answers
+      };
+
+      // 3. Update main state
+      setResults(resultWithAnswers);
+      setState("results");
+
+      // 4. INSTANT HISTORY UPDATE (Fixes the "Refresh" issue)
+      if (user && currentProjectName) {
+        const top = finalResults.ranking?.[0];
+
+        // Create a temporary history entry
+        const newEntry: PastResult = {
+          id: "just-now", // This gets replaced by real ID on next refresh
+          createdAt: new Date().toISOString(),
+          projectName: currentProjectName,
+          projectDescription: currentProjectDescription,
+          topMethod: top?.method || "Unknown",
+          score: Math.round((top?.score ?? 0) * 100),
+          factors: {},
+          fullResults: resultWithAnswers,
+        };
+
+        // Add to top of list immediately
+        setHistory(prev => [newEntry, ...prev]);
+      }
+    } catch (err) {
+      console.error("Error scoring assessment:", err);
+      alert("Failed to calculate score. Please try again.");
     }
   };
 
   const handleRestart = () => {
-    setStage('welcome');
-    setCurrentQuestion(0);
-    setAnswers({});
-    setResults([]);
+    setResults(null);
+    setResultId(null);
+    setState("landing");
+    setCurrentPage("home");
+    setCurrentProjectName(undefined);
+    setCurrentProjectDescription(undefined);
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Header currentPage={page} onNavigate={handleNavigate} />
-      
-      <div className="p-4 sm:p-8">
-        <div className="max-w-5xl mx-auto py-8">
-          <AnimatePresence mode="wait">
-            {page === 'home' && (
-              <HomePage
-                key="home"
-                onStartQuiz={handleStartQuiz}
-                onViewGuide={() => setPage('guide')}
-              />
-            )}
+  // --------- Find Results flow ----------
 
-            {page === 'guide' && (
-              <ToolGuidePage key="guide" onStartQuiz={handleStartQuiz} />
-            )}
+  const handleOpenFindResults = () => setState("findresults");
 
-            {page === 'quiz' && (
-              <>
-                {stage === 'welcome' && (
-                  <WelcomeScreen key="welcome" onStart={handleStart} />
-                )}
+  // ⬇️ CHANGED: Handles cases where we need to re-score via backend
+  const handleLoadResults = async (data: {
+    answers: UserAnswers;
+    results?: any[];
+    projectName?: string;
+    projectDescription?: string;
+  }) => {
+    // 1. Restore Metadata
+    if (data.projectName) setCurrentProjectName(data.projectName);
+    if (data.projectDescription) setCurrentProjectDescription(data.projectDescription);
 
-                {stage === 'quiz' && (
-                  <div key="quiz">
-                    <ProgressBar current={currentQuestion + 1} total={questions.length} />
-                    <AnimatePresence mode="wait">
-                      <QuestionCard
-                        key={questions[currentQuestion].id}
-                        question={questions[currentQuestion].question}
-                        options={questions[currentQuestion].options}
-                        onSelect={handleOptionSelect}
-                      />
-                    </AnimatePresence>
-                  </div>
-                )}
+    let finalScoring: ScoringResult;
 
-                {stage === 'results' && results.length > 0 && (
-                  <ResultsCard
-                    key="results"
-                    results={results}
-                    onRestart={handleRestart}
-                  />
-                )}
-              </>
-            )}
-          </AnimatePresence>
-        </div>
+    // 2. Use Saved Scores OR Ask Backend to Re-score
+    if (data.results && Array.isArray(data.results) && data.results.length > 0) {
+      finalScoring = {
+        ranking: data.results,
+        engineVersion: "v1-restored",
+        answers: data.answers
+      };
+    } else {
+      // Fallback: Call backend to score these answers
+      try {
+        console.log("Recomputing scores via backend...");
+        const res = await fetch("/api/scoringEngine", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data.answers),
+        });
+        finalScoring = await res.json();
+      } catch (err) {
+        console.error("Failed to re-score loaded data", err);
+        return; // Stop if we can't get scores
+      }
+    }
+
+    const normalized = { ...finalScoring, restored: true };
+    setResults(normalized);
+    setState("results");
+  };
+
+  // --------- Modes ----------
+
+  const handleOpenPitch = () => setState("pitch");
+  const handleOpenPrint = () => setState("print");
+  const handleExitPitchOrPrint = () => setState("results");
+  const handleOpenBenchmark = () => setState("benchmark");
+  const handleExitBenchmark = () => setState("results");
+
+  const handleViewResult = (id: string) => {
+    const result = history.find((r) => r.id === id);
+    if (result?.fullResults) {
+      setResults(result.fullResults);
+      setResultId(result.id);
+      setCurrentProjectName(result.projectName);
+      setCurrentProjectDescription(result.projectDescription);
+      setState("results");
+    }
+  };
+
+  // Profile update stubs
+  async function onUpdateProfile(patch: Partial<UserProfile>) { /* ... */ }
+  async function onChangeEmail(e: string, p: string) { /* ... */ }
+  async function onChangePassword(c: string, n: string) { /* ... */ }
+  async function onExportResult(id: string, format: "csv" | "json") { /* ... */ }
+  async function onDeleteResult(id: string) { /* ... */ }
+
+  const userProfile: UserProfile = user
+    ? {
+      fullName: user.fullName || user.email.split("@")[0],
+      email: user.email,
+      company: user.company,
+    }
+    : { fullName: "Guest", email: "guest@sectorsync", company: "" };
+
+  // --------- Render ----------
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <ThemeProvider>
+      <div className="min-h-screen flex flex-col">
+        {state !== "pitch" && state !== "signin" && state !== "signup" && (
+          <Navigation
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            onStartAssessment={handleStartAssessment}
+            onOpenFindResults={handleOpenFindResults}
+            onSignIn={handleShowSignIn}
+            user={user}
+            onSignOut={handleSignOut}
+            showProfile={true}
+            showFindResults={!user}
+          />
+        )}
+
+        {state !== "signin" && state !== "signup" && <MoodPlayer />}
+
+        <main className="flex-1">
+          {state === "signin" && (
+            <SignInPage onSignIn={handleSignIn} onSignUp={handleShowSignUp} onSkip={handleSkipAuth} />
+          )}
+          {state === "signup" && (
+            <SignUpPage onSignUp={handleSignUp} onSignIn={handleShowSignIn} onSkip={handleSkipAuth} />
+          )}
+          {state === "project-naming" && (
+            <ProjectNaming onComplete={handleProjectNamed} onSkip={handleSkipProjectNaming} />
+          )}
+          {state === "questionnaire" && (
+            <SurveyPage onComplete={handleComplete} />
+          )}
+          {state === "results" && results && (
+            <ResultsPage
+              results={results}
+              onRestart={handleRestart}
+              resultId={resultId}
+              setResultId={setResultId}
+              onOpenPitch={handleOpenPitch}
+              onOpenPrint={handleOpenPrint}
+              onOpenBenchmark={handleOpenBenchmark}
+              projectName={currentProjectName}
+              projectDescription={currentProjectDescription}
+            />
+          )}
+          {state === "findresults" && (
+            <FindResultsPage onLoadResults={handleLoadResults} />
+          )}
+          {state === "landing" && (
+            <>
+              {currentPage === "home" && <IndexPage onStartAssessment={handleStartAssessment} />}
+              {currentPage === "guide" && <GuidePage onStartAssessment={handleStartAssessment} />}
+              {currentPage === "about" && <AboutPage onStartAssessment={handleStartAssessment} />}
+            </>
+          )}
+          {state === "profile" && (
+            <ProfilePage
+              user={userProfile}
+              history={history}
+              onLogout={handleSignOut}
+              onUpdateProfile={onUpdateProfile}
+              onChangeEmail={onChangeEmail}
+              onChangePassword={onChangePassword}
+              onExportResult={onExportResult}
+              onDeleteResult={onDeleteResult}
+              onViewResult={handleViewResult}
+              onStartAssessment={handleStartAssessment}
+            />
+          )}
+          {state === "pitch" && results && (
+            <PitchPage results={results} onExit={handleExitPitchOrPrint} />
+          )}
+          {state === "print" && results && (
+            <PrintPage
+              results={results}
+              onBack={handleExitPitchOrPrint}
+              onOpenBenchmark={handleOpenBenchmark}
+              brandName="SectorSync"
+            />
+          )}
+          {state === "benchmark" && results && (
+            <BenchmarkPage results={results} onBack={handleExitBenchmark} />
+          )}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
