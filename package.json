@@ -68,7 +68,7 @@
       "scripts": {
             "dev": "vite",
             "build": "vite build",
-            "start": "concurrently \"npm run dev\" \"npm run server\"",
+            "start": "node server.js",
             "server": "node server.js"
       }
 }
