@@ -2,21 +2,31 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import Answer from "../models/Answer.js"; // ✅ Critical Import
+import Answer from "../models/Answer.js";
 import { OAuth2Client } from "google-auth-library";
 import cookieParser from "cookie-parser";
-
-
+import axios from "axios"; // Added for GitHub
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_dev_secret";
 
+// ⬇️ DYNAMIC FRONTEND URL
+// On Railway, set FRONTEND_URL to your Vercel link (no trailing slash). 
+// Locally, it defaults to localhost:3000.
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+
+// ⬇️ FIXED COOKIE SETTINGS FOR CROSS-DOMAIN
 const setTokenCookie = (res, token) => {
+  const isProduction = process.env.NODE_ENV === "production";
+  
   res.cookie("token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    // CRITICAL: For Vercel -> Railway, we need 'None' so cookies travel across domains
+    // Locally ('lax') is better for http://localhost
+    sameSite: isProduction ? "none" : "lax", 
+    // Secure MUST be true if SameSite is None
+    secure: isProduction, 
     maxAge: 7 * 24 * 60 * 60 * 1000, 
-    sameSite: "strict",
   });
 };
 
@@ -75,11 +85,11 @@ router.get("/google/callback", async (req, res) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "7d" });
     setTokenCookie(res, token);
     
-    // Redirect Home
-    res.redirect("http://localhost:3000/"); 
+    // ⬇️ Redirect to Dynamic URL
+    res.redirect(`${FRONTEND_URL}/`); 
   } catch (err) {
     console.error("Google Login Error:", err);
-    res.redirect("http://localhost:3000/signin?error=GoogleLoginFailed");
+    res.redirect(`${FRONTEND_URL}/signin?error=GoogleLoginFailed`);
   }
 });
 
@@ -104,45 +114,32 @@ router.get("/github/callback", async (req, res) => {
   try {
     const { code } = req.query;
 
-    // Exchange code for access token
-    const tokenRes = await fetch(
-      `https://github.com/login/oauth/access_token`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-          code,
-          redirect_uri: process.env.GITHUB_CALLBACK_URL,
-        }),
-      }
-    );
+    // Exchange code for access token (using axios for cleaner syntax)
+    const tokenRes = await axios.post("https://github.com/login/oauth/access_token", {
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+      redirect_uri: process.env.GITHUB_CALLBACK_URL,
+    }, { headers: { Accept: "application/json" } });
 
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
+    const accessToken = tokenRes.data.access_token;
 
     // Fetch GitHub profile
-    const userRes = await fetch("https://api.github.com/user", {
+    const userRes = await axios.get("https://api.github.com/user", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const githubUser = await userRes.json();
+    // Fetch GitHub email
+    let email = userRes.data.email;
+    if (!email) {
+       const emailRes = await axios.get("https://api.github.com/user/emails", {
+         headers: { Authorization: `Bearer ${accessToken}` }
+       });
+       const primary = emailRes.data.find(e => e.primary && e.verified);
+       email = primary ? primary.email : null;
+    }
 
-    // Fetch GitHub email (may require separate API call)
-    const emailRes = await fetch("https://api.github.com/user/emails", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-
-    const emails = await emailRes.json();
-    const primaryEmail =
-      emails.find((e) => e.primary)?.email || emails[0]?.email;
-
-    const email = primaryEmail;
-    const name = githubUser.name || githubUser.login;
+    const name = userRes.data.name || userRes.data.login;
 
     // Find or create user in DB
     let user = await User.findOne({ email });
@@ -159,16 +156,14 @@ router.get("/github/callback", async (req, res) => {
     }
 
     // Issue cookie
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "7d" });
     setTokenCookie(res, token);
 
-    // Redirect home
-    res.redirect("http://localhost:3000/");
+    // ⬇️ Redirect to Dynamic URL
+    res.redirect(`${FRONTEND_URL}/`);
   } catch (err) {
     console.error("GitHub Login Error:", err);
-    res.redirect("http://localhost:3000/signin?error=GitHubLoginFailed");
+    res.redirect(`${FRONTEND_URL}/signin?error=GitHubLoginFailed`);
   }
 });
 
@@ -213,11 +208,15 @@ router.post("/signin", async (req, res) => {
 
 // LOGOUT
 router.post("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
   res.json({ success: true });
 });
 
-// GET /me (Fixed Persistence Logic)
+// GET /me
 router.get("/me", async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -227,21 +226,14 @@ router.get("/me", async (req, res) => {
     const user = await User.findById(decoded.userId).select("-password");
     if (!user) return res.status(401).json({ error: "User not found" });
 
-    // ⬇️ HISTORY LOGIC (Matches your User Array Structure) ⬇️
+    // ⬇️ HISTORY LOGIC
     let history = [];
-    
-    // Check if the user has any assessment IDs saved
     if (user.assessments && user.assessments.length > 0) {
       try {
-        // Find Answers where recordId is inside the user's list
         const records = await Answer.find({ recordId: { $in: user.assessments } });
-        
-        // Map to frontend format
         history = records.map(rec => {
           const r = rec.records || {};
           const ranking = r.results || [];
-          
-          // Sort results to find the winner
           const sorted = [...ranking].sort((a, b) => (b.score || 0) - (a.score || 0));
           const top = sorted[0];
 
@@ -256,28 +248,24 @@ router.get("/me", async (req, res) => {
             fullResults: { ranking, answers: r.answers }
           };
         });
-        
-        // Sort newest first
         history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       } catch (historyErr) {
         console.error("Error fetching user history:", historyErr);
       }
     }
 
-      // Return User + History
-      res.json({ 
-          id: user._id, 
-          fullName: user.fullName, 
-          email: user.email, 
-          company: user.company,
-          role: user.role,
-          history 
-      });
+    res.json({ 
+        id: user._id, 
+        fullName: user.fullName, 
+        email: user.email, 
+        company: user.company,
+        role: user.role,
+        history 
+    });
   } catch (err) {
     console.error("Auth /me error:", err);
     res.status(401).json({ error: "Invalid token" });
   }
 });
-
 
 export default router;
