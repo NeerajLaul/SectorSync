@@ -1,0 +1,318 @@
+[
+  {
+    "id": "project_size",
+    "question": "What is the projected size of your project team over the course of the project?",
+    "description": "Please estimate the number of people, the number of teams/areas, project duration, budget allocation, and project complexity.",
+    "options": [
+      {
+        "id": "project_size-opt1",
+        "text": "Small",
+        "description": "Involves fewer than 50 people, a single team or functional area, lasts under 3 months, costs under $100K, and has low complexity.",
+        "factorValue": ""
+      },
+      {
+        "id": "project_size-opt2",
+        "text": "Medium",
+        "description": "Includes 50–100 people across a few teams or areas, lasts 3–9 months, costs $100K–$1M, and has moderate complexity.",
+        "factorValue": ""
+      },
+      {
+        "id": "project_size-opt3",
+        "text": "Large",
+        "description": "Involves 125–200 people, multiple teams or company-wide impact, lasts 9 months–3 years, costs $1M–$10M, and has high complexity.",
+        "factorValue": ""
+      },
+      {
+        "id": "project_size-opt4",
+        "text": "Enterprise",
+        "description": "Involves more than 200 people, wide organizational or public impact, lasts over 3 years, costs over $10M, and has extremely high complexity.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "planning",
+    "question": "How much oversight, formality, and approval do you expect will be required to manage planning and changes during this project?",
+    "description": "Think about how you want to approach planning for your project.",
+    "options": [
+      {
+        "id": "planning-opt1",
+        "text": "Minimal",
+        "description": "Planning is lightweight, flexible, and can change quickly with minimal approval.",
+        "factorValue": ""
+      },
+      {
+        "id": "planning-opt2",
+        "text": "Guided",
+        "description": "Planning follows a structure but allows adjustments with some review and input.",
+        "factorValue": ""
+      },
+      {
+        "id": "planning-opt3",
+        "text": "Structured",
+        "description": "Planning is documented and changes require formal review and approval.",
+        "factorValue": ""
+      },
+      {
+        "id": "planning-opt4",
+        "text": "Restricted",
+         "description": "Planning is tightly controlled with strict approvals, documentation, and compliance requirements.",
+        "factorValue": ""
+      },
+      {
+        "id": "planning-opt5",
+        "text": "Unknown",
+         "description": "The expected level of planning formality is unclear or not yet determined.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "sourcing",
+    "question": "How do you expect to handle sourcing for your project?",
+    "description": "Consider how the project team, resources, and requirements will be acquired and managed throughout the project lifecycle.",
+    "options": [
+      {
+        "id": "sourcing-opt1",
+        "text": "Internal Sourcing Team",
+        "description": "Uses existing employees across functions who collaborate and share responsibilities on the project.",
+        "factorValue": ""
+      },
+      {
+        "id": "sourcing-opt2",
+        "text": "Internal Sourcing Specialists",
+        "description": "Uses internal experts who work only within their specific areas without cross-functional collaboration.",
+        "factorValue": ""
+      },
+      {
+        "id": "sourcing-opt3",
+        "text": "Mixed Internal/External Sourcing Team",
+        "description": "Combines internal staff and external resources, promoting teamwork while expanding capabilities.",
+        "factorValue": ""
+      },
+      {
+        "id": "sourcing-opt4",
+        "text": "Mixed Internal/External Sourcing Specialists",
+        "description": "Blends internal and external expertise, but roles are task-specific with little cross-collaboration.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "goals",
+    "question": "Which primary objective will most strongly influence how the project needs to be managed??",
+    "description": "Choose the most important outcome for your project.",
+    "options": [
+      {
+        "id": "goals-opt1",
+        "text": "Speed to Market",
+        "description": "Prioritizes rapid execution and delivery, even if refinement comes later.",
+        "factorValue": ""
+      },
+      {
+        "id": "goals-opt2",
+        "text": "Compliance, Risk, and Stability",
+        "description": "Driven by regulatory, safety, or contractual constraints requiring stability and control.",
+        "factorValue": ""
+      },
+      {
+        "id": "goals-opt3",
+        "text": "Innovation and Experimentation",
+        "description": "Emphasizes novel solutions, experimentation, and creativity, often involving uncertainty.",
+        "factorValue": ""
+      },
+      {
+        "id": "goals-opt4",
+        "text": "Optimization and Efficiency",
+        "description": "Focuses on improving performance, quality, or operational efficiency.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "customer_communication",
+    "question": "Based on how often your customer will need to make decisions, how available they are, and how frequently feedback must occur, how do you anticipate communication and customer involvement will need to be structured?",
+    "description": "Think about the situations and events that would warrant customer interactions.",
+    "options": [
+      {
+        "id": "customer_communication-opt1",
+        "text": "Continuous, Direct Collaboration",
+        "description": "Customer deeply engaged throughout the project, frequently giving feedback and decisions.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_communication-opt2",
+        "text": "Scheduled Touchpoints with Feedback Cycles",
+        "description": "Customer engaged at planned feedback points such as milestones or reviews.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_communication-opt3",
+        "text": "Structured Reporting & Controlled Decision Points",
+        "description": "Customer involved mainly through formal status reports and approval checkpoints.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_communication-opt4",
+        "text": "Approval-Based or Contractual Communication",
+        "description": "Customer only involved for approvals, compliance, or contractual sign-off.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "customer_involvement",
+    "question": "Given the expected pace of decisions, review cycles, and stakeholder availability, how frequently will communication most likely need to occur?",
+    "description": "Think about how often you want to interact with your customer.",
+    "options": [
+      {
+        "id": "customer_involvement-opt1",
+        "text": "Daily or Continuous Communication",
+        "description": "Frequent/daily communication needed for rapid decisions and real-time collaboration.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_involvement-opt2",
+        "text": "Weekly or Regular Communication",
+        "description": "Communication occurs on a set cadence (weekly/bi-weekly) to align decisions and updates.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_involvement-opt3",
+        "text": "Milestone-Based Communication",
+        "description": "Communication mainly at major delivery points or key milestones.",
+        "factorValue": ""
+      },
+      {
+        "id": "customer_involvement-opt4",
+        "text": "Minimal or As-Needed Communication",
+        "description": "Communication only when needed for approvals, escalations, or contract reviews.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "design",
+    "question": "How do you expect major design decisions to be handled over the course of the project?",
+    "description": "Think about when and how design would happen.",
+    "options": [
+      {
+        "id": "design-opt1",
+        "text": "Fixed",
+        "description": "Most design decisions will be made early and are expected to remain stable.",
+        "factorValue": ""
+      },
+      {
+        "id": "design-opt2",
+        "text": "Adjusted",
+        "description": "Some design decisions will be made early but revisited and improved when needed.",
+        "factorValue": ""
+      },
+      {
+        "id": "design-opt3",
+        "text": "Flexible",
+        "description": "Design decisions are expected to continue evolving as more is learned.",
+        "factorValue": ""
+      },
+      {
+        "id": "design-opt4",
+        "text": "Unknown",
+        "description": "I do not have enough information to determine how design decisions will be handled.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "development",
+    "question": "Based on how the product is expected to perform and function, which best describes the type of system being built?",
+    "description": "Think about how you would want to build features.",
+    "options": [
+      {
+        "id": "development-opt1",
+        "text": "Optimized",
+        "description": "The product must deliver high efficiency or performance through tightly connected components.",
+        "factorValue": ""
+      },
+      {
+        "id": "development-opt2",
+        "text": "Platform-Based",
+        "description": "The product will rely on existing platforms, tools, or shared services that guide how components connect.",
+        "factorValue": ""
+      },
+      {
+        "id": "development-opt3",
+        "text": "Modular",
+        "description": "The product should remain flexible, with components that can be replaced, upgraded, or maintained independently.",
+        "factorValue": ""
+      },
+      {
+        "id": "development-opt4",
+        "text": "Undetermined",
+        "description": "The architectural needs or structure are not yet known.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "integration_testing",
+    "question": "Based on system risk, change frequency, and validation needs, how do you expect integration and testing will need to be conducted?",
+    "description": "Think about your testing and integration cadence.",
+    "options": [
+      {
+        "id": "integration_testing-opt1",
+        "text": "Integrated",
+        "description": "Most testing must be done at the system level because parts rely heavily on each other.",
+        "factorValue": ""
+      },
+      {
+        "id": "integration_testing-opt2",
+        "text": "Layered",
+        "description": "Both component-level and system-level testing will be needed at different stages.",
+        "factorValue": ""
+      },
+      {
+        "id": "integration_testing-opt3",
+        "text": "Isolated",
+        "description": "Most parts can be tested separately since they are largely independent.",
+        "factorValue": ""
+      },
+      {
+        "id": "integration_testing-opt4",
+        "text": "Undetermined",
+        "description": "The testing and integration approach is not yet clear.",
+        "factorValue": ""
+      }
+    ]
+  },
+  {
+    "id": "closing",
+    "question": "Given the type of deliverables, acceptance requirements, and ownership expectations, how do you anticipate final delivery and closure will need to be managed?",
+    "description": "Think about who would provide the final approval for your project.",
+    "options": [
+      {
+        "id": "closing-opt1",
+        "text": "Internal",
+        "description": "Approval will come from internal teams, leaders, or organizational stakeholders.",
+        "factorValue": ""
+      },
+      {
+        "id": "closing-opt2",
+        "text": "User",
+        "description": "Approval will come from those who directly use, request, or benefit from the product.",
+        "factorValue": ""
+      },
+      {
+        "id": "closing-opt3",
+        "text": "External",
+        "description": " Approval will involve outside or formal review — legal, compliance, regulators, auditors, or certification bodies.",
+        "factorValue": ""
+      },
+      {
+        "id": "closing-opt4",
+        "text": "Unknown",
+        "description": "Approval requirements are unclear or may be determined later.",
+        "factorValue": ""
+      }
+    ]
+  }
+]
