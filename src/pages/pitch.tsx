@@ -37,14 +37,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-/* ---- Video & copy ---- */
+/* ---- Video & copy (aligned with ResultsPage / Print Deck) ---- */
 const METHOD_VIDEOS: Record<string, string> = {
   Scrum: "pcsLLgUb7_A", // https://www.youtube.com/watch?v=pcsLLgUb7_A
-  SAFe: "aW2m-BtCJyE", // https://www.youtube.com/watch?v=aW2m-BtCJyE
+  SAFe: "aW2m-BtCJyE", // https://www.youtube.com/watch?v=pcsLLgUb7_A
   "Disciplined Agile": "Giu5wIdCaLI", // https://www.youtube.com/watch?v=Giu5wIdCaLI
   Agile: "Z9QbYZh1YXY", // https://www.youtube.com/watch?v=Z9QbYZh1YXY&t=524s
   Hybrid: "bLZ9MNwV2vE", // https://www.youtube.com/watch?v=bLZ9MNwV2vE
   "Lean Continuous Delivery": "tQMrrNo16jo",
+  "Continuous Delivery": "tQMrrNo16jo", // alias for consistency
   "Lean Six Sigma": "wfsRAZUnonI", // https://www.youtube.com/watch?v=wfsRAZUnonI
   Waterfall: "W4lE6ozdjls", // https://www.youtube.com/watch?v=W4lE6ozdjls
   PRINCE2: "bsIvbr0we8w", // https://www.youtube.com/watch?v=bsIvbr0we8w&t=57s
@@ -53,7 +54,8 @@ const METHOD_VIDEOS: Record<string, string> = {
 const METHOD_DESCRIPTIONS: Record<string, string> = {
   Scrum:
     "Agile framework emphasizing iterative development, self-organizing teams, and continuous improvement through sprints.",
-  SAFe: "Scaled Agile Framework designed for large enterprises to implement agile practices across multiple teams.",
+  SAFe:
+    "Scaled Agile Framework designed for large enterprises to implement agile practices across multiple teams.",
   Hybrid:
     "Combines traditional and agile approaches, allowing flexibility to adapt to different project phases.",
   Waterfall:
@@ -64,8 +66,107 @@ const METHOD_DESCRIPTIONS: Record<string, string> = {
     "Structured project management method emphasizing organization, control, and defined roles throughout the project.",
   "Disciplined Agile":
     "Hybrid toolkit that provides guidance for choosing the right approach for your specific context.",
-  "Continuous Delivery":
+  "Lean Continuous Delivery":
     "Software development practice where code changes are automatically built, tested, and deployed.",
+  "Continuous Delivery":
+    "Software development practice where code changes are automatically built, tested, and deployed.", // alias
+};
+
+/* --- Framework-specific Quick Insights (same as ResultsPage / Print Deck) --- */
+const METHOD_QUICK_INSIGHTS: Record<
+  string,
+  { why: string[]; watchouts: string[] }
+> = {
+  Scrum: {
+    why: [
+      "Works well when requirements evolve and you need fast feedback cycles.",
+      "Highly effective for small to medium teams that benefit from continuous collaboration and iterative delivery.",
+    ],
+    watchouts: [
+      "Requires strong team discipline and consistent stakeholder availability.",
+      "Can struggle in environments with rigid governance or low customer involvement.",
+    ],
+  },
+  SAFe: {
+    why: [
+      "Ideal for large, complex, multi-team initiatives requiring alignment across an organization.",
+      "Provides structured planning, governance, and coordination while retaining Agile adaptability.",
+    ],
+    watchouts: [
+      "Implementation can be heavy and resource-intensive.",
+      "Requires significant training, cultural change, and leadership support to work effectively.",
+    ],
+  },
+  "Disciplined Agile": {
+    why: [
+      "Offers flexibility for teams that need to tailor practices across Agile, Lean, and traditional methods.",
+      "Fits organizations seeking guided decision-making while retaining team autonomy.",
+    ],
+    watchouts: [
+      "Can overwhelm inexperienced teams due to its wide range of options.",
+      "Requires strong coaching to prevent inconsistent or poorly integrated practices.",
+    ],
+  },
+  Hybrid: {
+    why: [
+      "Works when you need upfront structure but still want iterative refinement in development phases.",
+      "Fits organizations transitioning from predictive models to more agile or iterative ways of working.",
+    ],
+    watchouts: [
+      "At risk of becoming 'waterfall with extra steps' if iterations aren’t meaningful.",
+      "Requires clear boundaries to avoid confusion between iterative and sequential phases.",
+    ],
+  },
+  "Lean Continuous Delivery": {
+    why: [
+      "Excellent for teams that prioritize rapid releases, automation, and continuous customer value delivery.",
+      "Works best when integration, testing, and deployment pipelines are mature.",
+    ],
+    watchouts: [
+      "Requires strong DevOps culture and robust engineering automation.",
+      "Can overwhelm teams without stable environments or dedicated infrastructure support.",
+    ],
+  },
+  "Continuous Delivery": {
+    why: [
+      "Excellent for teams that prioritize rapid releases, automation, and continuous customer value delivery.",
+      "Works best when integration, testing, and deployment pipelines are mature.",
+    ],
+    watchouts: [
+      "Requires strong DevOps culture and robust engineering automation.",
+      "Can overwhelm teams without stable environments or dedicated infrastructure support.",
+    ],
+  },
+  "Lean Six Sigma": {
+    why: [
+      "Effective for projects that require precision, quality control, and reduction of process variation.",
+      "Works well in highly regulated or data-driven environments where defects have major impact.",
+    ],
+    watchouts: [
+      "Can be slow and documentation-heavy for fast-moving or exploratory work.",
+      "Not suited for high-uncertainty environments requiring creativity or rapid adaptation.",
+    ],
+  },
+  Waterfall: {
+    why: [
+      "Best when requirements are fixed, stable, and well-understood from the beginning.",
+      "Strong fit for projects requiring extensive upfront documentation and formal approvals.",
+    ],
+    watchouts: [
+      "Difficult to adapt if requirements change mid-project.",
+      "Limited customer feedback early on increases the risk of late-stage surprises.",
+    ],
+  },
+  PRINCE2: {
+    why: [
+      "Ideal for organizations needing strong governance, roles, and stage-based control.",
+      "Works well for large projects with significant oversight and documentation requirements.",
+    ],
+    watchouts: [
+      "Can be overly rigid for teams needing creative or iterative delivery.",
+      "Requires trained project roles and disciplined adherence to governance events.",
+    ],
+  },
 };
 
 /* ---- Privacy-friendly responsive YouTube embed ---- */
@@ -262,6 +363,27 @@ function deriveCompanyVector(result: ScoringResult) {
   return { axes: seed, releasePerWeek, hotfixMedianHrs };
 }
 
+/* --- score meta (aligned with ResultsPage / Print Deck) --- */
+function getScoresMeta(ranking: ScoringResult["ranking"]) {
+  const scores = ranking.map((r) => r.score);
+  const max = Math.max(...scores);
+  const min = Math.min(...scores);
+  const range = Math.max(1e-9, max - min);
+
+  const normalize = (s: number) => ((s - min) / range) * 100;
+
+  const sorted = [...scores].sort((a, b) => b - a);
+  const sep = sorted.length > 1 ? sorted[0] - sorted[1] : 0;
+
+  const confidence = Math.round(
+    Math.min(100, Math.max(0, (sep / range) * 100)),
+  );
+
+  const percentile = (s: number) => Math.round(normalize(s));
+
+  return { normalize, percentile, confidence };
+}
+
 /* -------------------------------- Component -------------------------------- */
 
 interface PitchPageProps {
@@ -278,6 +400,10 @@ export function PitchPage({
   const ranking = results.ranking ?? [];
   const top = ranking[0];
   const [idx, setIdx] = useState(0);
+
+  if (!top) return null;
+
+  const { normalize, percentile, confidence } = getScoresMeta(ranking);
 
   // Choose a default peer view for pitch (simple & neutral)
   const peer =
@@ -318,22 +444,22 @@ export function PitchPage({
   const slides = useMemo(() => {
     if (!top) return [];
 
-    const positives = [...top.contributions]
-      .filter((c) => c.delta > 0)
-      .sort((a, b) => b.delta - a.delta)
-      .slice(0, 3)
-      .map((c) => c.factor.replace(/_/g, " "));
-    const negatives = [...top.contributions]
-      .filter((c) => c.delta < 0)
-      .sort((a, b) => a.delta - b.delta)
-      .slice(0, 3)
-      .map((c) => c.factor.replace(/_/g, " "));
     const sec = [ranking[1], ranking[2]].filter(
       Boolean,
     ) as typeof ranking;
 
+    const methodInsights =
+      METHOD_QUICK_INSIGHTS[top.method] ?? {
+        why: [
+          "This framework aligns well with your project's size, goals, and governance needs.",
+        ],
+        watchouts: [
+          "Be mindful of the cultural and tooling changes needed to apply this framework effectively.",
+        ],
+      };
+
     return [
-      // Slide 0: Hero
+      // Slide 0: Hero (now also shows score/percentile/confidence like ResultsPage)
       <div
         key="hero"
         className="flex flex-col items-center justify-center h-full text-center"
@@ -347,9 +473,35 @@ export function PitchPage({
         <h1 className="text-5xl md:text-6xl font-semibold mb-4">
           {top.method}
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
+        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-6">
           {METHOD_DESCRIPTIONS[top.method] ?? ""}
         </p>
+
+        <div className="grid grid-cols-3 gap-4 max-w-xl w-full text-sm">
+          <div className="rounded-xl border border-white/30 p-3">
+            <div className="text-xs opacity-70 mb-1">Top score</div>
+            <div className="text-lg font-semibold">
+              {top.score.toFixed(2)}
+            </div>
+          </div>
+          <div className="rounded-xl border border-white/30 p-3">
+            <div className="text-xs opacity-70 mb-1">Percentile</div>
+            <div className="text-lg font-semibold">
+              {percentile(top.score)}%
+            </div>
+            <Progress
+              className="mt-2 h-2"
+              value={percentile(top.score)}
+            />
+          </div>
+          <div className="rounded-xl border border-white/30 p-3">
+            <div className="text-xs opacity-70 mb-1">Confidence</div>
+            <div className="text-lg font-semibold">
+              {confidence}%
+            </div>
+            <Progress className="mt-2 h-2" value={confidence} />
+          </div>
+        </div>
       </div>,
 
       // Slide 1: Video
@@ -366,7 +518,7 @@ export function PitchPage({
         )}
       </div>,
 
-      // Slide 2: Quick insights
+      // Slide 2: Quick insights (now uses METHOD_QUICK_INSIGHTS like Results/Print Deck)
       <div
         key="insights"
         className="grid md:grid-cols-2 gap-8 max-w-6xl w-full"
@@ -376,11 +528,9 @@ export function PitchPage({
             Why it fits
           </h3>
           <ul className="list-disc list-inside text-lg text-muted-foreground space-y-2">
-            {positives.length ? (
-              positives.map((p) => <li key={p}>{p}</li>)
-            ) : (
-              <li>—</li>
-            )}
+            {methodInsights.why.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
           </ul>
         </Card>
         <Card className="p-8">
@@ -388,16 +538,14 @@ export function PitchPage({
             Watch outs
           </h3>
           <ul className="list-disc list-inside text-lg text-muted-foreground space-y-2">
-            {negatives.length ? (
-              negatives.map((n) => <li key={n}>{n}</li>)
-            ) : (
-              <li>—</li>
-            )}
+            {methodInsights.watchouts.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
           </ul>
         </Card>
       </div>,
 
-      // Slide 3: #2 / #3
+      // Slide 3: #2 / #3 (aligned with ResultsPage relative match logic)
       <div key="alts" className="max-w-6xl w-full">
         <h3 className="text-2xl font-semibold mb-4 text-center">
           Secondary Options
@@ -409,21 +557,25 @@ export function PitchPage({
                 <h4 className="text-2xl font-semibold">
                   {opt.method}
                 </h4>
-                <Badge variant="secondary">Alt #{i + 2}</Badge>
+                <div className="flex items-center gap-2">
+                  {Math.abs(
+                    percentile(opt.score) - percentile(top.score),
+                  ) <= 3 && (
+                    <Badge variant="outline">Very close</Badge>
+                  )}
+                  <Badge variant="secondary">Alt #{i + 2}</Badge>
+                </div>
               </div>
               <p className="text-muted-foreground mt-3">
-                {(METHOD_DESCRIPTIONS as any)[opt.method] ?? ""}
+                {METHOD_DESCRIPTIONS[opt.method] ?? ""}
               </p>
               <div className="mt-4">
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-1">
                   <span>Relative match</span>
-                  <span>{opt.score.toFixed(2)}</span>
+                  <span>{percentile(opt.score)}%</span>
                 </div>
                 <Progress
-                  value={
-                    100 *
-                    (opt.score / Math.max(top.score, 1e-9))
-                  }
+                  value={normalize(opt.score)}
                   className="h-2"
                 />
               </div>
@@ -575,7 +727,7 @@ export function PitchPage({
         </div>
       </div>,
     ];
-  }, [ranking, top, radarData, cadenceBars, ours, peer]);
+  }, [ranking, top, percentile, confidence, normalize, radarData, cadenceBars, ours, peer]);
 
   const total = slides.length;
 
@@ -624,8 +776,6 @@ export function PitchPage({
       }
     };
   }, []);
-
-  if (!top) return null;
 
   return (
     <div className="fixed inset-0 z-[100] bg-black text-white">
