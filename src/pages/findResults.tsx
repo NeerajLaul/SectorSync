@@ -23,7 +23,7 @@ export function FindResultsPage({ onLoadResults }: FindResultsPageProps) {
         setError("");
 
         try {
-            const res = await fetch(`/api/answers/${searchId.trim()}`);
+            const res = await fetch(`https://sectorsync-production.up.railway.app/api/answers/${searchId.trim()}`);
             if (!res.ok) {
                 setError("Result not found. Please check the ID and try again.");
                 setLoading(false);
@@ -98,4 +98,5 @@ export function FindResultsPage({ onLoadResults }: FindResultsPageProps) {
             </Card>
         </div>
     );
+
 }
