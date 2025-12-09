@@ -169,7 +169,7 @@ export function SignInPage({ onSignIn, onSignUp, onSkip }: SignInPageProps) {
               type="button"
               variant="outline"
               onClick={() => {
-                window.location.href = "/api/auth/google";
+                window.location.href = "https://sectorsync-production.up.railway.app//api/auth/google";
               }}
               className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-white/20 dark:border-white/10"
             >
@@ -181,7 +181,7 @@ export function SignInPage({ onSignIn, onSignUp, onSkip }: SignInPageProps) {
               type="button"
               variant="outline"
               onClick={() => {
-                window.location.href = "/api/auth/github";
+                window.location.href = "https://sectorsync-production.up.railway.app//api/auth/github";
               }}
               className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-white/20 dark:border-white/10"
             >
