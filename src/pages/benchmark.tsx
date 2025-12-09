@@ -546,7 +546,7 @@ export function BenchmarkPage({
   company,
 }: BenchmarkPageProps) {
   // User's recommended framework
-  const topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
+  let topMethodology = (results.ranking?.[0]?.method ?? "Scrum") as Methodology;
   if (topMethodology === "Lean Continuous Delivery") {
       topMethodology = "Continuous Delivery";
   }
