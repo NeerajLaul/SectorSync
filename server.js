@@ -17,13 +17,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// ⬇️ THE FIX: Specific Origins + Credentials
+// ⬇️ PURE PRODUCTION CORS
+// This explicitly tells the browser: "Only sector-sync.vercel.app can send cookies here."
 app.use(cors({
-  origin: [
-    "http://localhost:3000",                // Localhost
-    "https://sector-sync.vercel.app"        // Your Vercel Domain
-  ],
-  credentials: true, // Required for cookies to work
+  origin: "https://sector-sync.vercel.app", 
+  credentials: true, 
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
 
